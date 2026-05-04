@@ -1,0 +1,315 @@
+import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
+
+import { QueryClient } from "../../queryclient";
+import {
+  evmd,
+  evmdEnabled,
+  evmfaucet,
+  nonExistentAddress,
+  nonNegativeIntegerMatcher,
+  simapp,
+  simappEnabled,
+  unused,
+} from "../../testutils";
+import { BankExtension, setupBankExtension } from "./queries";
+
+async function makeClientWithBank(rpcUrl: string): Promise<[QueryClient & BankExtension, CometClient]> {
+  const cometClient = await connectComet(rpcUrl);
+  return [QueryClient.withExtensions(cometClient, setupBankExtension), cometClient];
+}
+
+(simappEnabled ? describe : xdescribe)("BankExtension", () => {
+  describe("balance", () => {
+    it("works for different existing balances", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const response1 = await client.bank.balance(unused.address, simapp.denomFee);
+      expect(response1).toEqual({
+        amount: unused.balanceFee,
+        denom: simapp.denomFee,
+      });
+      const response2 = await client.bank.balance(unused.address, simapp.denomStaking);
+      expect(response2).toEqual({
+        amount: unused.balanceStaking,
+        denom: simapp.denomStaking,
+      });
+
+      cometClient.disconnect();
+    });
+
+    it("returns zero for non-existent balance", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const response = await client.bank.balance(unused.address, "gintonic");
+      expect(response).toEqual({
+        amount: "0",
+        denom: "gintonic",
+      });
+
+      cometClient.disconnect();
+    });
+
+    it("returns zero for non-existent address", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const response = await client.bank.balance(nonExistentAddress, simapp.denomFee);
+      expect(response).toEqual({
+        amount: "0",
+        denom: simapp.denomFee,
+      });
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("allBalances", () => {
+    it("returns all balances for unused account", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const balances = await client.bank.allBalances(unused.address);
+      expect(balances).toEqual([
+        {
+          amount: unused.balanceFee,
+          denom: simapp.denomFee,
+        },
+        {
+          amount: unused.balanceStaking,
+          denom: simapp.denomStaking,
+        },
+      ]);
+
+      cometClient.disconnect();
+    });
+
+    it("returns an empty list for non-existent account", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const balances = await client.bank.allBalances(nonExistentAddress);
+      expect(balances).toEqual([]);
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("totalSupply", () => {
+    it("works", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const { supply } = await client.bank.totalSupply();
+      expect(supply).toEqual([
+        {
+          amount: simapp.totalSupply.toString(),
+          denom: simapp.denomFee,
+        },
+        {
+          amount: jasmine.stringMatching(nonNegativeIntegerMatcher),
+          denom: simapp.denomStaking,
+        },
+      ]);
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("supplyOf", () => {
+    it("works for existing denom", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const response = await client.bank.supplyOf(simapp.denomFee);
+      expect(response).toEqual({
+        amount: simapp.totalSupply.toString(),
+        denom: simapp.denomFee,
+      });
+
+      cometClient.disconnect();
+    });
+
+    it("returns zero for non-existent denom", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const response = await client.bank.supplyOf("gintonic");
+      expect(response).toEqual({
+        amount: "0",
+        denom: "gintonic",
+      });
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("denomMetadata", () => {
+    it("works for existing denom", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const metadata = await client.bank.denomMetadata("ucosm");
+      expect(metadata).toEqual(
+        jasmine.objectContaining({
+          description: "The fee token of this test chain",
+          denomUnits: [
+            {
+              denom: "ucosm",
+              exponent: 0,
+              aliases: [],
+            },
+            {
+              denom: "COSM",
+              exponent: 6,
+              aliases: [],
+            },
+          ],
+          base: "ucosm",
+          display: "COSM",
+          name: "",
+          symbol: "",
+        }),
+      );
+
+      cometClient.disconnect();
+    });
+
+    it("works for non-existent denom", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      await expectAsync(client.bank.denomMetadata("nothere")).toBeRejectedWithError(/code = NotFound/i);
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("denomsMetadata", () => {
+    it("works", async () => {
+      const [client, cometClient] = await makeClientWithBank(simapp.tendermintUrlHttp);
+
+      const metadatas = await client.bank.denomsMetadata();
+      expect(metadatas.length).toEqual(1);
+      expect(metadatas[0]).toEqual(
+        jasmine.objectContaining({
+          description: "The fee token of this test chain",
+          denomUnits: [
+            {
+              denom: "ucosm",
+              exponent: 0,
+              aliases: [],
+            },
+            {
+              denom: "COSM",
+              exponent: 6,
+              aliases: [],
+            },
+          ],
+          base: "ucosm",
+          display: "COSM",
+          name: "",
+          symbol: "",
+        }),
+      );
+
+      cometClient.disconnect();
+    });
+  });
+});
+
+(evmdEnabled ? describe : xdescribe)("BankExtension (evmd)", () => {
+  describe("balance", () => {
+    it("works for existing balance", async () => {
+      const [client, cometClient] = await makeClientWithBank(evmd.tendermintUrlHttp);
+
+      const response = await client.bank.balance(evmfaucet.address0, evmd.denomFee);
+      expect(response.denom).toEqual(evmd.denomFee);
+      const balanceAmount = Number(BigInt(response.amount));
+      expect(balanceAmount).toBeGreaterThan(0);
+
+      cometClient.disconnect();
+    });
+
+    it("returns zero for non-existent balance", async () => {
+      const [client, cometClient] = await makeClientWithBank(evmd.tendermintUrlHttp);
+
+      const response = await client.bank.balance(evmfaucet.address0, "gintonic");
+      expect(response).toEqual({
+        amount: "0",
+        denom: "gintonic",
+      });
+
+      cometClient.disconnect();
+    });
+
+    it("returns zero for non-existent address", async () => {
+      const [client, cometClient] = await makeClientWithBank(evmd.tendermintUrlHttp);
+
+      const response = await client.bank.balance(nonExistentAddress, evmd.denomFee);
+      expect(response).toEqual({
+        amount: "0",
+        denom: evmd.denomFee,
+      });
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("allBalances", () => {
+    it("returns all balances for account", async () => {
+      const [client, cometClient] = await makeClientWithBank(evmd.tendermintUrlHttp);
+
+      const balances = await client.bank.allBalances(evmfaucet.address0);
+      expect(balances.length).toBeGreaterThanOrEqual(1);
+      expect(balances).toContain(
+        jasmine.objectContaining({
+          denom: evmd.denomFee,
+        }),
+      );
+
+      cometClient.disconnect();
+    });
+
+    it("returns an empty list for non-existent account", async () => {
+      const [client, cometClient] = await makeClientWithBank(evmd.tendermintUrlHttp);
+
+      const balances = await client.bank.allBalances(nonExistentAddress);
+      expect(balances).toEqual([]);
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("totalSupply", () => {
+    it("works", async () => {
+      const [client, cometClient] = await makeClientWithBank(evmd.tendermintUrlHttp);
+
+      const { supply } = await client.bank.totalSupply();
+      expect(supply.length).toBeGreaterThanOrEqual(1);
+      expect(supply).toContain(
+        jasmine.objectContaining({
+          denom: evmd.denomFee,
+        }),
+      );
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("supplyOf", () => {
+    it("works for existing denom", async () => {
+      const [client, cometClient] = await makeClientWithBank(evmd.tendermintUrlHttp);
+
+      const response = await client.bank.supplyOf(evmd.denomFee);
+      expect(response.denom).toEqual(evmd.denomFee);
+      const supplyAmount = Number(BigInt(response.amount));
+      expect(supplyAmount).toBeGreaterThan(0);
+
+      cometClient.disconnect();
+    });
+
+    it("returns zero for non-existent denom", async () => {
+      const [client, cometClient] = await makeClientWithBank(evmd.tendermintUrlHttp);
+
+      const response = await client.bank.supplyOf("gintonic");
+      expect(response).toEqual({
+        amount: "0",
+        denom: "gintonic",
+      });
+
+      cometClient.disconnect();
+    });
+  });
+});

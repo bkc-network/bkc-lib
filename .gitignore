@@ -1,0 +1,47 @@
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# Output of 'npm pack'
+*.tgz
+
+# OS-specific files
+.DS_Store
+
+# IDE-specific
+.vscode/
+.idea/
+
+# demo mnemonics from cli
+*.key
+
+# Code coverage
+.nyc_output/
+coverage/
+
+# Documentation builds
+/docs_deployment/
+
+# Yarn v2+
+# See https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+# for Zero-Installs (https://yarnpkg.com/features/caching#zero-installs)
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Yarn platform-specific bindings
+# Platform-specific packages are added/removed depending on the OS. To avoid annoying back and forth
+# we ignore them here. They are not needed in CI and `yarn install` will bring them back on the
+# appropriate platform.
+.yarn/cache/fsevents-patch-*-*.zip
+.yarn/cache/@unrs-resolver-binding-*-*.zip
+
+AGENTS.md

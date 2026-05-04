@@ -1,0 +1,70 @@
+{
+  "name": "@cosmjs/faucet",
+  "version": "0.39.0",
+  "description": "The faucet",
+  "contributors": [
+    "Ethan Frey <ethanfrey@users.noreply.github.com>",
+    "Simon Warta <webmaster128@users.noreply.github.com>"
+  ],
+  "license": "Apache-2.0",
+  "bin": {
+    "cosmos-faucet": "bin/cosmos-faucet"
+  },
+  "files": [
+    "bin/",
+    "build/",
+    "*.md",
+    "!*.spec.*",
+    "!*testutils.*",
+    "!**/cli-bundle/",
+    "!**/karma-bundle/",
+    "!**/testdata/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cosmos/cosmjs/tree/main/packages/faucet"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "dev-start": "yarn start-dev",
+    "format": "prettier --write --log-level warn \"./src/**/*.ts\"",
+    "format-text": "prettier --write \"./*.md\"",
+    "build": "rm -rf ./build && tsc",
+    "build-or-skip": "[ -n \"${SKIP_BUILD:-}\" ] || yarn build",
+    "test-node": "yarn node jasmine-testrunner.cjs",
+    "test": "yarn build-or-skip && yarn test-node",
+    "coverage": "nyc --reporter=text --reporter=lcov yarn test --quiet",
+    "start-dev": "FAUCET_ADDRESS_PREFIX=wasm FAUCET_CREDIT_AMOUNT_UCOSM=10000000 FAUCET_CREDIT_AMOUNT_USTAKE=100000 FAUCET_CONCURRENCY=3 FAUCET_MNEMONIC=\"economy stock theory fatal elder harbor betray wasp final emotion task crumble siren bottom lizard educate guess current outdoor pair theory focus wife stone\" ./bin/cosmos-faucet start \"http://localhost:26659\"",
+    "start-coralnet": "FAUCET_ADDRESS_PREFIX=coral FAUCET_TOKENS=\"ushell,ureef\" FAUCET_CREDIT_AMOUNT_USHELL=10000000 FAUCET_CREDIT_AMOUNT_UREEF=2000000 FAUCET_CONCURRENCY=3 FAUCET_MNEMONIC=\"economy stock theory fatal elder harbor betray wasp final emotion task crumble siren bottom lizard educate guess current outdoor pair theory focus wife stone\" ./bin/cosmos-faucet start \"https://lcd.coralnet.cosmwasm.com\"",
+    "pack-node": "yarn build-or-skip && webpack --mode production --config webpack.node.config.cjs"
+  },
+  "dependencies": {
+    "@cosmjs/crypto": "workspace:^",
+    "@cosmjs/encoding": "workspace:^",
+    "@cosmjs/math": "workspace:^",
+    "@cosmjs/proto-signing": "workspace:^",
+    "@cosmjs/stargate": "workspace:^",
+    "@cosmjs/utils": "workspace:^",
+    "@koa/bodyparser": "^6.0.0",
+    "@koa/cors": "^5.0",
+    "koa": "^3.1.2"
+  },
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/jasmine": "^4",
+    "@types/koa": "^3.0.1",
+    "@types/koa__cors": "^3.3",
+    "jasmine": "^4",
+    "jasmine-spec-reporter": "^6",
+    "nyc": "^17.1.0",
+    "prettier": "^3.6.2",
+    "ses": "^1.13.0",
+    "source-map-support": "^0.5.19",
+    "typescript": "~5.9",
+    "webpack": "^5.76.0",
+    "webpack-cli": "^4.6.0"
+  }
+}

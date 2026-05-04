@@ -1,0 +1,1018 @@
+import { getAminoPubkey } from "@cosmjs/amino";
+import { fromBase64, toBase64 } from "@cosmjs/encoding";
+import {
+  coins,
+  DirectEthSecp256k1HdWallet,
+  DirectSecp256k1HdWallet,
+  encodePubkey,
+  makeAuthInfoBytes,
+  makeSignDoc,
+  Registry,
+  TxBodyEncodeObject,
+} from "@cosmjs/proto-signing";
+import { assert, sleep } from "@cosmjs/utils";
+import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { ReadonlyDate } from "readonly-date-esm";
+
+import {
+  assertIsDeliverTxSuccess,
+  BroadcastTxError,
+  DeliverTxResponse,
+  isDeliverTxFailure,
+  isDeliverTxSuccess,
+  PrivateStargateClient,
+  StargateClient,
+  TimeoutError,
+} from "./stargateclient";
+import {
+  evmd,
+  evmdEnabled,
+  evmfaucet,
+  faucet,
+  makeRandomAddress,
+  nonExistentAddress,
+  simapp,
+  simapp47Enabled,
+  simappEnabled,
+  slowSimapp,
+  slowSimappEnabled,
+  tendermintIdMatcher,
+  unused,
+  validator,
+} from "./testutils";
+
+const resultFailure: DeliverTxResponse = {
+  code: 5,
+  height: 219901,
+  txIndex: 0,
+  rawLog:
+    "failed to execute message; message index: 0: 1855527000ufct is smaller than 20000000000000000000000ufct: insufficient funds",
+  transactionHash: "FDC4FB701AABD465935F7D04AE490D1EF5F2BD4B227601C4E98B57EB077D9B7D",
+  events: [],
+  msgResponses: [],
+  gasUsed: 54396n,
+  gasWanted: 200000n,
+};
+const resultSuccess: DeliverTxResponse = {
+  code: 0,
+  height: 219894,
+  txIndex: 0,
+  rawLog:
+    '[{"events":[{"type":"message","attributes":[{"key":"action","value":"send"},{"key":"sender","value":"firma1trqyle9m2nvyafc2n25frkpwed2504y6avgfzr"},{"key":"module","value":"bank"}]},{"type":"transfer","attributes":[{"key":"recipient","value":"firma12er8ls2sf5zess3jgjxz59xat9xtf8hz0hk6n4"},{"key":"sender","value":"firma1trqyle9m2nvyafc2n25frkpwed2504y6avgfzr"},{"key":"amount","value":"2000000ufct"}]}]}]',
+  transactionHash: "C0B416CA868C55C2B8C1BBB8F3CFA233854F13A5CB15D3E9599F50CAF7B3D161",
+  events: [],
+  msgResponses: [],
+  gasUsed: 61556n,
+  gasWanted: 200000n,
+};
+
+describe("isDeliverTxFailure", () => {
+  it("works", () => {
+    expect(isDeliverTxFailure(resultFailure)).toEqual(true);
+    expect(isDeliverTxFailure(resultSuccess)).toEqual(false);
+  });
+});
+
+describe("isDeliverTxSuccess", () => {
+  it("works", () => {
+    expect(isDeliverTxSuccess(resultFailure)).toEqual(false);
+    expect(isDeliverTxSuccess(resultSuccess)).toEqual(true);
+  });
+});
+
+(simappEnabled ? describe : xdescribe)("StargateClient", () => {
+  describe("connect", () => {
+    it("works", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      expect(client).toBeTruthy();
+      client.disconnect();
+    });
+  });
+
+  describe("getChainId", () => {
+    it("works", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      expect(await client.getChainId()).toEqual(simapp.chainId);
+      client.disconnect();
+    });
+
+    it("caches chain ID", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      const openedClient = client as unknown as PrivateStargateClient;
+      const getCodeSpy = spyOn(openedClient.cometClient!, "status").and.callThrough();
+
+      expect(await client.getChainId()).toEqual(simapp.chainId); // from network
+      expect(await client.getChainId()).toEqual(simapp.chainId); // from cache
+
+      expect(getCodeSpy).toHaveBeenCalledTimes(1);
+
+      client.disconnect();
+    });
+  });
+
+  describe("getHeight", () => {
+    it("works", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const height1 = await client.getHeight();
+      expect(height1).toBeGreaterThan(0);
+      await sleep(simapp.blockTime * 1.4); // tolerate chain being 40% slower than expected
+      const height2 = await client.getHeight();
+      expect(height2).toBeGreaterThanOrEqual(height1 + 1);
+      expect(height2).toBeLessThanOrEqual(height1 + 2);
+
+      client.disconnect();
+    });
+  });
+
+  describe("getAccount", () => {
+    it("works for unused account", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const account = await client.getAccount(unused.address);
+      assert(account);
+      expect(account).toEqual({
+        address: unused.address,
+        pubkey: null,
+        accountNumber: unused.accountNumber,
+        sequence: unused.sequence,
+      });
+
+      client.disconnect();
+    });
+
+    it("works for account with pubkey and non-zero sequence", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const account = await client.getAccount(validator.delegatorAddress);
+      assert(account);
+      expect(account).toEqual({
+        address: validator.delegatorAddress,
+        pubkey: validator.pubkey,
+        accountNumber: validator.accountNumber,
+        sequence: validator.sequence,
+      });
+
+      client.disconnect();
+    });
+
+    it("returns null for non-existent address", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const account = await client.getAccount(nonExistentAddress);
+      expect(account).toBeNull();
+
+      client.disconnect();
+    });
+  });
+
+  describe("getSequence", () => {
+    it("works for unused account", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const account = await client.getSequence(unused.address);
+      assert(account);
+      expect(account).toEqual({
+        accountNumber: unused.accountNumber,
+        sequence: unused.sequence,
+      });
+
+      client.disconnect();
+    });
+
+    it("rejects for non-existent address", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      await expectAsync(client.getSequence(nonExistentAddress)).toBeRejectedWithError(
+        /account '([a-z0-9]{10,90})' does not exist on chain/i,
+      );
+
+      client.disconnect();
+    });
+  });
+
+  describe("getBlock", () => {
+    it("works for latest block", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      const response = await client.getBlock();
+
+      expect(response).toEqual(
+        jasmine.objectContaining({
+          id: jasmine.stringMatching(tendermintIdMatcher),
+          header: jasmine.objectContaining({
+            chainId: await client.getChainId(),
+          }),
+          txs: jasmine.arrayContaining([]),
+        }),
+      );
+
+      expect(response.header.height).toBeGreaterThanOrEqual(1);
+      expect(new ReadonlyDate(response.header.time).getTime()).toBeLessThan(ReadonlyDate.now());
+      expect(new ReadonlyDate(response.header.time).getTime()).toBeGreaterThanOrEqual(
+        ReadonlyDate.now() - 5_000,
+      );
+
+      client.disconnect();
+    });
+
+    it("works for block by height", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      const height = (await client.getBlock()).header.height;
+      const response = await client.getBlock(height - 1);
+
+      expect(response).toEqual(
+        jasmine.objectContaining({
+          id: jasmine.stringMatching(tendermintIdMatcher),
+          header: jasmine.objectContaining({
+            height: height - 1,
+            chainId: await client.getChainId(),
+          }),
+          txs: jasmine.arrayContaining([]),
+        }),
+      );
+
+      expect(new ReadonlyDate(response.header.time).getTime()).toBeLessThan(ReadonlyDate.now());
+      expect(new ReadonlyDate(response.header.time).getTime()).toBeGreaterThanOrEqual(
+        ReadonlyDate.now() - 5_000,
+      );
+
+      client.disconnect();
+    });
+  });
+
+  describe("getBalance", () => {
+    it("works for different existing balances", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const response1 = await client.getBalance(unused.address, simapp.denomFee);
+      expect(response1).toEqual({
+        amount: unused.balanceFee,
+        denom: simapp.denomFee,
+      });
+      const response2 = await client.getBalance(unused.address, simapp.denomStaking);
+      expect(response2).toEqual({
+        amount: unused.balanceStaking,
+        denom: simapp.denomStaking,
+      });
+
+      client.disconnect();
+    });
+
+    it("returns 0 for non-existent balance", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const response = await client.getBalance(unused.address, "gintonic");
+      expect(response).toEqual({
+        denom: "gintonic",
+        amount: "0",
+      });
+
+      client.disconnect();
+    });
+
+    it("returns 0 for non-existent address", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const response = await client.getBalance(nonExistentAddress, simapp.denomFee);
+      expect(response).toEqual({
+        denom: simapp.denomFee,
+        amount: "0",
+      });
+
+      client.disconnect();
+    });
+  });
+
+  describe("getAllBalances", () => {
+    it("returns all balances for unused account", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const balances = await client.getAllBalances(unused.address);
+      expect(balances).toEqual([
+        {
+          amount: unused.balanceFee,
+          denom: simapp.denomFee,
+        },
+        {
+          amount: unused.balanceStaking,
+          denom: simapp.denomStaking,
+        },
+      ]);
+
+      client.disconnect();
+    });
+
+    it("returns an empty list for non-existent account", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const balances = await client.getAllBalances(nonExistentAddress);
+      expect(balances).toEqual([]);
+
+      client.disconnect();
+    });
+  });
+
+  describe("getBalanceStaked", () => {
+    it("works", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      const response = await client.getBalanceStaked(faucet.address0);
+
+      expect(response).toEqual({ denom: "ustake", amount: "63474" });
+
+      client.disconnect();
+    });
+  });
+
+  describe("broadcastTx", () => {
+    it("broadcasts a transaction", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(faucet.mnemonic);
+      const [{ address, pubkey: pubkeyBytes }] = await wallet.getAccounts();
+      const pubkey = encodePubkey({
+        type: "tendermint/PubKeySecp256k1",
+        value: toBase64(pubkeyBytes),
+      });
+      const registry = new Registry();
+      const txBodyFields: TxBodyEncodeObject = {
+        typeUrl: "/cosmos.tx.v1beta1.TxBody",
+        value: {
+          messages: [
+            {
+              typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+              value: {
+                fromAddress: address,
+                toAddress: makeRandomAddress(),
+                amount: [
+                  {
+                    denom: "ucosm",
+                    amount: "1234567",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      };
+      const txBodyBytes = registry.encode(txBodyFields);
+      const { accountNumber, sequence } = await client.getSequence(address);
+      const feeAmount = coins(2000, "ucosm");
+      const gasLimit = 200000;
+      const feeGranter = undefined;
+      const feePayer = undefined;
+      const authInfoBytes = makeAuthInfoBytes(
+        [{ pubkey, sequence }],
+        feeAmount,
+        gasLimit,
+        feeGranter,
+        feePayer,
+      );
+
+      const chainId = await client.getChainId();
+      const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber);
+      const { signature } = await wallet.signDirect(address, signDoc);
+      const txRaw = TxRaw.fromPartial({
+        bodyBytes: txBodyBytes,
+        authInfoBytes: authInfoBytes,
+        signatures: [fromBase64(signature.signature)],
+      });
+      const txRawBytes = Uint8Array.from(TxRaw.encode(txRaw).finish());
+      const txResult = await client.broadcastTx(txRawBytes);
+      assertIsDeliverTxSuccess(txResult);
+
+      const { gasUsed, rawLog, transactionHash } = txResult;
+      expect(gasUsed).toBeGreaterThan(0);
+      if (simapp47Enabled) {
+        expect(rawLog).toMatch(/{"key":"amount","value":"1234567ucosm"}/);
+      } else {
+        expect(rawLog).toEqual(""); // empty for 0.50+ (https://github.com/cosmos/cosmos-sdk/pull/15845)
+      }
+      expect(transactionHash).toMatch(/^[0-9A-F]{64}$/);
+
+      client.disconnect();
+    });
+
+    it("errors immediately for a CheckTx failure", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(faucet.mnemonic);
+      const [{ address, pubkey: pubkeyBytes }] = await wallet.getAccounts();
+      const pubkey = encodePubkey({
+        type: "tendermint/PubKeySecp256k1",
+        value: toBase64(pubkeyBytes),
+      });
+      const registry = new Registry();
+      const invalidRecipientAddress = "tgrade1z363ulwcrxged4z5jswyt5dn5v3lzsemwz9ewj"; // wrong bech32 prefix
+      const txBodyFields: TxBodyEncodeObject = {
+        typeUrl: "/cosmos.tx.v1beta1.TxBody",
+        value: {
+          messages: [
+            {
+              typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+              value: {
+                fromAddress: address,
+                toAddress: invalidRecipientAddress,
+                amount: [
+                  {
+                    denom: "ucosm",
+                    amount: "1234567",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      };
+      const txBodyBytes = registry.encode(txBodyFields);
+      const { accountNumber, sequence } = await client.getSequence(address);
+      const feeAmount = coins(2000, "ucosm");
+      const gasLimit = 200000;
+      const feeGranter = undefined;
+      const feePayer = undefined;
+      const authInfoBytes = makeAuthInfoBytes(
+        [{ pubkey, sequence }],
+        feeAmount,
+        gasLimit,
+        feeGranter,
+        feePayer,
+        sequence,
+      );
+
+      const chainId = await client.getChainId();
+      const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber);
+      const { signature } = await wallet.signDirect(address, signDoc);
+      const txRaw = TxRaw.fromPartial({
+        bodyBytes: txBodyBytes,
+        authInfoBytes: authInfoBytes,
+        signatures: [fromBase64(signature.signature)],
+      });
+      const txRawBytes = Uint8Array.from(TxRaw.encode(txRaw).finish());
+
+      try {
+        await client.broadcastTx(txRawBytes);
+        assert(false, "Expected broadcastTx to throw");
+      } catch (error: any) {
+        assert(error instanceof BroadcastTxError);
+        expect(error.message).toMatch(
+          simapp47Enabled
+            ? /Broadcasting transaction failed with code 7/i
+            : // New error code for SDK 0.50+
+              /Broadcasting transaction failed with code 4/i,
+        );
+        if (simapp47Enabled) {
+          expect(error.code).toEqual(7);
+        } else {
+          // New error code for SDK 0.50+
+          expect(error.code).toEqual(4);
+        }
+        expect(error.codespace).toEqual("sdk");
+      }
+
+      client.disconnect();
+    });
+
+    (slowSimappEnabled ? it : xit)(
+      "respects user timeouts rather than RPC timeouts",
+      async () => {
+        const client = await StargateClient.connect(slowSimapp.tendermintUrlHttp);
+        const wallet = await DirectSecp256k1HdWallet.fromMnemonic(faucet.mnemonic);
+        const [{ address, pubkey: pubkeyBytes }] = await wallet.getAccounts();
+        const pubkey = encodePubkey({
+          type: "tendermint/PubKeySecp256k1",
+          value: toBase64(pubkeyBytes),
+        });
+        const registry = new Registry();
+        const txBodyFields: TxBodyEncodeObject = {
+          typeUrl: "/cosmos.tx.v1beta1.TxBody",
+          value: {
+            messages: [
+              {
+                typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+                value: {
+                  fromAddress: address,
+                  toAddress: makeRandomAddress(),
+                  amount: [
+                    {
+                      denom: "ucosm",
+                      amount: "1234567",
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        };
+        const txBodyBytes = registry.encode(txBodyFields);
+        const chainId = await client.getChainId();
+        const feeAmount = coins(2000, "ucosm");
+        const gasLimit = 200000;
+        const feeGranter = undefined;
+        const feePayer = undefined;
+
+        const { accountNumber: accountNumber1, sequence: sequence1 } = await client.getSequence(address);
+        const authInfoBytes1 = makeAuthInfoBytes(
+          [{ pubkey, sequence: sequence1 }],
+          feeAmount,
+          gasLimit,
+          feeGranter,
+          feePayer,
+        );
+        const signDoc1 = makeSignDoc(txBodyBytes, authInfoBytes1, chainId, accountNumber1);
+        const { signature: signature1 } = await wallet.signDirect(address, signDoc1);
+        const txRaw1 = TxRaw.fromPartial({
+          bodyBytes: txBodyBytes,
+          authInfoBytes: authInfoBytes1,
+          signatures: [fromBase64(signature1.signature)],
+        });
+        const txRawBytes1 = Uint8Array.from(TxRaw.encode(txRaw1).finish());
+        const largeTimeoutMs = 30_000;
+        const txResult = await client.broadcastTx(txRawBytes1, largeTimeoutMs);
+        assertIsDeliverTxSuccess(txResult);
+
+        const { accountNumber: accountNumber2, sequence: sequence2 } = await client.getSequence(address);
+        const authInfoBytes2 = makeAuthInfoBytes(
+          [{ pubkey, sequence: sequence2 }],
+          feeAmount,
+          gasLimit,
+          feeGranter,
+          feePayer,
+        );
+        const signDoc2 = makeSignDoc(txBodyBytes, authInfoBytes2, chainId, accountNumber2);
+        const { signature: signature2 } = await wallet.signDirect(address, signDoc2);
+        const txRaw2 = TxRaw.fromPartial({
+          bodyBytes: txBodyBytes,
+          authInfoBytes: authInfoBytes2,
+          signatures: [fromBase64(signature2.signature)],
+        });
+        const txRawBytes2 = Uint8Array.from(TxRaw.encode(txRaw2).finish());
+        const smallTimeoutMs = 1_000;
+        await expectAsync(client.broadcastTx(txRawBytes2, smallTimeoutMs)).toBeRejectedWithError(
+          TimeoutError,
+          /transaction with id .+ was submitted but was not yet found on the chain/i,
+        );
+
+        client.disconnect();
+      },
+      30_000,
+    );
+  });
+
+  describe("broadcastTxSync", () => {
+    it("broadcasts sync a transaction, to get transaction hash", async () => {
+      const client = await StargateClient.connect(simapp.tendermintUrlHttp);
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(faucet.mnemonic);
+      const [{ address, pubkey: pubkeyBytes }] = await wallet.getAccounts();
+      const pubkey = encodePubkey({
+        type: "tendermint/PubKeySecp256k1",
+        value: toBase64(pubkeyBytes),
+      });
+      const registry = new Registry();
+      const txBodyFields: TxBodyEncodeObject = {
+        typeUrl: "/cosmos.tx.v1beta1.TxBody",
+        value: {
+          messages: [
+            {
+              typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+              value: {
+                fromAddress: address,
+                toAddress: makeRandomAddress(),
+                amount: [
+                  {
+                    denom: "ucosm",
+                    amount: "1234567",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      };
+      const txBodyBytes = registry.encode(txBodyFields);
+      const { accountNumber, sequence } = await client.getSequence(address);
+      const feeAmount = coins(2000, "ucosm");
+      const gasLimit = 200000;
+      const feeGranter = undefined;
+      const feePayer = undefined;
+      const authInfoBytes = makeAuthInfoBytes(
+        [{ pubkey, sequence }],
+        feeAmount,
+        gasLimit,
+        feeGranter,
+        feePayer,
+      );
+
+      const chainId = await client.getChainId();
+      const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber);
+      const { signature } = await wallet.signDirect(address, signDoc);
+      const txRaw = TxRaw.fromPartial({
+        bodyBytes: txBodyBytes,
+        authInfoBytes: authInfoBytes,
+        signatures: [fromBase64(signature.signature)],
+      });
+      const txRawBytes = Uint8Array.from(TxRaw.encode(txRaw).finish());
+      const transactionHash = await client.broadcastTxSync(txRawBytes);
+
+      expect(transactionHash).toMatch(/^[0-9A-F]{64}$/);
+
+      await sleep(simapp.blockTime * 1.5);
+
+      client.disconnect();
+    });
+  });
+});
+
+(evmdEnabled ? describe : xdescribe)("StargateClient (evmd)", () => {
+  describe("connect", () => {
+    it("works", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      expect(client).toBeTruthy();
+      client.disconnect();
+    });
+  });
+
+  describe("getChainId", () => {
+    it("works", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      expect(await client.getChainId()).toEqual(evmd.chainId);
+      client.disconnect();
+    });
+
+    it("caches chain ID", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      const openedClient = client as unknown as PrivateStargateClient;
+      const getCodeSpy = spyOn(openedClient.cometClient!, "status").and.callThrough();
+
+      expect(await client.getChainId()).toEqual(evmd.chainId); // from network
+      expect(await client.getChainId()).toEqual(evmd.chainId); // from cache
+
+      expect(getCodeSpy).toHaveBeenCalledTimes(1);
+
+      client.disconnect();
+    });
+  });
+
+  describe("getHeight", () => {
+    it("works", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const height1 = await client.getHeight();
+      expect(height1).toBeGreaterThan(0);
+      await sleep(evmd.blockTime * 1.4); // tolerate chain being 40% slower than expected
+      const height2 = await client.getHeight();
+      expect(height2).toBeGreaterThanOrEqual(height1 + 1);
+      expect(height2).toBeLessThanOrEqual(height1 + 2);
+
+      client.disconnect();
+    });
+  });
+
+  describe("getAccount", () => {
+    it("works for account with pubkey and non-zero sequence", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const account = await client.getAccount(evmfaucet.address0);
+      assert(account);
+      expect(account.address).toEqual(evmfaucet.address0);
+      expect(account.pubkey).toBeTruthy();
+      expect(account.accountNumber >= 0n).toBe(true);
+      expect(account.sequence).toBeGreaterThanOrEqual(0);
+
+      client.disconnect();
+    });
+
+    it("returns null for non-existent address", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const account = await client.getAccount(nonExistentAddress);
+      expect(account).toBeNull();
+
+      client.disconnect();
+    });
+  });
+
+  describe("getSequence", () => {
+    it("works for account", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const account = await client.getSequence(evmfaucet.address0);
+      assert(account);
+      expect(account.accountNumber >= 0n).toBe(true);
+      expect(account.sequence).toBeGreaterThanOrEqual(0);
+
+      client.disconnect();
+    });
+
+    it("rejects for non-existent address", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      await expectAsync(client.getSequence(nonExistentAddress)).toBeRejectedWithError(
+        /account '([a-z0-9]{10,90})' does not exist on chain/i,
+      );
+
+      client.disconnect();
+    });
+  });
+
+  describe("getBlock", () => {
+    it("works for latest block", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      const response = await client.getBlock();
+
+      expect(response).toEqual(
+        jasmine.objectContaining({
+          id: jasmine.stringMatching(tendermintIdMatcher),
+          header: jasmine.objectContaining({
+            chainId: await client.getChainId(),
+          }),
+          txs: jasmine.arrayContaining([]),
+        }),
+      );
+
+      expect(response.header.height).toBeGreaterThanOrEqual(1);
+      expect(new ReadonlyDate(response.header.time).getTime()).toBeLessThan(ReadonlyDate.now());
+      expect(new ReadonlyDate(response.header.time).getTime()).toBeGreaterThanOrEqual(
+        ReadonlyDate.now() - 5_000,
+      );
+
+      client.disconnect();
+    });
+
+    it("works for block by height", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      const height = (await client.getBlock()).header.height;
+      const response = await client.getBlock(height - 1);
+
+      expect(response).toEqual(
+        jasmine.objectContaining({
+          id: jasmine.stringMatching(tendermintIdMatcher),
+          header: jasmine.objectContaining({
+            height: height - 1,
+            chainId: await client.getChainId(),
+          }),
+          txs: jasmine.arrayContaining([]),
+        }),
+      );
+
+      expect(new ReadonlyDate(response.header.time).getTime()).toBeLessThan(ReadonlyDate.now());
+      expect(new ReadonlyDate(response.header.time).getTime()).toBeGreaterThanOrEqual(
+        ReadonlyDate.now() - 5_000,
+      );
+
+      client.disconnect();
+    });
+  });
+
+  describe("getBalance", () => {
+    it("works for different existing balances", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const response = await client.getBalance(evmfaucet.address0, evmd.denomFee);
+      expect(response).toEqual(
+        jasmine.objectContaining({
+          denom: evmd.denomFee,
+        }),
+      );
+      const balanceAmount = Number(BigInt(response.amount));
+      expect(balanceAmount).toBeGreaterThan(0);
+
+      client.disconnect();
+    });
+
+    it("returns 0 for non-existent balance", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const response = await client.getBalance(evmfaucet.address0, "gintonic");
+      expect(response).toEqual({
+        denom: "gintonic",
+        amount: "0",
+      });
+
+      client.disconnect();
+    });
+
+    it("returns 0 for non-existent address", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const response = await client.getBalance(nonExistentAddress, evmd.denomFee);
+      expect(response).toEqual({
+        denom: evmd.denomFee,
+        amount: "0",
+      });
+
+      client.disconnect();
+    });
+  });
+
+  describe("getAllBalances", () => {
+    it("returns all balances for account", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const balances = await client.getAllBalances(evmfaucet.address0);
+      expect(balances.length).toBeGreaterThanOrEqual(1);
+      expect(balances).toContain(
+        jasmine.objectContaining({
+          denom: evmd.denomFee,
+        }),
+      );
+
+      client.disconnect();
+    });
+
+    it("returns an empty list for non-existent account", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const balances = await client.getAllBalances(nonExistentAddress);
+      expect(balances).toEqual([]);
+
+      client.disconnect();
+    });
+  });
+
+  describe("getBalanceStaked", () => {
+    it("works", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      const response = await client.getBalanceStaked(evmfaucet.address0);
+
+      assert(response);
+      expect(response.denom).toEqual(evmd.denomStaking);
+      // Balance can be 0 or greater
+      const balanceAmount = Number(BigInt(response.amount));
+      expect(balanceAmount).toBeGreaterThanOrEqual(0);
+
+      client.disconnect();
+    });
+  });
+
+  describe("broadcastTx", () => {
+    it("broadcasts a transaction", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      const wallet = await DirectEthSecp256k1HdWallet.fromMnemonic(evmfaucet.mnemonic);
+      const [accountFromWallet] = await wallet.getAccounts();
+      const { address } = accountFromWallet;
+      const pubkey = encodePubkey(getAminoPubkey(accountFromWallet));
+      const registry = new Registry();
+      const txBodyFields: TxBodyEncodeObject = {
+        typeUrl: "/cosmos.tx.v1beta1.TxBody",
+        value: {
+          messages: [
+            {
+              typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+              value: {
+                fromAddress: address,
+                toAddress: makeRandomAddress(),
+                amount: coins(1234567, evmd.denomFee),
+              },
+            },
+          ],
+        },
+      };
+      const txBodyBytes = registry.encode(txBodyFields);
+      const { accountNumber, sequence } = await client.getSequence(address);
+      const feeAmount = coins(2000, evmd.denomFee);
+      const gasLimit = 200000;
+      const feeGranter = undefined;
+      const feePayer = undefined;
+      const authInfoBytes = makeAuthInfoBytes(
+        [{ pubkey, sequence }],
+        feeAmount,
+        gasLimit,
+        feeGranter,
+        feePayer,
+      );
+
+      const chainId = await client.getChainId();
+      const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber);
+      const { signature } = await wallet.signDirect(address, signDoc);
+      const txRaw = TxRaw.fromPartial({
+        bodyBytes: txBodyBytes,
+        authInfoBytes: authInfoBytes,
+        signatures: [fromBase64(signature.signature)],
+      });
+      const txRawBytes = Uint8Array.from(TxRaw.encode(txRaw).finish());
+      const txResult = await client.broadcastTx(txRawBytes);
+      assertIsDeliverTxSuccess(txResult);
+
+      const { gasUsed, rawLog, transactionHash } = txResult;
+      expect(gasUsed).toBeGreaterThan(0);
+      expect(rawLog).toEqual(""); // empty for SDK 0.50+
+      expect(transactionHash).toMatch(/^[0-9A-F]{64}$/);
+
+      client.disconnect();
+    });
+
+    it("errors immediately for a CheckTx failure", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      const wallet = await DirectEthSecp256k1HdWallet.fromMnemonic(evmfaucet.mnemonic);
+      const [accountFromWallet] = await wallet.getAccounts();
+      const { address } = accountFromWallet;
+      const pubkey = encodePubkey(getAminoPubkey(accountFromWallet));
+      const registry = new Registry();
+      const invalidRecipientAddress = "tgrade1z363ulwcrxged4z5jswyt5dn5v3lzsemwz9ewj"; // wrong bech32 prefix
+      const txBodyFields: TxBodyEncodeObject = {
+        typeUrl: "/cosmos.tx.v1beta1.TxBody",
+        value: {
+          messages: [
+            {
+              typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+              value: {
+                fromAddress: address,
+                toAddress: invalidRecipientAddress,
+                amount: coins(1234567, evmd.denomFee),
+              },
+            },
+          ],
+        },
+      };
+      const txBodyBytes = registry.encode(txBodyFields);
+      const { accountNumber, sequence } = await client.getSequence(address);
+      const feeAmount = coins(2000, evmd.denomFee);
+      const gasLimit = 200000;
+      const feeGranter = undefined;
+      const feePayer = undefined;
+      const authInfoBytes = makeAuthInfoBytes(
+        [{ pubkey, sequence }],
+        feeAmount,
+        gasLimit,
+        feeGranter,
+        feePayer,
+        sequence,
+      );
+
+      const chainId = await client.getChainId();
+      const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber);
+      const { signature } = await wallet.signDirect(address, signDoc);
+      const txRaw = TxRaw.fromPartial({
+        bodyBytes: txBodyBytes,
+        authInfoBytes: authInfoBytes,
+        signatures: [fromBase64(signature.signature)],
+      });
+      const txRawBytes = Uint8Array.from(TxRaw.encode(txRaw).finish());
+
+      try {
+        await client.broadcastTx(txRawBytes);
+        assert(false, "Expected broadcastTx to throw");
+      } catch (error: any) {
+        assert(error instanceof BroadcastTxError);
+        expect(error.message).toMatch(/Broadcasting transaction failed with code 4/i);
+        expect(error.code).toEqual(4);
+        expect(error.codespace).toEqual("sdk");
+      }
+
+      client.disconnect();
+    });
+  });
+
+  describe("broadcastTxSync", () => {
+    it("broadcasts sync a transaction, to get transaction hash", async () => {
+      const client = await StargateClient.connect(evmd.tendermintUrlHttp);
+      const wallet = await DirectEthSecp256k1HdWallet.fromMnemonic(evmfaucet.mnemonic);
+      const [accountFromWallet] = await wallet.getAccounts();
+      const { address } = accountFromWallet;
+      const pubkey = encodePubkey(getAminoPubkey(accountFromWallet));
+      const registry = new Registry();
+      const txBodyFields: TxBodyEncodeObject = {
+        typeUrl: "/cosmos.tx.v1beta1.TxBody",
+        value: {
+          messages: [
+            {
+              typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+              value: {
+                fromAddress: address,
+                toAddress: makeRandomAddress(),
+                amount: coins(1234567, evmd.denomFee),
+              },
+            },
+          ],
+        },
+      };
+      const txBodyBytes = registry.encode(txBodyFields);
+      const { accountNumber, sequence } = await client.getSequence(address);
+      const feeAmount = coins(2000, evmd.denomFee);
+      const gasLimit = 200000;
+      const feeGranter = undefined;
+      const feePayer = undefined;
+      const authInfoBytes = makeAuthInfoBytes(
+        [{ pubkey, sequence }],
+        feeAmount,
+        gasLimit,
+        feeGranter,
+        feePayer,
+      );
+
+      const chainId = await client.getChainId();
+      const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber);
+      const { signature } = await wallet.signDirect(address, signDoc);
+      const txRaw = TxRaw.fromPartial({
+        bodyBytes: txBodyBytes,
+        authInfoBytes: authInfoBytes,
+        signatures: [fromBase64(signature.signature)],
+      });
+      const txRawBytes = Uint8Array.from(TxRaw.encode(txRaw).finish());
+      const transactionHash = await client.broadcastTxSync(txRawBytes);
+
+      expect(transactionHash).toMatch(/^[0-9A-F]{64}$/);
+
+      await sleep(evmd.blockTime * 1.5);
+
+      client.disconnect();
+    });
+  });
+});

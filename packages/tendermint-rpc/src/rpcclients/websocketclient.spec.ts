@@ -1,0 +1,210 @@
+import { Uint53 } from "@cosmjs/math";
+import { toListPromise } from "@cosmjs/stream";
+import { Stream } from "xstream";
+
+import { createJsonRpcRequest } from "../jsonrpc";
+import { defaultInstance, tendermintEnabled } from "../testutil.spec";
+import { SubscriptionEvent } from "./rpcclient";
+import { WebsocketClient } from "./websocketclient";
+
+(tendermintEnabled ? describe : xdescribe)("WebsocketClient", () => {
+  const { blockTime, url } = defaultInstance;
+  const tendermintUrl = "ws://" + url;
+
+  it("can make a simple call", async () => {
+    const client = new WebsocketClient(tendermintUrl);
+
+    const healthResponse = await client.execute(createJsonRpcRequest("health"));
+    expect(healthResponse.result).toEqual({});
+
+    const statusResponse = await client.execute(createJsonRpcRequest("status"));
+    expect(statusResponse.result).toBeTruthy();
+    expect(statusResponse.result.node_info).toBeTruthy();
+
+    await expectAsync(client.execute(createJsonRpcRequest("no-such-method"))).toBeRejected();
+
+    client.disconnect();
+  });
+
+  it("can listen to events", async () => {
+    let done!: (() => void) & { fail: (e?: any) => void };
+    const ret = new Promise<void>((resolve, reject) => {
+      done = resolve as typeof done;
+      done.fail = reject;
+    });
+
+    const client = new WebsocketClient(tendermintUrl);
+
+    const query = "tm.event='NewBlockHeader'";
+    const req = createJsonRpcRequest("subscribe", { query: query });
+    const headers = client.listen(req);
+
+    const events: SubscriptionEvent[] = [];
+
+    const subscription = headers.subscribe({
+      error: done.fail,
+      complete: () => {
+        done.fail("subscription should not complete");
+      },
+      next: (event: SubscriptionEvent) => {
+        events.push(event);
+        expect(event.query).toEqual(query);
+
+        if (events.length === 2) {
+          // make sure they are consecutive heights
+          const eventHeight = (index: number): number =>
+            Uint53.fromString(events[index].data.value.header.height).toNumber();
+          expect(eventHeight(1)).toEqual(eventHeight(0) + 1);
+
+          subscription.unsubscribe();
+
+          // wait 1.5 * blockTime and check we did not get more events
+          setTimeout(() => {
+            expect(events.length).toEqual(2);
+
+            client.disconnect();
+            done();
+          }, 1.5 * blockTime);
+        }
+      },
+    });
+
+    return ret;
+  });
+
+  it("can listen to the same query twice", async () => {
+    const client = new WebsocketClient(tendermintUrl);
+
+    const newBlockHeaderQuery = "tm.event='NewBlockHeader'";
+
+    // we need two requests with unique IDs
+    const request1 = createJsonRpcRequest("subscribe", { query: newBlockHeaderQuery });
+    const request2 = createJsonRpcRequest("subscribe", { query: newBlockHeaderQuery });
+    const stream1 = client.listen(request1);
+    const stream2 = client.listen(request2);
+
+    const eventHeights = await toListPromise(
+      Stream.merge(stream1, stream2).map((event) => {
+        // height is string or number, depending on Tendermint version. But we don't care in this case
+        return event.data.value.header.height;
+      }),
+      4,
+    );
+    expect(new Set(eventHeights).size).toEqual(2);
+
+    client.disconnect();
+  });
+
+  it("can execute commands while listening to events", async () => {
+    let done!: (() => void) & { fail: (e?: any) => void };
+    const ret = new Promise<void>((resolve, reject) => {
+      done = resolve as typeof done;
+      done.fail = reject;
+    });
+
+    const client = new WebsocketClient(tendermintUrl);
+
+    const query = "tm.event='NewBlockHeader'";
+    const req = createJsonRpcRequest("subscribe", { query: query });
+    const headers = client.listen(req);
+
+    const events: SubscriptionEvent[] = [];
+
+    const subscription = headers.subscribe({
+      error: done.fail,
+      complete: () => {
+        done.fail("subscription should not complete");
+      },
+      next: (event: SubscriptionEvent) => {
+        events.push(event);
+        expect(event.query).toEqual(query);
+
+        if (events.length === 2) {
+          subscription.unsubscribe();
+
+          // wait 1.5 * blockTime and check we did not get more events
+          setTimeout(() => {
+            expect(events.length).toEqual(2);
+
+            client.disconnect();
+            done();
+          }, 1.5 * blockTime);
+        }
+      },
+    });
+
+    client
+      .execute(createJsonRpcRequest("status"))
+      .then((statusResponse) => {
+        expect(statusResponse).toBeTruthy();
+      })
+      .catch(done.fail);
+
+    return ret;
+  });
+
+  it("can end event listening by disconnecting", async () => {
+    let done!: (() => void) & { fail: (e?: any) => void };
+    const ret = new Promise<void>((resolve, reject) => {
+      done = resolve as typeof done;
+      done.fail = reject;
+    });
+
+    const client = new WebsocketClient(tendermintUrl);
+
+    const query = "tm.event='NewBlockHeader'";
+    const req = createJsonRpcRequest("subscribe", { query: query });
+    const headers = client.listen(req);
+
+    const receivedEvents: SubscriptionEvent[] = [];
+
+    setTimeout(() => {
+      client.disconnect();
+    }, blockTime);
+
+    headers.subscribe({
+      error: done.fail,
+      next: (event: SubscriptionEvent) => receivedEvents.push(event),
+      complete: () => {
+        expect(receivedEvents.length).toEqual(1);
+        done();
+      },
+    });
+
+    return ret;
+  });
+
+  it("fails when executing on a disconnected client", async () => {
+    const client = new WebsocketClient(tendermintUrl);
+    // dummy command to ensure client is connected
+    await client.execute(createJsonRpcRequest("health"));
+
+    client.disconnect();
+
+    await expectAsync(client.execute(createJsonRpcRequest("health"))).toBeRejectedWithError(
+      /socket has disconnected/i,
+    );
+  });
+
+  it("fails when listening to a disconnected client", async () => {
+    const client = new WebsocketClient(tendermintUrl);
+    // dummy command to ensure client is connected
+    await client.execute(createJsonRpcRequest("health"));
+
+    client.disconnect();
+
+    const query = "tm.event='NewBlockHeader'";
+    const req = createJsonRpcRequest("subscribe", { query: query });
+    expect(() => client.listen(req).subscribe({})).toThrowError(/socket has disconnected/i);
+  });
+
+  it("cannot listen to simple requests", async () => {
+    const client = new WebsocketClient(tendermintUrl);
+
+    const req = createJsonRpcRequest("health");
+    expect(() => client.listen(req)).toThrowError(/request method must be "subscribe"/i);
+
+    await client.connected();
+    client.disconnect();
+  });
+});

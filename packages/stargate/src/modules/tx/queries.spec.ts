@@ -1,0 +1,197 @@
+import { encodeEthSecp256k1Pubkey } from "@cosmjs/amino";
+import {
+  coin,
+  coins,
+  DirectEthSecp256k1HdWallet,
+  DirectSecp256k1HdWallet,
+  Registry,
+} from "@cosmjs/proto-signing";
+import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
+import { assertDefined, sleep } from "@cosmjs/utils";
+import { MsgDelegate } from "cosmjs-types/cosmos/staking/v1beta1/tx";
+
+import { QueryClient } from "../../queryclient";
+import { defaultRegistryTypes, SigningStargateClient } from "../../signingstargateclient";
+import { assertIsDeliverTxSuccess, StargateClient } from "../../stargateclient";
+import {
+  defaultSigningClientOptions,
+  evmd,
+  evmdEnabled,
+  evmfaucet,
+  evmSigningClientOptions,
+  evmvalidator,
+  faucet,
+  makeRandomAddress,
+  simapp,
+  simappEnabled,
+  validator,
+} from "../../testutils";
+import { setupTxExtension, TxExtension } from "./queries";
+
+async function makeClientWithTx(rpcUrl: string): Promise<[QueryClient & TxExtension, CometClient]> {
+  const cometClient = await connectComet(rpcUrl);
+  return [QueryClient.withExtensions(cometClient, setupTxExtension), cometClient];
+}
+
+(simappEnabled ? describe : xdescribe)("TxExtension", () => {
+  const defaultFee = {
+    amount: coins(25000, "ucosm"),
+    gas: "1500000", // 1.5 million
+  };
+  let txHash: string | undefined;
+  let memo: string | undefined;
+
+  beforeAll(async () => {
+    const wallet = await DirectSecp256k1HdWallet.fromMnemonic(faucet.mnemonic);
+    const client = await SigningStargateClient.connectWithSigner(
+      simapp.tendermintUrlHttp,
+      wallet,
+      defaultSigningClientOptions,
+    );
+
+    {
+      const recipient = makeRandomAddress();
+      memo = `Test tx ${Date.now()}`;
+      const result = await client.sendTokens(
+        faucet.address0,
+        recipient,
+        coins(25000, "ucosm"),
+        defaultFee,
+        memo,
+      );
+      assertIsDeliverTxSuccess(result);
+      txHash = result.transactionHash;
+    }
+
+    await sleep(75); // wait until transactions are indexed
+  });
+
+  describe("getTx", () => {
+    it("works", async () => {
+      assertDefined(txHash);
+      assertDefined(memo);
+      const [client, cometClient] = await makeClientWithTx(simapp.tendermintUrlHttp);
+
+      const response = await client.tx.getTx(txHash);
+      expect(response.tx?.body?.memo).toEqual(memo);
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("simulate", () => {
+    it("works", async () => {
+      assertDefined(txHash);
+      assertDefined(memo);
+      const [client, cometClient] = await makeClientWithTx(simapp.tendermintUrlHttp);
+      const sequenceClient = await StargateClient.connect(simapp.tendermintUrlHttp);
+
+      const registry = new Registry(defaultRegistryTypes);
+      const msg: MsgDelegate = {
+        delegatorAddress: faucet.address0,
+        validatorAddress: validator.validatorAddress,
+        amount: coin(25000, "ustake"),
+      };
+      const msgAny = registry.encodeAsAny({
+        typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
+        value: msg,
+      });
+
+      const { sequence } = await sequenceClient.getSequence(faucet.address0);
+      const response = await client.tx.simulate([msgAny], "foo", faucet.pubkey0, sequence);
+      expect(response.gasInfo?.gasUsed).toBeGreaterThanOrEqual(101_000);
+      expect(response.gasInfo?.gasUsed).toBeLessThanOrEqual(200_000);
+      expect(response.gasInfo?.gasWanted).toEqual(
+        // Some dummy value. Value does not matter for regular users.
+        BigInt("0xffffffffffffffff"),
+      );
+
+      cometClient.disconnect();
+    });
+  });
+});
+
+(evmdEnabled ? describe : xdescribe)("TxExtension (evmd)", () => {
+  const defaultFee = {
+    amount: coins(25000, evmd.denomFee),
+    gas: "1500000", // 1.5 million
+  };
+  let txHash: string | undefined;
+  let memo: string | undefined;
+
+  beforeAll(async () => {
+    const wallet = await DirectEthSecp256k1HdWallet.fromMnemonic(evmfaucet.mnemonic);
+    const client = await SigningStargateClient.connectWithSigner(
+      evmd.tendermintUrlHttp,
+      wallet,
+      evmSigningClientOptions,
+    );
+
+    {
+      const recipient = makeRandomAddress();
+      memo = `Test tx ${Date.now()}`;
+      const result = await client.sendTokens(
+        evmfaucet.address0,
+        recipient,
+        coins(25000, evmd.denomFee),
+        defaultFee,
+        memo,
+      );
+      assertIsDeliverTxSuccess(result);
+      txHash = result.transactionHash;
+    }
+
+    await sleep(75); // wait until transactions are indexed
+  });
+
+  describe("getTx", () => {
+    it("works", async () => {
+      assertDefined(txHash);
+      assertDefined(memo);
+      const [client, cometClient] = await makeClientWithTx(evmd.tendermintUrlHttp);
+
+      const response = await client.tx.getTx(txHash);
+      expect(response.tx?.body?.memo).toEqual(memo);
+
+      cometClient.disconnect();
+    });
+  });
+
+  describe("simulate", () => {
+    it("works", async () => {
+      assertDefined(txHash);
+      assertDefined(memo);
+      const [client, cometClient] = await makeClientWithTx(evmd.tendermintUrlHttp);
+      const sequenceClient = await StargateClient.connect(evmd.tendermintUrlHttp);
+
+      const registry = new Registry(defaultRegistryTypes);
+      const msg: MsgDelegate = {
+        delegatorAddress: evmfaucet.address0,
+        validatorAddress: evmvalidator.validatorAddress,
+        amount: coin(25000, evmd.denomStaking),
+      };
+      const msgAny = registry.encodeAsAny({
+        typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
+        value: msg,
+      });
+
+      const wallet = await DirectEthSecp256k1HdWallet.fromMnemonic(evmfaucet.mnemonic);
+      const [account] = await wallet.getAccounts();
+      const { sequence } = await sequenceClient.getSequence(evmfaucet.address0);
+      const response = await client.tx.simulate(
+        [msgAny],
+        "foo",
+        encodeEthSecp256k1Pubkey(account.pubkey),
+        sequence,
+      );
+      expect(response.gasInfo?.gasUsed).toBeGreaterThanOrEqual(101_000);
+      expect(response.gasInfo?.gasUsed).toBeLessThanOrEqual(300_000);
+      expect(response.gasInfo?.gasWanted).toEqual(
+        // Some dummy value. Value does not matter for regular users.
+        BigInt("0xffffffffffffffff"),
+      );
+
+      cometClient.disconnect();
+    });
+  });
+});

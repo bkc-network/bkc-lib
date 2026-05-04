@@ -1,0 +1,71 @@
+name: Coverage
+
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test-with-coverage:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - name: Install native build dependencies
+        run: sudo apt-get update && sudo apt-get install -y libusb-1.0-0-dev libudev-dev
+
+      - name: Build evmd
+        run: ./scripts/evmd051/build.sh
+      - name: Start evmd
+        run: RUNNER_TRACKING_ID="" && ./scripts/evmd051/start.sh &
+      - name: Start slow evmd
+        run: RUNNER_TRACKING_ID="" && ./scripts/evmd051/slow_start.sh &
+      - name: Start wasmd
+        run: RUNNER_TRACKING_ID="" && ./scripts/wasmd/start.sh &
+      - name: Start simapp
+        run: RUNNER_TRACKING_ID="" && ./scripts/simapp50/start.sh &
+      - name: Start slow simapp
+        run: RUNNER_TRACKING_ID="" && ./scripts/simapp50/slow_start.sh &
+      - name: Start Tendermint blockchains
+        run: RUNNER_TRACKING_ID="" && ./scripts/tendermint/all_start.sh &
+      - name: Start socket server
+        run: RUNNER_TRACKING_ID="" && ./scripts/socketserver/start.sh &
+      - name: Start http server
+        run: RUNNER_TRACKING_ID="" && ./scripts/httpserver/start.sh &
+
+      - name: Install dependencies
+        run: yarn install --immutable --immutable-cache --check-cache
+
+      - name: Build
+        run: yarn build
+
+      - name: Initialize evmd
+        run: ./scripts/evmd051/init.sh
+      - name: Initialize wasmd (deploy contracts and friends)
+        run: ./scripts/wasmd/init.sh
+
+      - name: Test with coverage
+        env:
+          EVMD051_ENABLED: 1
+          SLOW_EVMD051_ENABLED: 1
+          HTTPSERVER_ENABLED: 1
+          SIMAPP50_ENABLED: 1
+          SLOW_SIMAPP50_ENABLED: 1
+          TENDERMINT_ENABLED: 1
+          SOCKETSERVER_ENABLED: 1
+          SKIP_BUILD: 1
+          WASMD_ENABLED: 1
+        run: yarn coverage
+
+      - uses: codecov/codecov-action@v5
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
