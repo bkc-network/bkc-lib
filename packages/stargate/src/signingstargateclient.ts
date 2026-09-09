@@ -1,4 +1,4 @@
-import { encodeSecp256k1Pubkey, getAminoPubkey, makeSignDoc as makeSignDocAmino, StdFee } from "@bkc/amino";
+import { getAminoPubkey, makeSignDoc as makeSignDocAmino, StdFee } from "@bkc/amino";
 import { fromBase64 } from "@bkc/encoding";
 import { Int53, Uint53 } from "@bkc/math";
 import {
@@ -195,7 +195,8 @@ export class SigningStargateClient extends StargateClient {
     if (!accountFromSigner) {
       throw new Error("Failed to retrieve account from signer");
     }
-    const pubkey = encodeSecp256k1Pubkey(accountFromSigner.pubkey);
+    // Route pubkey encoding by the account's algorithm (secp256k1 / eth_secp256k1 / mldsa65).
+    const pubkey = getAminoPubkey(accountFromSigner);
     const { sequence } = await this.getSequence(signerAddress);
     const { gasInfo } = await this.forceGetQueryClient().tx.simulate(anyMsgs, memo, pubkey, sequence);
     assertDefined(gasInfo);

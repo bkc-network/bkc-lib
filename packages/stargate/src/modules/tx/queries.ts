@@ -1,4 +1,5 @@
-import { Pubkey } from "@bkc/amino";
+import { Pubkey, pubkeyType } from "@bkc/amino";
+import { mldsa65 } from "@bkc/crypto";
 import { encodePubkey } from "@bkc/proto-signing";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import {
@@ -49,6 +50,11 @@ export function setupTxExtension(base: QueryClient): TxExtension {
         signer: Pubkey,
         sequence: number,
       ) => {
+        // ML-DSA-65 chains (BKC) are SIGN_MODE_DIRECT-only, and the ~3.3 KB signature must be a
+        // realistic placeholder or the tx-size gas is under-estimated. secp/ed keep the original.
+        const isMldsa65 = signer.type === pubkeyType.mldsa65;
+        const mode = isMldsa65 ? SignMode.SIGN_MODE_DIRECT : SignMode.SIGN_MODE_UNSPECIFIED;
+        const dummySignature = isMldsa65 ? new Uint8Array(mldsa65.signatureLength) : new Uint8Array();
         const tx = Tx.fromPartial({
           authInfo: AuthInfo.fromPartial({
             fee: Fee.fromPartial({}),
@@ -56,7 +62,7 @@ export function setupTxExtension(base: QueryClient): TxExtension {
               {
                 publicKey: encodePubkey(signer),
                 sequence: BigInt(sequence),
-                modeInfo: { single: { mode: SignMode.SIGN_MODE_UNSPECIFIED } },
+                modeInfo: { single: { mode: mode } },
               },
             ],
           }),
@@ -64,7 +70,7 @@ export function setupTxExtension(base: QueryClient): TxExtension {
             messages: Array.from(messages),
             memo: memo,
           }),
-          signatures: [new Uint8Array()],
+          signatures: [dummySignature],
         });
         const request = SimulateRequest.fromPartial({
           txBytes: Tx.encode(tx).finish(),
