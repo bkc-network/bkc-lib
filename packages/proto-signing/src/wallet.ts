@@ -12,7 +12,15 @@ import { toAscii } from "@bkc/encoding";
  * This reduces the scope of a potential rainbow attack to all CosmJS users.
  * Must be 16 bytes due to implementation limitations.
  */
-export const cosmjsSalt: Uint8Array<ArrayBuffer> = toAscii("The CosmJS salt.");
+/**
+ * KDF salt for the encrypted keystore.
+ *
+ * The string is part of the on-disk format, not a label: it goes into Argon2 when a
+ * wallet is serialised, so every keystore ever written was derived with these exact
+ * bytes. Renaming the constant is safe; changing what it spells would lock every
+ * existing wallet out. It keeps the upstream wording for that reason alone.
+ */
+export const keystoreKdfSalt: Uint8Array<ArrayBuffer> = toAscii("The CosmJS salt.");
 
 export interface KdfConfiguration {
   /**
@@ -32,7 +40,7 @@ export async function executeKdf(password: string, configuration: KdfConfigurati
     case "argon2id": {
       const options = configuration.params;
       if (!isArgon2idOptions(options)) throw new Error("Invalid format of argon2id params");
-      return await Argon2id.execute(password, cosmjsSalt, options);
+      return await Argon2id.execute(password, keystoreKdfSalt, options);
     }
     default:
       throw new Error("Unsupported KDF algorithm");
