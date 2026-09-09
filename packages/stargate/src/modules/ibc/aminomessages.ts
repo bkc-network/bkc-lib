@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { AminoMsg, Coin, omitDefault } from "@cosmjs/amino";
+import { AminoMsg, Coin, omitDefault } from "@bkc/amino";
 import { MsgTransfer } from "cosmjs-types/ibc/applications/transfer/v1/tx";
 
 import { AminoConverters } from "../../aminotypes";

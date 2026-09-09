@@ -1,5 +1,5 @@
-import { Random } from "@cosmjs/crypto";
-import { fromBase64, fromBech32, fromHex } from "@cosmjs/encoding";
+import { Random } from "@bkc/crypto";
+import { fromBase64, fromBech32, fromHex } from "@bkc/encoding";
 
 import {
   decodeAminoPubkey,

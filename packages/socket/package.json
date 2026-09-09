@@ -1,5 +1,5 @@
 {
-  "name": "@cosmjs/socket",
+  "name": "@bkc/socket",
   "version": "0.39.0",
   "description": "Utility functions for working with WebSockets",
   "contributors": [
@@ -44,13 +44,13 @@
     "pack-web": "yarn build-or-skip && webpack --mode development --config webpack.web.config.cjs"
   },
   "dependencies": {
-    "@cosmjs/stream": "workspace:^",
+    "@bkc/stream": "workspace:^",
     "isomorphic-ws": "^4.0.1",
     "ws": "^7",
     "xstream": "^11.14.0"
   },
   "devDependencies": {
-    "@cosmjs/utils": "workspace:^",
+    "@bkc/utils": "workspace:^",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/jasmine": "^4",
     "@types/karma-firefox-launcher": "^2",

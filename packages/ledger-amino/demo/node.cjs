@@ -1,7 +1,7 @@
-const { makeCosmoshubPath, makeSignDoc } = require("@cosmjs/amino");
-const { pathToString } = require("@cosmjs/crypto");
-const { toBase64 } = require("@cosmjs/encoding");
-const { LedgerSigner } = require("@cosmjs/ledger-amino");
+const { makeCosmoshubPath, makeSignDoc } = require("@bkc/amino");
+const { pathToString } = require("@bkc/crypto");
+const { toBase64 } = require("@bkc/encoding");
+const { LedgerSigner } = require("@bkc/ledger-amino");
 const TransportNodeHid = require("@ledgerhq/hw-transport-node-hid").default;
 
 const interactiveTimeout = 120_000;

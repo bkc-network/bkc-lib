@@ -1,7 +1,7 @@
-import { Random } from "@cosmjs/crypto";
-import { toBech32 } from "@cosmjs/encoding";
-import { makeCosmoshubPath, StargateClient } from "@cosmjs/stargate";
-import { assert } from "@cosmjs/utils";
+import { Random } from "@bkc/crypto";
+import { toBech32 } from "@bkc/encoding";
+import { makeCosmoshubPath, StargateClient } from "@bkc/stargate";
+import { assert } from "@bkc/utils";
 
 import { Faucet } from "./faucet";
 import { simappEnabled } from "./testutils";

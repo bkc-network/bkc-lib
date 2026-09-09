@@ -1,5 +1,5 @@
-import { getAminoPubkey } from "@cosmjs/amino";
-import { fromBase64 } from "@cosmjs/encoding";
+import { getAminoPubkey } from "@bkc/amino";
+import { fromBase64 } from "@bkc/encoding";
 import {
   coins,
   decodeTxRaw,
@@ -10,8 +10,8 @@ import {
   makeSignDoc,
   Registry,
   TxBodyEncodeObject,
-} from "@cosmjs/proto-signing";
-import { assert, sleep } from "@cosmjs/utils";
+} from "@bkc/proto-signing";
+import { assert, sleep } from "@bkc/utils";
 import { MsgSendResponse } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";

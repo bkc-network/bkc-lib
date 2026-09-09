@@ -1,4 +1,4 @@
-import { sleep } from "@cosmjs/utils";
+import { sleep } from "@bkc/utils";
 import { Stream } from "xstream";
 
 import { DefaultValueProducer } from "./defaultvalueproducer";

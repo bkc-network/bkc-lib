@@ -1,3 +1,10 @@
+BKC Lib is a fork of CosmJS (https://github.com/cosmos/cosmjs), Apache-2.0, taken at
+version 0.39.0. Every workspace package was renamed from the @cosmjs scope to @bkc, and
+the signing stack was extended with ML-DSA-65 (FIPS 204) for the BKC chain. The upstream
+notice below is retained as the licence requires.
+
+---
+
 This repository was forked from the folders packages/iov-cosmos and scripts/cosmos
 of https://github.com/iov-one/iov-core at tag v2.0.0-alpha.7. It was repurposed
 and heavily modified from there on.

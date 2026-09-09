@@ -1,4 +1,4 @@
-import { fromBase64, fromHex } from "@cosmjs/encoding";
+import { fromBase64, fromHex } from "@bkc/encoding";
 
 import blockResponse from "../testdata/block_results.json";
 import {

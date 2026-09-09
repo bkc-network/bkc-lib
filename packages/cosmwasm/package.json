@@ -1,5 +1,5 @@
 {
-  "name": "@cosmjs/cosmwasm",
+  "name": "@bkc/cosmwasm",
   "version": "0.39.0",
   "description": "CosmWasm SDK",
   "contributors": [
@@ -43,14 +43,14 @@
     "pack-web": "yarn build-or-skip && webpack --mode development --config webpack.web.config.cjs"
   },
   "dependencies": {
-    "@cosmjs/amino": "workspace:^",
-    "@cosmjs/crypto": "workspace:^",
-    "@cosmjs/encoding": "workspace:^",
-    "@cosmjs/math": "workspace:^",
-    "@cosmjs/proto-signing": "workspace:^",
-    "@cosmjs/stargate": "workspace:^",
-    "@cosmjs/tendermint-rpc": "workspace:^",
-    "@cosmjs/utils": "workspace:^",
+    "@bkc/amino": "workspace:^",
+    "@bkc/crypto": "workspace:^",
+    "@bkc/encoding": "workspace:^",
+    "@bkc/math": "workspace:^",
+    "@bkc/proto-signing": "workspace:^",
+    "@bkc/stargate": "workspace:^",
+    "@bkc/tendermint-rpc": "workspace:^",
+    "@bkc/utils": "workspace:^",
     "cosmjs-types": "^0.11.0"
   },
   "devDependencies": {

@@ -180,21 +180,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bufbuild/protobuf@npm:^2.10.2":
-  version: 2.10.2
-  resolution: "@bufbuild/protobuf@npm:2.10.2"
-  checksum: 10c0/970c4020bfc4769baa13eb5b2622d6e59962bfff54dbf8b5fc7499e8dc0b6ec1ee80be85148eb545f70d7e5b058bd178a5dc5c0b7409a96a510114fb3bfbb631
-  languageName: node
-  linkType: hard
-
-"@cosmjs/amino@workspace:^, @cosmjs/amino@workspace:packages/amino":
+"@bkc/amino@workspace:^, @bkc/amino@workspace:packages/amino":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/amino@workspace:packages/amino"
+  resolution: "@bkc/amino@workspace:packages/amino"
   dependencies:
-    "@cosmjs/crypto": "workspace:^"
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/math": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/crypto": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/math": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -219,11 +212,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/cosmwasm-stargate@workspace:packages/cosmwasm-stargate":
+"@bkc/cosmwasm-stargate@workspace:packages/cosmwasm-stargate":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/cosmwasm-stargate@workspace:packages/cosmwasm-stargate"
+  resolution: "@bkc/cosmwasm-stargate@workspace:packages/cosmwasm-stargate"
   dependencies:
-    "@cosmjs/cosmwasm": "workspace:^"
+    "@bkc/cosmwasm": "workspace:^"
     "@types/node": "npm:*"
     glob: "npm:^13.0.0"
     prettier: "npm:^3.6.2"
@@ -232,18 +225,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/cosmwasm@workspace:^, @cosmjs/cosmwasm@workspace:packages/cosmwasm":
+"@bkc/cosmwasm@workspace:^, @bkc/cosmwasm@workspace:packages/cosmwasm":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/cosmwasm@workspace:packages/cosmwasm"
+  resolution: "@bkc/cosmwasm@workspace:packages/cosmwasm"
   dependencies:
-    "@cosmjs/amino": "workspace:^"
-    "@cosmjs/crypto": "workspace:^"
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/math": "workspace:^"
-    "@cosmjs/proto-signing": "workspace:^"
-    "@cosmjs/stargate": "workspace:^"
-    "@cosmjs/tendermint-rpc": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/amino": "workspace:^"
+    "@bkc/crypto": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/math": "workspace:^"
+    "@bkc/proto-signing": "workspace:^"
+    "@bkc/stargate": "workspace:^"
+    "@bkc/tendermint-rpc": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -271,13 +264,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/crypto@workspace:^, @cosmjs/crypto@workspace:packages/crypto":
+"@bkc/crypto@workspace:^, @bkc/crypto@workspace:packages/crypto":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/crypto@workspace:packages/crypto"
+  resolution: "@bkc/crypto@workspace:packages/crypto"
   dependencies:
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/math": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/math": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@noble/ciphers": "npm:^2.1.1"
     "@noble/curves": "npm:^2.0.1"
@@ -307,9 +300,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/encoding@workspace:^, @cosmjs/encoding@workspace:packages/encoding":
+"@bkc/encoding@workspace:^, @bkc/encoding@workspace:packages/encoding":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/encoding@workspace:packages/encoding"
+  resolution: "@bkc/encoding@workspace:packages/encoding"
   dependencies:
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@scure/base": "npm:^2.0.0"
@@ -340,9 +333,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/faucet-client@workspace:packages/faucet-client":
+"@bkc/faucet-client@workspace:packages/faucet-client":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/faucet-client@workspace:packages/faucet-client"
+  resolution: "@bkc/faucet-client@workspace:packages/faucet-client"
   dependencies:
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
@@ -369,16 +362,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/faucet@workspace:packages/faucet":
+"@bkc/faucet@workspace:packages/faucet":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/faucet@workspace:packages/faucet"
+  resolution: "@bkc/faucet@workspace:packages/faucet"
   dependencies:
-    "@cosmjs/crypto": "workspace:^"
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/math": "workspace:^"
-    "@cosmjs/proto-signing": "workspace:^"
-    "@cosmjs/stargate": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/crypto": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/math": "workspace:^"
+    "@bkc/proto-signing": "workspace:^"
+    "@bkc/stargate": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@koa/bodyparser": "npm:^6.0.0"
     "@koa/cors": "npm:^5.0"
@@ -400,11 +393,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/json-rpc@workspace:^, @cosmjs/json-rpc@workspace:packages/json-rpc":
+"@bkc/json-rpc@workspace:^, @bkc/json-rpc@workspace:packages/json-rpc":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/json-rpc@workspace:packages/json-rpc"
+  resolution: "@bkc/json-rpc@workspace:packages/json-rpc"
   dependencies:
-    "@cosmjs/stream": "workspace:^"
+    "@bkc/stream": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -430,16 +423,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/ledger-amino@workspace:packages/ledger-amino":
+"@bkc/ledger-amino@workspace:packages/ledger-amino":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/ledger-amino@workspace:packages/ledger-amino"
+  resolution: "@bkc/ledger-amino@workspace:packages/ledger-amino"
   dependencies:
-    "@cosmjs/amino": "workspace:^"
-    "@cosmjs/crypto": "workspace:^"
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/math": "workspace:^"
-    "@cosmjs/stargate": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/amino": "workspace:^"
+    "@bkc/crypto": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/math": "workspace:^"
+    "@bkc/stargate": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@ledgerhq/hw-transport": "npm:^6.31.4"
     "@ledgerhq/hw-transport-node-hid": "npm:^6.29.5"
@@ -462,9 +455,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/math@workspace:^, @cosmjs/math@workspace:packages/math":
+"@bkc/math@workspace:^, @bkc/math@workspace:packages/math":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/math@workspace:packages/math"
+  resolution: "@bkc/math@workspace:packages/math"
   dependencies:
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
@@ -490,16 +483,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/proto-signing@workspace:^, @cosmjs/proto-signing@workspace:packages/proto-signing":
+"@bkc/proto-signing@workspace:^, @bkc/proto-signing@workspace:packages/proto-signing":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/proto-signing@workspace:packages/proto-signing"
+  resolution: "@bkc/proto-signing@workspace:packages/proto-signing"
   dependencies:
+    "@bkc/amino": "workspace:^"
+    "@bkc/crypto": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/math": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@bufbuild/protobuf": "npm:^2.10.2"
-    "@cosmjs/amino": "workspace:^"
-    "@cosmjs/crypto": "workspace:^"
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/math": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -527,12 +520,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/socket@workspace:^, @cosmjs/socket@workspace:packages/socket":
+"@bkc/socket@workspace:^, @bkc/socket@workspace:packages/socket":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/socket@workspace:packages/socket"
+  resolution: "@bkc/socket@workspace:packages/socket"
   dependencies:
-    "@cosmjs/stream": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/stream": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -561,18 +554,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/stargate@workspace:^, @cosmjs/stargate@workspace:packages/stargate":
+"@bkc/stargate@workspace:^, @bkc/stargate@workspace:packages/stargate":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/stargate@workspace:packages/stargate"
+  resolution: "@bkc/stargate@workspace:packages/stargate"
   dependencies:
-    "@cosmjs/amino": "workspace:^"
-    "@cosmjs/crypto": "workspace:^"
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/math": "workspace:^"
-    "@cosmjs/proto-signing": "workspace:^"
-    "@cosmjs/stream": "workspace:^"
-    "@cosmjs/tendermint-rpc": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/amino": "workspace:^"
+    "@bkc/crypto": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/math": "workspace:^"
+    "@bkc/proto-signing": "workspace:^"
+    "@bkc/stream": "workspace:^"
+    "@bkc/tendermint-rpc": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -600,11 +593,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/stream@workspace:^, @cosmjs/stream@workspace:packages/stream":
+"@bkc/stream@workspace:^, @bkc/stream@workspace:packages/stream":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/stream@workspace:packages/stream"
+  resolution: "@bkc/stream@workspace:packages/stream"
   dependencies:
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -631,17 +624,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/tendermint-rpc@workspace:^, @cosmjs/tendermint-rpc@workspace:packages/tendermint-rpc":
+"@bkc/tendermint-rpc@workspace:^, @bkc/tendermint-rpc@workspace:packages/tendermint-rpc":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/tendermint-rpc@workspace:packages/tendermint-rpc"
+  resolution: "@bkc/tendermint-rpc@workspace:packages/tendermint-rpc"
   dependencies:
-    "@cosmjs/crypto": "workspace:^"
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/json-rpc": "workspace:^"
-    "@cosmjs/math": "workspace:^"
-    "@cosmjs/socket": "workspace:^"
-    "@cosmjs/stream": "workspace:^"
-    "@cosmjs/utils": "workspace:^"
+    "@bkc/crypto": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/json-rpc": "workspace:^"
+    "@bkc/math": "workspace:^"
+    "@bkc/socket": "workspace:^"
+    "@bkc/stream": "workspace:^"
+    "@bkc/utils": "workspace:^"
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -669,9 +662,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cosmjs/utils@workspace:^, @cosmjs/utils@workspace:packages/utils":
+"@bkc/utils@workspace:^, @bkc/utils@workspace:packages/utils":
   version: 0.0.0-use.local
-  resolution: "@cosmjs/utils@workspace:packages/utils"
+  resolution: "@bkc/utils@workspace:packages/utils"
   dependencies:
     "@istanbuljs/nyc-config-typescript": "npm:^1.0.1"
     "@types/jasmine": "npm:^4"
@@ -697,6 +690,13 @@ __metadata:
     webpack-cli: "npm:^4.6.0"
   languageName: unknown
   linkType: soft
+
+"@bufbuild/protobuf@npm:^2.10.2":
+  version: 2.10.2
+  resolution: "@bufbuild/protobuf@npm:2.10.2"
+  checksum: 10c0/970c4020bfc4769baa13eb5b2622d6e59962bfff54dbf8b5fc7499e8dc0b6ec1ee80be85148eb545f70d7e5b058bd178a5dc5c0b7409a96a510114fb3bfbb631
+  languageName: node
+  linkType: hard
 
 "@discoveryjs/json-ext@npm:^0.5.0":
   version: 0.5.3
@@ -1642,12 +1642,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=10.0.0, @types/node@npm:>=13.7.0":
-  version: 22.10.6
-  resolution: "@types/node@npm:22.10.6"
+"@types/node@npm:22.7.5":
+  version: 22.7.5
+  resolution: "@types/node@npm:22.7.5"
   dependencies:
-    undici-types: "npm:~6.20.0"
-  checksum: 10c0/8b67affc211e5f9c74f7949cda04ca669721e50b83d71b8772a7bed7a4a3c41d663b3a794413f618e763ca6c5da8c234c25ffebcb0737983fc3e7415818ab9a7
+    undici-types: "npm:~6.19.2"
+  checksum: 10c0/cf11f74f1a26053ec58066616e3a8685b6bcd7259bc569738b8f752009f9f0f7f85a1b2d24908e5b0f752482d1e8b6babdf1fbb25758711ec7bb9500bfcd6e60
   languageName: node
   linkType: hard
 
@@ -2557,6 +2557,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bkc-lib-monorepo-root@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "bkc-lib-monorepo-root@workspace:."
+  dependencies:
+    "@bkc/amino": "workspace:^"
+    "@bkc/cosmwasm": "workspace:^"
+    "@bkc/crypto": "workspace:^"
+    "@bkc/encoding": "workspace:^"
+    "@bkc/proto-signing": "workspace:^"
+    "@bkc/stargate": "workspace:^"
+    "@eslint/js": "npm:^9.32.0"
+    "@typescript-eslint/eslint-plugin": "npm:^8.46.0"
+    "@typescript-eslint/parser": "npm:^8.46.0"
+    eslint: "npm:^9.32.0"
+    eslint-config-prettier: "npm:^8.3.0"
+    eslint-import-resolver-typescript: "npm:^4.4.4"
+    eslint-plugin-import: "npm:^2.32.0"
+    eslint-plugin-prettier: "npm:^5.5.0"
+    eslint-plugin-simple-import-sort: "npm:^7.0.0"
+    globals: "npm:^16.3.0"
+    prettier: "npm:^3.6.2"
+    typescript: "npm:~5.9"
+  languageName: unknown
+  linkType: soft
+
 "bl@npm:^4.0.3":
   version: 4.1.0
   resolution: "bl@npm:4.1.0"
@@ -3010,31 +3035,6 @@ __metadata:
   checksum: 10c0/373702b7999409922da80de4a61938aabba6929aea5b6fd9096fefb9e8342f626c0ebd7507b0e8b0b311380744cc985f27edebc0a26e0ddb784b54e1085de761
   languageName: node
   linkType: hard
-
-"cosmjs-monorepo-root@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "cosmjs-monorepo-root@workspace:."
-  dependencies:
-    "@cosmjs/amino": "workspace:^"
-    "@cosmjs/cosmwasm": "workspace:^"
-    "@cosmjs/crypto": "workspace:^"
-    "@cosmjs/encoding": "workspace:^"
-    "@cosmjs/proto-signing": "workspace:^"
-    "@cosmjs/stargate": "workspace:^"
-    "@eslint/js": "npm:^9.32.0"
-    "@typescript-eslint/eslint-plugin": "npm:^8.46.0"
-    "@typescript-eslint/parser": "npm:^8.46.0"
-    eslint: "npm:^9.32.0"
-    eslint-config-prettier: "npm:^8.3.0"
-    eslint-import-resolver-typescript: "npm:^4.4.4"
-    eslint-plugin-import: "npm:^2.32.0"
-    eslint-plugin-prettier: "npm:^5.5.0"
-    eslint-plugin-simple-import-sort: "npm:^7.0.0"
-    globals: "npm:^16.3.0"
-    prettier: "npm:^3.6.2"
-    typescript: "npm:~5.9"
-  languageName: unknown
-  linkType: soft
 
 "cosmjs-types@npm:^0.11.0":
   version: 0.11.0
@@ -7683,10 +7683,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.20.0":
-  version: 6.20.0
-  resolution: "undici-types@npm:6.20.0"
-  checksum: 10c0/68e659a98898d6a836a9a59e6adf14a5d799707f5ea629433e025ac90d239f75e408e2e5ff086afc3cace26f8b26ee52155293564593fbb4a2f666af57fc59bf
+"undici-types@npm:~6.19.2":
+  version: 6.19.8
+  resolution: "undici-types@npm:6.19.8"
+  checksum: 10c0/078afa5990fba110f6824823ace86073b4638f1d5112ee26e790155f481f2a868cc3e0615505b6f4282bdf74a3d8caad715fd809e870c2bb0704e3ea6082f344
   languageName: node
   linkType: hard
 

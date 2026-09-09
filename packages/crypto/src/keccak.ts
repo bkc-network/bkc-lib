@@ -1,4 +1,4 @@
-import { fixUint8Array } from "@cosmjs/encoding";
+import { fixUint8Array } from "@bkc/encoding";
 import { keccak_256 } from "@noble/hashes/sha3.js";
 
 import { HashFunction } from "./hash";

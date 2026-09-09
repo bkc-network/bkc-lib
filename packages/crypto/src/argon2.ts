@@ -1,4 +1,4 @@
-import { isNonNullObject } from "@cosmjs/utils";
+import { isNonNullObject } from "@bkc/utils";
 import { argon2id, ArgonOpts } from "@noble/hashes/argon2.js";
 
 /**

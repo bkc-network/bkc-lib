@@ -1,5 +1,5 @@
-import { fromUtf8 } from "@cosmjs/encoding";
-import { Decimal } from "@cosmjs/math";
+import { fromUtf8 } from "@bkc/encoding";
+import { Decimal } from "@bkc/math";
 
 import { checkDynamicGasPriceSupport, multiplyDecimalByNumber, queryDynamicGasPrice } from "./feemarket";
 

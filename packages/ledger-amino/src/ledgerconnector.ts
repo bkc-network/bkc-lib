@@ -1,7 +1,7 @@
-import { encodeSecp256k1Pubkey, makeCosmoshubPath, pubkeyToAddress, Secp256k1Pubkey } from "@cosmjs/amino";
-import { HdPath, pathToString, Secp256k1Signature } from "@cosmjs/crypto";
-import { fromUtf8 } from "@cosmjs/encoding";
-import { assert } from "@cosmjs/utils";
+import { encodeSecp256k1Pubkey, makeCosmoshubPath, pubkeyToAddress, Secp256k1Pubkey } from "@bkc/amino";
+import { HdPath, pathToString, Secp256k1Signature } from "@bkc/crypto";
+import { fromUtf8 } from "@bkc/encoding";
+import { assert } from "@bkc/utils";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import Transport from "@ledgerhq/hw-transport";
 // eslint-disable-next-line @typescript-eslint/naming-convention

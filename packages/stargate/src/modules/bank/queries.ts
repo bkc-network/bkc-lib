@@ -1,4 +1,4 @@
-import { assert } from "@cosmjs/utils";
+import { assert } from "@bkc/utils";
 import { Metadata } from "cosmjs-types/cosmos/bank/v1beta1/bank";
 import {
   QueryAllBalancesRequest,

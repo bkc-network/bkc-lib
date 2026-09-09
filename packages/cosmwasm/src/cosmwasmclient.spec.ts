@@ -1,6 +1,6 @@
-import { sha256 } from "@cosmjs/crypto";
-import { fromAscii, fromBase64, fromHex, toAscii } from "@cosmjs/encoding";
-import { Int53 } from "@cosmjs/math";
+import { sha256 } from "@bkc/crypto";
+import { fromAscii, fromBase64, fromHex, toAscii } from "@bkc/encoding";
+import { Int53 } from "@bkc/math";
 import {
   DirectSecp256k1HdWallet,
   encodePubkey,
@@ -8,9 +8,9 @@ import {
   makeSignDoc,
   Registry,
   TxBodyEncodeObject,
-} from "@cosmjs/proto-signing";
-import { assertIsDeliverTxSuccess, coins, MsgSendEncodeObject, StdFee } from "@cosmjs/stargate";
-import { assert, sleep } from "@cosmjs/utils";
+} from "@bkc/proto-signing";
+import { assertIsDeliverTxSuccess, coins, MsgSendEncodeObject, StdFee } from "@bkc/stargate";
+import { assert, sleep } from "@bkc/utils";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { ReadonlyDate } from "readonly-date-esm";
 

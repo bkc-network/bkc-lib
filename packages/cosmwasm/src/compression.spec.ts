@@ -1,5 +1,5 @@
-import { fromHex } from "@cosmjs/encoding";
-import { Uint32 } from "@cosmjs/math";
+import { fromHex } from "@bkc/encoding";
+import { Uint32 } from "@bkc/math";
 
 import { gzip } from "./compression";
 

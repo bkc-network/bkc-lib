@@ -1,4 +1,4 @@
-import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
+import { CometClient, connectComet } from "@bkc/tendermint-rpc";
 
 import { QueryClient } from "../../queryclient";
 import { simapp } from "../../testutils";

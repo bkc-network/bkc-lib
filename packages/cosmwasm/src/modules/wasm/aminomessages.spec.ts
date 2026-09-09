@@ -1,5 +1,5 @@
-import { fromBase64, toBase64, toUtf8 } from "@cosmjs/encoding";
-import { AminoTypes, coins } from "@cosmjs/stargate";
+import { fromBase64, toBase64, toUtf8 } from "@bkc/encoding";
+import { AminoTypes, coins } from "@bkc/stargate";
 import {
   MsgClearAdmin,
   MsgExecuteContract,

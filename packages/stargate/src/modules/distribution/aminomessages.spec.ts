@@ -1,4 +1,4 @@
-import { coins } from "@cosmjs/proto-signing";
+import { coins } from "@bkc/proto-signing";
 import {
   MsgFundCommunityPool,
   MsgSetWithdrawAddress,

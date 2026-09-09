@@ -1,4 +1,4 @@
-import { fromBase64, fromHex } from "@cosmjs/encoding";
+import { fromBase64, fromHex } from "@bkc/encoding";
 
 import { decodeEvent, decodeValidatorGenesis, decodeValidatorInfo, decodeValidatorUpdate } from "./responses";
 

@@ -1,8 +1,8 @@
-import { AccountData, StdSignDoc } from "@cosmjs/amino";
-import { HdPath, pathToString, stringToPath } from "@cosmjs/crypto";
-import { toBase64 } from "@cosmjs/encoding";
-import { Uint53 } from "@cosmjs/math";
-import { assert } from "@cosmjs/utils";
+import { AccountData, StdSignDoc } from "@bkc/amino";
+import { HdPath, pathToString, stringToPath } from "@bkc/crypto";
+import { toBase64 } from "@bkc/encoding";
+import { Uint53 } from "@bkc/math";
+import { assert } from "@bkc/utils";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 

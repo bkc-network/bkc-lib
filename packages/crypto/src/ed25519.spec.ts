@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-import { fromHex } from "@cosmjs/encoding";
+import { fromHex } from "@bkc/encoding";
 
 import { Ed25519, Ed25519Keypair } from "./ed25519";
 

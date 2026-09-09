@@ -3,7 +3,7 @@ import {
   JsonRpcRequest,
   JsonRpcSuccessResponse,
   parseJsonRpcResponse,
-} from "@cosmjs/json-rpc";
+} from "@bkc/json-rpc";
 
 import { http } from "./http";
 import { HttpEndpoint } from "./httpclient";

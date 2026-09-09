@@ -1,4 +1,4 @@
-import { fixUint8Array } from "@cosmjs/encoding";
+import { fixUint8Array } from "@bkc/encoding";
 
 import { HashFunction } from "./hash";
 

@@ -1,5 +1,5 @@
 {
-  "name": "@cosmjs/faucet",
+  "name": "@bkc/faucet",
   "version": "0.39.0",
   "description": "The faucet",
   "contributors": [
@@ -42,12 +42,12 @@
     "pack-node": "yarn build-or-skip && webpack --mode production --config webpack.node.config.cjs"
   },
   "dependencies": {
-    "@cosmjs/crypto": "workspace:^",
-    "@cosmjs/encoding": "workspace:^",
-    "@cosmjs/math": "workspace:^",
-    "@cosmjs/proto-signing": "workspace:^",
-    "@cosmjs/stargate": "workspace:^",
-    "@cosmjs/utils": "workspace:^",
+    "@bkc/crypto": "workspace:^",
+    "@bkc/encoding": "workspace:^",
+    "@bkc/math": "workspace:^",
+    "@bkc/proto-signing": "workspace:^",
+    "@bkc/stargate": "workspace:^",
+    "@bkc/utils": "workspace:^",
     "@koa/bodyparser": "^6.0.0",
     "@koa/cors": "^5.0",
     "koa": "^3.1.2"

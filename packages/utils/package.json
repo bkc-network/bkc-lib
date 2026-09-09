@@ -1,5 +1,5 @@
 {
-  "name": "@cosmjs/utils",
+  "name": "@bkc/utils",
   "version": "0.39.0",
   "description": "Utility tools, primarily for testing code",
   "contributors": [

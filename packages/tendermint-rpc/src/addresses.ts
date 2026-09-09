@@ -1,5 +1,5 @@
-import { ripemd160, sha256 } from "@cosmjs/crypto";
-import { toHex } from "@cosmjs/encoding";
+import { ripemd160, sha256 } from "@bkc/crypto";
+import { toHex } from "@bkc/encoding";
 
 export function rawEd25519PubkeyToRawAddress(pubkeyData: Uint8Array): Uint8Array<ArrayBuffer> {
   if (pubkeyData.length !== 32) {

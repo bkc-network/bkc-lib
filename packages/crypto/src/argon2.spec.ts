@@ -1,4 +1,4 @@
-import { fromHex, toAscii } from "@cosmjs/encoding";
+import { fromHex, toAscii } from "@bkc/encoding";
 
 import { Argon2id, Argon2idOptions } from "./argon2";
 

@@ -1,7 +1,7 @@
 {
-  "name": "@cosmjs/cosmwasm-stargate",
+  "name": "@bkc/cosmwasm-stargate",
   "version": "0.39.0",
-  "description": "Old name of @cosmjs/cosmwasm. Use @cosmjs/cosmwasm instead.",
+  "description": "Old name of @bkc/cosmwasm. Use @bkc/cosmwasm instead.",
   "contributors": [
     "Simon Warta <webmaster128@users.noreply.github.com>"
   ],
@@ -41,7 +41,7 @@
     "coverage": "exit 0"
   },
   "dependencies": {
-    "@cosmjs/cosmwasm": "workspace:^"
+    "@bkc/cosmwasm": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "*",

@@ -1,5 +1,5 @@
-import { coin, coins, Secp256k1HdWallet } from "@cosmjs/amino";
-import { DirectEthSecp256k1HdWallet, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { coin, coins, Secp256k1HdWallet } from "@bkc/amino";
+import { DirectEthSecp256k1HdWallet, DirectSecp256k1HdWallet } from "@bkc/proto-signing";
 import { MsgCreateVestingAccount } from "cosmjs-types/cosmos/vesting/v1beta1/tx";
 
 import { SigningStargateClient } from "../../signingstargateclient";

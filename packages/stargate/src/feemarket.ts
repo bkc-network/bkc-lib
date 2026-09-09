@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define, no-bitwise */
-import { Decimal } from "@cosmjs/math";
+import { Decimal } from "@bkc/math";
 import { BinaryReader, BinaryWriter } from "cosmjs-types/binary";
 
 import { GasPrice } from "./fee";

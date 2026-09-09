@@ -1,5 +1,5 @@
-import { AminoMsg } from "@cosmjs/amino";
-import { EncodeObject } from "@cosmjs/proto-signing";
+import { AminoMsg } from "@bkc/amino";
+import { EncodeObject } from "@bkc/proto-signing";
 
 export interface AminoConverter {
   readonly aminoType: string;

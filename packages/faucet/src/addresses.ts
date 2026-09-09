@@ -1,4 +1,4 @@
-import { fromBech32 } from "@cosmjs/encoding";
+import { fromBech32 } from "@bkc/encoding";
 
 // Penumbra are up to 150 chars. ibc-go has a limit of 2048.
 // See https://github.com/cosmos/cosmjs/pull/1674

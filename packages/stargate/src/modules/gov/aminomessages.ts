@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { AminoMsg, Coin } from "@cosmjs/amino";
-import { Decimal } from "@cosmjs/math";
-import { assert, assertDefinedAndNotNull, isNonNullObject } from "@cosmjs/utils";
+import { AminoMsg, Coin } from "@bkc/amino";
+import { Decimal } from "@bkc/math";
+import { assert, assertDefinedAndNotNull, isNonNullObject } from "@bkc/utils";
 import { TextProposal, voteOptionFromJSON } from "cosmjs-types/cosmos/gov/v1beta1/gov";
 import { MsgDeposit, MsgSubmitProposal, MsgVote, MsgVoteWeighted } from "cosmjs-types/cosmos/gov/v1beta1/tx";
 import { Any } from "cosmjs-types/google/protobuf/any";

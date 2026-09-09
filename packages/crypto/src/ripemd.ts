@@ -1,4 +1,4 @@
-import { fixUint8Array } from "@cosmjs/encoding";
+import { fixUint8Array } from "@bkc/encoding";
 import { ripemd160 as nobleRipemd160 } from "@noble/hashes/legacy.js";
 
 import { HashFunction } from "./hash";

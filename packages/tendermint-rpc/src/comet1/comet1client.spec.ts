@@ -1,6 +1,6 @@
-import { toAscii, toHex } from "@cosmjs/encoding";
-import { firstEvent, toListPromise } from "@cosmjs/stream";
-import { assert, sleep } from "@cosmjs/utils";
+import { toAscii, toHex } from "@bkc/encoding";
+import { firstEvent, toListPromise } from "@bkc/stream";
+import { assert, sleep } from "@bkc/utils";
 import { ReadonlyDate } from "readonly-date-esm";
 import { Stream } from "xstream";
 

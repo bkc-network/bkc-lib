@@ -1,4 +1,4 @@
-import { fixUint8Array } from "@cosmjs/encoding";
+import { fixUint8Array } from "@bkc/encoding";
 import { entropyToMnemonic, mnemonicToEntropy, mnemonicToSeed } from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english.js";
 

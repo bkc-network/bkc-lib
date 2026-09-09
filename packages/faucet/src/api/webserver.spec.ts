@@ -1,5 +1,5 @@
-import { makeCosmoshubPath } from "@cosmjs/stargate";
-import { sleep } from "@cosmjs/utils";
+import { makeCosmoshubPath } from "@bkc/stargate";
+import { sleep } from "@bkc/utils";
 
 import { Faucet } from "../faucet";
 import { simappEnabled } from "../testutils";

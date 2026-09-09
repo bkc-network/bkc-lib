@@ -1,6 +1,6 @@
-import { coins } from "@cosmjs/amino";
-import { keccak256, Secp256k1, Secp256k1Signature, Slip10RawIndex } from "@cosmjs/crypto";
-import { fromBase64, fromHex } from "@cosmjs/encoding";
+import { coins } from "@bkc/amino";
+import { keccak256, Secp256k1, Secp256k1Signature, Slip10RawIndex } from "@bkc/crypto";
+import { fromBase64, fromHex } from "@bkc/encoding";
 
 import { DirectEthSecp256k1HdWallet } from "./directethsecp256k1hdwallet";
 import { makeAuthInfoBytes, makeSignBytes, makeSignDoc } from "./signing";

@@ -1,7 +1,7 @@
-import { coin } from "@cosmjs/amino";
-import { DirectEthSecp256k1HdWallet, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
-import { assert } from "@cosmjs/utils";
+import { coin } from "@bkc/amino";
+import { DirectEthSecp256k1HdWallet, DirectSecp256k1HdWallet } from "@bkc/proto-signing";
+import { CometClient, connectComet } from "@bkc/tendermint-rpc";
+import { assert } from "@bkc/utils";
 import {
   QueryAllBalancesRequest,
   QueryAllBalancesResponse,

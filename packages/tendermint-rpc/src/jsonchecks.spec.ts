@@ -1,4 +1,4 @@
-import { fromHex } from "@cosmjs/encoding";
+import { fromHex } from "@bkc/encoding";
 
 import { jCheckNonEmptyString, jCheckNonZeroNumber } from "./jsonchecks";
 

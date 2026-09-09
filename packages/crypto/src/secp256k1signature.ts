@@ -1,4 +1,4 @@
-import { fixUint8Array } from "@cosmjs/encoding";
+import { fixUint8Array } from "@bkc/encoding";
 
 function trimLeadingNullBytes(inData: Uint8Array): Uint8Array<ArrayBuffer> {
   let numberOfLeadingNullBytes = 0;

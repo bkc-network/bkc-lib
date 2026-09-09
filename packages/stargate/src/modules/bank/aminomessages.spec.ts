@@ -1,4 +1,4 @@
-import { coins } from "@cosmjs/proto-signing";
+import { coins } from "@bkc/proto-signing";
 import { MsgMultiSend, MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 
 import { AminoTypes } from "../../aminotypes";

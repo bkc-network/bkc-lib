@@ -1,1 +1,1 @@
-export * from "@cosmjs/cosmwasm";
+export * from "@bkc/cosmwasm";

@@ -1,4 +1,4 @@
-import { fromHex, toAscii, toUtf8 } from "@cosmjs/encoding";
+import { fromHex, toAscii, toUtf8 } from "@bkc/encoding";
 
 import { getSubtle, pbkdf2Sha512, pbkdf2Sha512Noble, pbkdf2Sha512Subtle } from "./pbkdf2";
 

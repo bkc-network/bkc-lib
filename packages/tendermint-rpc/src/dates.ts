@@ -1,5 +1,5 @@
-import { fromRfc3339 } from "@cosmjs/encoding";
-import { Uint32 } from "@cosmjs/math";
+import { fromRfc3339 } from "@bkc/encoding";
+import { Uint32 } from "@bkc/math";
 import { ReadonlyDate } from "readonly-date-esm";
 
 export interface ReadonlyDateWithNanoseconds extends ReadonlyDate {

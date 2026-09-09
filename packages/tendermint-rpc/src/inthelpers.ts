@@ -1,4 +1,4 @@
-import { Int53 } from "@cosmjs/math";
+import { Int53 } from "@bkc/math";
 
 import { jCheckString } from "./jsonchecks";
 
