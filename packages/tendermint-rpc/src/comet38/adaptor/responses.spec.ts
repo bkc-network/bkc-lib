@@ -1,4 +1,4 @@
-import { fromBase64, fromHex } from "@bkc/encoding";
+import { fromBase64, fromHex, toBase64 } from "@bkc/encoding";
 
 import {
   decodeCommit,
@@ -84,6 +84,25 @@ describe("Responses", () => {
           algorithm: "ed25519",
           data: fromBase64("2BX6Zuj8RmdJAkD1BAg6KB0v04liyM7jBdwOGIb9F9Q="),
         },
+      });
+    });
+
+    it("works for ML-DSA-65 consensus keys (BKC chain)", () => {
+      // The BKC chain uses ML-DSA-65 (FIPS 204) for validator consensus keys,
+      // reported as "cometbft/PubKeyMlDsa65" (pubkey is 1952 bytes).
+      const rawPubkey = new Uint8Array(1952).fill(7);
+      const validator = decodeValidatorGenesis({
+        address: "A03DC128D38DB0BC5F18AE1872F1CB2E1FD41157",
+        name: "bkc-validator",
+        power: "10",
+        pub_key: {
+          type: "cometbft/PubKeyMlDsa65",
+          value: toBase64(rawPubkey),
+        },
+      });
+      expect(validator.pubkey).toEqual({
+        algorithm: "mldsa65",
+        data: rawPubkey,
       });
     });
   });

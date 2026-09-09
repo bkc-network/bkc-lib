@@ -185,7 +185,10 @@ function decodePubkey(data: RpcPubkey): ValidatorPubkey {
   if ("Sum" in data) {
     // we don't need to check type because we're checking algorithm
     const [[algorithm, value]] = Object.entries(data.Sum.value);
-    assert(algorithm === "ed25519" || algorithm === "secp256k1", `unknown pubkey type: ${algorithm}`);
+    assert(
+      algorithm === "ed25519" || algorithm === "secp256k1" || algorithm === "mldsa65",
+      `unknown pubkey type: ${algorithm}`,
+    );
     return {
       algorithm,
       data: fromBase64(jCheckNonEmptyString(value)),
@@ -201,6 +204,12 @@ function decodePubkey(data: RpcPubkey): ValidatorPubkey {
       case "tendermint/PubKeySecp256k1":
         return {
           algorithm: "secp256k1",
+          data: fromBase64(jCheckNonEmptyString(data.value)),
+        };
+      // Post-quantum ML-DSA-65 consensus key (e.g. the BKC chain).
+      case "cometbft/PubKeyMlDsa65":
+        return {
+          algorithm: "mldsa65",
           data: fromBase64(jCheckNonEmptyString(data.value)),
         };
       default:

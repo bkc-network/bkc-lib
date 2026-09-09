@@ -13,10 +13,16 @@ export interface ValidatorSecp256k1Pubkey {
   readonly data: Uint8Array;
 }
 
+/** A post-quantum ML-DSA-65 (FIPS 204) consensus pubkey, as used by the BKC chain. */
+export interface ValidatorMldsa65Pubkey {
+  readonly algorithm: "mldsa65";
+  readonly data: Uint8Array;
+}
+
 /**
  * Union type for different possible pubkeys.
  */
-export type ValidatorPubkey = ValidatorEd25519Pubkey | ValidatorSecp256k1Pubkey;
+export type ValidatorPubkey = ValidatorEd25519Pubkey | ValidatorSecp256k1Pubkey | ValidatorMldsa65Pubkey;
 
 export enum BlockIdFlag {
   Unknown = 0,

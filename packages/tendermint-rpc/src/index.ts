@@ -28,6 +28,7 @@ export { connectComet, isComet1Client, isComet38Client, isTendermint37Client } f
 export type {
   CommitSignature,
   ValidatorEd25519Pubkey,
+  ValidatorMldsa65Pubkey,
   ValidatorPubkey,
   ValidatorSecp256k1Pubkey,
 } from "./types";
