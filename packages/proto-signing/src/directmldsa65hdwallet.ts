@@ -26,7 +26,7 @@ import {
 } from "./wallet";
 
 /**
- * CHAIN-DEPENDENT: the HKDF salt the QRT chain uses to derive an ML-DSA-65 seed
+ * CHAIN-DEPENDENT: the HKDF salt the BKC chain uses to derive an ML-DSA-65 seed
  * from a BIP39 seed (see the chain's `crypto/hd/algo.go`). Change this to match
  * your chain if it uses a different salt.
  */
@@ -135,7 +135,7 @@ interface DirectMldsa65HdWalletData {
  * A wallet that derives ML-DSA-65 (FIPS 204) keypairs from a BIP39 mnemonic.
  *
  * ML-DSA has no standard BIP-32/SLIP-0010 hierarchical derivation, so instead of
- * SLIP-0010 this mirrors the QRT chain convention:
+ * SLIP-0010 this mirrors the BKC chain convention:
  *
  *   bip39Seed = BIP39(mnemonic, bip39Password)
  *   mldsaSeed = HKDF-SHA256(ikm=bip39Seed, salt=hkdfSalt, info=hdPath, length=32)

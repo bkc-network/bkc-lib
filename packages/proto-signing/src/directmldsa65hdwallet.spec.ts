@@ -11,7 +11,7 @@ describe("DirectMldsa65HdWallet", () => {
   const mnemonic =
     "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
   // Golden address for this mnemonic with prefix "bkc" and the default path
-  // m/44'/118'/0'/0/0 using the QRT HKDF convention. Verified end-to-end against
+  // m/44'/118'/0'/0/0 using the BKC HKDF convention. Verified end-to-end against
   // the live chain's on-chain ML-DSA verification precompile.
   const bkcAddress = "bkc1749qmcj8tl3zd9xdnepfgk67s7vza8gyw5njd7";
 
