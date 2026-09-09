@@ -11,9 +11,17 @@ function hasBech32Separator(input: string): input is `${string}1${string}` {
   return input.indexOf("1") !== -1;
 }
 
+/**
+ * A bech32 address has no length limit in Cosmos, but @scure/base >= 2.1 rejects
+ * `Infinity` as a limit, so pass a finite bound far beyond any real address instead.
+ * Without this, decoding throws for anyone whose install resolves a newer @scure/base
+ * than this repository's lockfile pins.
+ */
+const noLengthLimit = Number.MAX_SAFE_INTEGER;
+
 export function fromBech32(
   address: string,
-  limit = Infinity,
+  limit = noLengthLimit,
 ): { readonly prefix: string; readonly data: Uint8Array<ArrayBuffer> } {
   // This extra check can be removed once
   // https://github.com/paulmillr/scure-base/pull/45 is merged and published.
