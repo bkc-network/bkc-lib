@@ -1,4 +1,4 @@
-import { Random } from "@bkc/crypto";
+import { Mldsa65, Random } from "@bkc/crypto";
 import { fromBase64, fromBech32, fromHex } from "@bkc/encoding";
 
 import {
@@ -7,6 +7,7 @@ import {
   encodeAminoPubkey,
   encodeBech32Pubkey,
   encodeEd25519Pubkey,
+  encodeMldsa65Pubkey,
   encodeSecp256k1Pubkey,
 } from "./encoding";
 import { Pubkey } from "./pubkeys";
@@ -55,6 +56,55 @@ describe("encoding", () => {
       expect(() => encodeEd25519Pubkey(Random.getBytes(64))).toThrowError(
         /ed25519 public key must be 32 bytes long/i,
       );
+    });
+  });
+
+  describe("encodeMldsa65Pubkey", () => {
+    const seed = fromHex("00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff");
+
+    it("encodes an ML-DSA-65 pubkey", async () => {
+      const { pubkey } = await Mldsa65.makeKeypair(seed);
+      const encoded = encodeMldsa65Pubkey(pubkey);
+      expect(encoded.type).toEqual("cosmos/PubKeyMlDsa65");
+      // The base64 value round-trips back to the raw 1952 byte pubkey.
+      expect(fromBase64(encoded.value)).toEqual(pubkey);
+    });
+
+    it("throws for wrong pubkey lengths", () => {
+      expect(() => encodeMldsa65Pubkey(Random.getBytes(32))).toThrowError(
+        /ML-DSA-65 public key must be 1952 bytes long/i,
+      );
+      expect(() => encodeMldsa65Pubkey(Random.getBytes(1953))).toThrowError(
+        /ML-DSA-65 public key must be 1952 bytes long/i,
+      );
+    });
+  });
+
+  describe("amino binary pubkey (ML-DSA-65)", () => {
+    const seed = fromHex("00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff");
+
+    it("encodes with the go-amino prefix + 2-byte varint length", async () => {
+      const { pubkey } = await Mldsa65.makeKeypair(seed);
+      const encoded = encodeAminoPubkey(encodeMldsa65Pubkey(pubkey));
+      // 4-byte type prefix b7ac06fd, then uvarint(1952) = a0 0f, then 1952 key bytes.
+      expect(encoded.slice(0, 4)).toEqual(fromHex("b7ac06fd"));
+      expect(encoded.slice(4, 6)).toEqual(fromHex("a00f"));
+      expect(encoded.length).toEqual(4 + 2 + 1952);
+    });
+
+    it("round-trips through encode/decodeAminoPubkey", async () => {
+      const { pubkey } = await Mldsa65.makeKeypair(seed);
+      const original = encodeMldsa65Pubkey(pubkey);
+      const decoded = decodeAminoPubkey(encodeAminoPubkey(original));
+      expect(decoded).toEqual(original);
+    });
+
+    it("round-trips through encode/decodeBech32Pubkey", async () => {
+      const { pubkey } = await Mldsa65.makeKeypair(seed);
+      const original = encodeMldsa65Pubkey(pubkey);
+      const bech = encodeBech32Pubkey(original, "bkcpub");
+      expect(bech.startsWith("bkcpub1")).toEqual(true);
+      expect(decodeBech32Pubkey(bech)).toEqual(original);
     });
   });
 

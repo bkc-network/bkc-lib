@@ -34,11 +34,29 @@ export function isEthSecp256k1Pubkey(pubkey: Pubkey): pubkey is EthSecp256k1Pubk
   return (pubkey as EthSecp256k1Pubkey).type === "os/PubKeyEthSecp256k1";
 }
 
+export interface Mldsa65Pubkey extends SinglePubkey {
+  readonly type: "cosmos/PubKeyMlDsa65";
+  /** The 1952 byte ML-DSA-65 (FIPS 204) public key in base64 encoding */
+  readonly value: string;
+}
+
+export function isMldsa65Pubkey(pubkey: Pubkey): pubkey is Mldsa65Pubkey {
+  return (pubkey as Mldsa65Pubkey).type === "cosmos/PubKeyMlDsa65";
+}
+
 export const pubkeyType = {
   /** @see https://github.com/tendermint/tendermint/blob/v0.33.0/crypto/secp256k1/secp256k1.go#L23 */
   secp256k1: "tendermint/PubKeySecp256k1" as const,
   /** @see https://github.com/cosmos/evm/blob/v1.0.0-rc2/crypto/ethsecp256k1/ethsecp256k1.go#L35-L36 */
   ethsecp256k1: "os/PubKeyEthSecp256k1" as const,
+  /**
+   * ML-DSA-65 (FIPS 204) post-quantum public key.
+   *
+   * CHAIN-DEPENDENT: this is the Amino type name registered by the chain's Go
+   * key type. Update the string to match the chain (e.g. the value passed to
+   * `RegisterAminoConcrete` for the ML-DSA-65 PubKey).
+   */
+  mldsa65: "cosmos/PubKeyMlDsa65" as const,
   /** @see https://github.com/tendermint/tendermint/blob/v0.33.0/crypto/ed25519/ed25519.go#L22 */
   ed25519: "tendermint/PubKeyEd25519" as const,
   /** @see https://github.com/tendermint/tendermint/blob/v0.33.0/crypto/sr25519/codec.go#L12 */
@@ -69,6 +87,7 @@ export function isSinglePubkey(pubkey: Pubkey): pubkey is SinglePubkey {
     pubkeyType.ed25519,
     pubkeyType.secp256k1,
     pubkeyType.ethsecp256k1,
+    pubkeyType.mldsa65,
     pubkeyType.sr25519,
   ];
   return singPubkeyTypes.includes(pubkey.type);

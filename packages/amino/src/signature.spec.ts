@@ -1,8 +1,10 @@
-import { fromBase64 } from "@bkc/encoding";
+import { Mldsa65 } from "@bkc/crypto";
+import { fromBase64, fromHex, toBase64 } from "@bkc/encoding";
 
 import {
   decodeSignature,
   encodeEthSecp256k1Signature,
+  encodeMldsa65Signature,
   encodeSecp256k1Signature,
   StdSignature,
 } from "./signature";
@@ -90,6 +92,20 @@ describe("signature", () => {
     });
   });
 
+  describe("encodeMldsa65Signature", () => {
+    const seed = fromHex("00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff");
+
+    it("encodes a full signature", async () => {
+      const { pubkey, privkey } = await Mldsa65.makeKeypair(seed);
+      const signature = await Mldsa65.createSignature(new Uint8Array([1, 2, 3, 4]), privkey);
+
+      const encoded = encodeMldsa65Signature(pubkey, signature);
+      expect(encoded.pub_key.type).toEqual("cosmos/PubKeyMlDsa65");
+      expect(fromBase64(encoded.pub_key.value)).toEqual(pubkey);
+      expect(fromBase64(encoded.signature)).toEqual(signature);
+    });
+  });
+
   describe("decodeSignature", () => {
     it("works for secp256k1", () => {
       const signature: StdSignature = {
@@ -121,6 +137,18 @@ describe("signature", () => {
           "sGcYUlDfO1PDA/Z9NqUBtgSTdRTJ+AJ8tvgw+5qtXalPgh5XqZj4R2eY1b7RXMU1m5and6aOl7YGpk9cZnESmQ==",
         ),
       });
+    });
+
+    it("works for mldsa65", async () => {
+      const { pubkey, privkey } = await Mldsa65.makeKeypair(
+        fromHex("00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff"),
+      );
+      const signature = await Mldsa65.createSignature(new Uint8Array([1, 2, 3, 4]), privkey);
+      const stdSignature: StdSignature = {
+        pub_key: { type: "cosmos/PubKeyMlDsa65", value: toBase64(pubkey) },
+        signature: toBase64(signature),
+      };
+      expect(decodeSignature(stdSignature)).toEqual({ pubkey, signature });
     });
   });
 });

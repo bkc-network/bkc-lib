@@ -1,3 +1,4 @@
+import { mldsa65 } from "@bkc/crypto";
 import { fromBase64, fromBech32, fromHex, toBase64, toBech32, toHex } from "@bkc/encoding";
 import { Uint53 } from "@bkc/math";
 import { arrayContentStartsWith } from "@bkc/utils";
@@ -7,8 +8,10 @@ import {
   EthSecp256k1Pubkey,
   isEd25519Pubkey,
   isEthSecp256k1Pubkey,
+  isMldsa65Pubkey,
   isMultisigThresholdPubkey,
   isSecp256k1Pubkey,
+  Mldsa65Pubkey,
   MultisigThresholdPubkey,
   Pubkey,
   pubkeyType,
@@ -57,6 +60,23 @@ export function encodeEthSecp256k1Pubkey(pubkey: Uint8Array): EthSecp256k1Pubkey
   };
 }
 
+/**
+ * Takes an ML-DSA-65 (FIPS 204) public key as raw bytes and returns the Amino
+ * JSON representation of it (the type/value wrapper object).
+ *
+ * Unlike secp256k1, ML-DSA-65 public keys are large (1952 bytes) and are neither
+ * compressed nor prefixed, so we only validate the length.
+ */
+export function encodeMldsa65Pubkey(pubkey: Uint8Array): Mldsa65Pubkey {
+  if (pubkey.length !== mldsa65.pubkeyLength) {
+    throw new Error(`ML-DSA-65 public key must be ${mldsa65.pubkeyLength} bytes long`);
+  }
+  return {
+    type: pubkeyType.mldsa65,
+    value: toBase64(pubkey),
+  };
+}
+
 // As discussed in https://github.com/binance-chain/javascript-sdk/issues/163
 // Prefixes listed here: https://github.com/tendermint/tendermint/blob/d419fffe18531317c28c29a292ad7d253f6cafdf/docs/spec/blockchain/encoding.md#public-key-cryptography
 // Last bytes is varint-encoded length prefix
@@ -68,6 +88,9 @@ const pubkeyAminoPrefixEd25519 = fromHex("1624de64" + "20" /* fixed length */);
 const pubkeyAminoPrefixSr25519 = fromHex("0dfb1005" + "20" /* fixed length */);
 /** See https://github.com/tendermint/tendermint/commit/38b401657e4ad7a7eeb3c30a3cbf512037df3740 */
 const pubkeyAminoPrefixMultisigThreshold = fromHex("22c1f7e2" /* variable length not included */);
+// go-amino prefix for "cosmos/PubKeyMlDsa65". Length not baked in (unlike secp/ed): the 1952-byte
+// key needs a 2-byte varint, written after this prefix.
+const pubkeyAminoPrefixMldsa65 = fromHex("b7ac06fd" /* variable length not included */);
 
 /**
  * Decodes a pubkey in the Amino binary format to a type/value object.
@@ -100,6 +123,19 @@ export function decodeAminoPubkey(data: Uint8Array): Pubkey {
       type: pubkeyType.sr25519,
       value: toBase64(rest),
     };
+  } else if (arrayContentStartsWith(data, pubkeyAminoPrefixMldsa65)) {
+    // prefix (4b) + varint length + key bytes
+    const reader = Array.from(data.slice(pubkeyAminoPrefixMldsa65.length));
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    const [length, lengthBytes] = decodeUvarint(reader);
+    const rest = reader.slice(lengthBytes);
+    if (length !== mldsa65.pubkeyLength || rest.length !== mldsa65.pubkeyLength) {
+      throw new Error(`Invalid rest data length. Expected ${mldsa65.pubkeyLength} bytes (ML-DSA-65 pubkey).`);
+    }
+    return {
+      type: pubkeyType.mldsa65,
+      value: toBase64(Uint8Array.from(rest)),
+    };
   } else if (arrayContentStartsWith(data, pubkeyAminoPrefixMultisigThreshold)) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return decodeMultisigPubkey(data);
@@ -120,20 +156,28 @@ export function decodeBech32Pubkey(bechEncoded: string): Pubkey {
 }
 
 /**
- * Uvarint decoder for Amino.
+ * Uvarint decoder for Amino. Same encoding as `binary.Uvarint` from the Go standard library:
+ * base-128, little-endian, with the high bit (0x80) of each byte signalling "more bytes follow".
+ *
  * @see https://github.com/tendermint/go-amino/blob/8e779b71f40d175/decoder.go#L64-76
  * @returns varint as number, and bytes count occupied by varint
  */
 function decodeUvarint(reader: number[]): [number, number] {
-  if (reader.length < 1) {
-    throw new Error("Can't decode varint. EOF");
+  let value = 0;
+  let factor = 1; // 128 ** byteIndex
+  for (let i = 0; i < reader.length; i++) {
+    const byte = reader[i];
+    // Low 7 bits = value, byte >= 128 = "continue". %/* not bitwise (repo forbids it).
+    value += (byte % 128) * factor;
+    if (!Number.isSafeInteger(value)) {
+      throw new Error("Varint exceeds safe integer range");
+    }
+    if (byte < 128) {
+      return [value, i + 1];
+    }
+    factor *= 128;
   }
-  if (reader[0] > 127) {
-    throw new Error(
-      "Decoding numbers > 127 is not supported here. Please tell those lazy CosmJS maintainers to port the binary.Varint implementation from the Go standard library and write some tests.",
-    );
-  }
-  return [reader[0], 1];
+  throw new Error("Can't decode varint. EOF");
 }
 
 /**
@@ -199,13 +243,15 @@ function decodeMultisigPubkey(data: Uint8Array): MultisigThresholdPubkey {
  * @see https://github.com/tendermint/go-amino/blob/8e779b71f40d175/encoder.go#L77-L85
  */
 function encodeUvarint(value: number | string): number[] {
-  const checked = Uint53.fromString(value.toString()).toNumber();
-  if (checked > 127) {
-    throw new Error(
-      "Encoding numbers > 127 is not supported here. Please tell those lazy CosmJS maintainers to port the binary.PutUvarint implementation from the Go standard library and write some tests.",
-    );
+  let remaining = Uint53.fromString(value.toString()).toNumber();
+  const out: number[] = [];
+  // 7 bits per byte, low group first, 0x80 = "continue". %/floor (not bitwise) for values > 2^31.
+  while (remaining >= 0x80) {
+    out.push((remaining % 128) + 0x80);
+    remaining = Math.floor(remaining / 128);
   }
-  return [checked];
+  out.push(remaining);
+  return out;
 }
 
 /**
@@ -228,6 +274,10 @@ export function encodeAminoPubkey(pubkey: Pubkey): Uint8Array<ArrayBuffer> {
     return new Uint8Array([...pubkeyAminoPrefixSecp256k1, ...fromBase64(pubkey.value)]);
   } else if (isEthSecp256k1Pubkey(pubkey)) {
     return new Uint8Array([...pubkeyAminoPrefixEthSecp256k1, ...fromBase64(pubkey.value)]);
+  } else if (isMldsa65Pubkey(pubkey)) {
+    // 1952-byte key -> the length needs a real (2-byte) varint after the type prefix.
+    const pubkeyData = fromBase64(pubkey.value);
+    return new Uint8Array([...pubkeyAminoPrefixMldsa65, ...encodeUvarint(pubkeyData.length), ...pubkeyData]);
   } else {
     throw new Error("Unsupported pubkey type");
   }
@@ -240,5 +290,8 @@ export function encodeAminoPubkey(pubkey: Pubkey): Uint8Array<ArrayBuffer> {
  * @param prefix the bech32 prefix (human readable part)
  */
 export function encodeBech32Pubkey(pubkey: Pubkey, prefix: string): string {
-  return toBech32(prefix, encodeAminoPubkey(pubkey));
+  // No bech32 length limit: an ML-DSA-65 pubkey is ~3146 chars once bech32-encoded, far past the
+  // default 90-char cap. `fromBech32` already defaults to no limit, so this keeps the two symmetric
+  // and does not affect the short secp256k1/ed25519 pubkeys.
+  return toBech32(prefix, encodeAminoPubkey(pubkey), Infinity);
 }

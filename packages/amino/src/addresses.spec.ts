@@ -1,8 +1,12 @@
+import { Mldsa65 } from "@bkc/crypto";
 import { fromBech32, fromHex, toBase64 } from "@bkc/encoding";
 
 import { pubkeyToAddress, pubkeyToRawAddress } from "./addresses";
 import { decodeBech32Pubkey } from "./encoding";
 import { MultisigThresholdPubkey } from "./pubkeys";
+
+// Public key deterministically derived from this seed (see mldsa65.spec.ts).
+const mldsa65Seed = fromHex("00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff");
 
 describe("addresses", () => {
   describe("pubkeyToRawAddress", () => {
@@ -24,6 +28,13 @@ describe("addresses", () => {
       expect(pubkeyToRawAddress(pubkey)).toEqual(
         fromBech32("cosmos1pfq05em6sfkls66ut4m2257p7qwlk448h8mysz").data,
       );
+    });
+
+    it("works for Mldsa65", async () => {
+      const { pubkey } = await Mldsa65.makeKeypair(mldsa65Seed);
+      const aminoPubkey = { type: "cosmos/PubKeyMlDsa65", value: toBase64(pubkey) };
+      // Golden vector: first 20 bytes of sha256(pubkey).
+      expect(pubkeyToRawAddress(aminoPubkey)).toEqual(fromHex("31d4758a807dc4354e95927873aa55f2a7d61fd2"));
     });
 
     it("works for multisig", () => {
@@ -65,6 +76,13 @@ describe("addresses", () => {
         value: toBase64(fromHex("12ee6f581fe55673a1e9e1382a0829e32075a0aa4763c968bc526e1852e78c95")),
       };
       expect(pubkeyToAddress(pubkey, prefix)).toEqual("cosmos1pfq05em6sfkls66ut4m2257p7qwlk448h8mysz");
+    });
+
+    it("works for Mldsa65", async () => {
+      const prefix = "bkc";
+      const { pubkey } = await Mldsa65.makeKeypair(mldsa65Seed);
+      const aminoPubkey = { type: "cosmos/PubKeyMlDsa65", value: toBase64(pubkey) };
+      expect(pubkeyToAddress(aminoPubkey, prefix)).toEqual("bkc1x828tz5q0hzr2n54jfu882j472nav87ju62vzx");
     });
 
     it("works for multisig", () => {

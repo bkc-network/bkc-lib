@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { fromBase64, toBase64 } from "@bkc/encoding";
 
-import { encodeEthSecp256k1Pubkey, encodeSecp256k1Pubkey } from "./encoding";
+import { encodeEthSecp256k1Pubkey, encodeMldsa65Pubkey, encodeSecp256k1Pubkey } from "./encoding";
 import { Pubkey, pubkeyType } from "./pubkeys";
 
 export interface StdSignature {
@@ -47,6 +47,22 @@ export function encodeEthSecp256k1Signature(pubkey: Uint8Array, signature: Uint8
   };
 }
 
+/**
+ * Takes a binary pubkey and signature to create a signature object.
+ *
+ * Unlike secp256k1, ML-DSA-65 signatures are a single opaque blob (~3309 bytes)
+ * rather than a fixed 2x32 byte r/s pair, so no length assertion is made here.
+ *
+ * @param pubkey an ML-DSA-65 public key (1952 bytes)
+ * @param signature an ML-DSA-65 signature
+ */
+export function encodeMldsa65Signature(pubkey: Uint8Array, signature: Uint8Array): StdSignature {
+  return {
+    pub_key: encodeMldsa65Pubkey(pubkey),
+    signature: toBase64(signature),
+  };
+}
+
 export function decodeSignature(signature: StdSignature): {
   readonly pubkey: Uint8Array;
   readonly signature: Uint8Array;
@@ -59,6 +75,11 @@ export function decodeSignature(signature: StdSignature): {
         signature: fromBase64(signature.signature),
       };
     case pubkeyType.ethsecp256k1:
+      return {
+        pubkey: fromBase64(signature.pub_key.value),
+        signature: fromBase64(signature.signature),
+      };
+    case pubkeyType.mldsa65:
       return {
         pubkey: fromBase64(signature.pub_key.value),
         signature: fromBase64(signature.signature),

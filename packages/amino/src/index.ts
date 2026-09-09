@@ -3,6 +3,7 @@ export {
   pubkeyToRawAddress,
   rawEd25519PubkeyToRawAddress,
   rawEthSecp256k1PubkeyToRawAddress,
+  rawMldsa65PubkeyToRawAddress,
   rawSecp256k1PubkeyToRawAddress,
 } from "./addresses";
 export type { Coin } from "./coins";
@@ -14,6 +15,7 @@ export {
   encodeBech32Pubkey,
   encodeEd25519Pubkey,
   encodeEthSecp256k1Pubkey,
+  encodeMldsa65Pubkey,
   encodeSecp256k1Pubkey,
 } from "./encoding";
 export { createMultisigThresholdPubkey } from "./multisig";
@@ -22,6 +24,7 @@ export { makeCosmoshubPath } from "./paths";
 export type {
   Ed25519Pubkey,
   EthSecp256k1Pubkey,
+  Mldsa65Pubkey,
   MultisigThresholdPubkey,
   Pubkey,
   Secp256k1Pubkey,
@@ -30,6 +33,7 @@ export type {
 export {
   isEd25519Pubkey,
   isEthSecp256k1Pubkey,
+  isMldsa65Pubkey,
   isMultisigThresholdPubkey,
   isSecp256k1Pubkey,
   isSinglePubkey,
@@ -45,6 +49,7 @@ export {
   type StdSignature,
   decodeSignature,
   encodeEthSecp256k1Signature,
+  encodeMldsa65Signature,
   encodeSecp256k1Signature,
 } from "./signature";
 export type { AminoMsg, StdFee, StdSignDoc } from "./signdoc";
