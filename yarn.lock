@@ -275,6 +275,7 @@ __metadata:
     "@noble/ciphers": "npm:^2.1.1"
     "@noble/curves": "npm:^2.0.1"
     "@noble/hashes": "npm:^2.0.1"
+    "@noble/post-quantum": "npm:^0.7.0"
     "@scure/bip39": "npm:^2.0.1"
     "@types/jasmine": "npm:^4"
     "@types/karma-firefox-launcher": "npm:^2"
@@ -1133,12 +1134,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/ciphers@npm:~2.3.0":
+  version: 2.3.0
+  resolution: "@noble/ciphers@npm:2.3.0"
+  checksum: 10c0/fb7ca0838c29154fcb10f74f4f569da62d2e6fdcdb01df83f1010727f26783efdf4d0bafe6b012cc4cd860b4f9ae21d4780b6bf048e0fb8fca8cc2ca764206cf
+  languageName: node
+  linkType: hard
+
 "@noble/curves@npm:^2.0.1":
   version: 2.0.1
   resolution: "@noble/curves@npm:2.0.1"
   dependencies:
     "@noble/hashes": "npm:2.0.1"
   checksum: 10c0/e0b329eb9229e862d3b7203e0444bd479e9ecf2d5990181908dad416aab69106717ca696fc7b12ad0eb19d710f58c454646b27ce517a4298ab9abc89a9bdb6ee
+  languageName: node
+  linkType: hard
+
+"@noble/curves@npm:~2.3.0":
+  version: 2.3.0
+  resolution: "@noble/curves@npm:2.3.0"
+  dependencies:
+    "@noble/hashes": "npm:2.3.0"
+  checksum: 10c0/c0a4bc7623c3eb291e16e721a5b7db593aa216b99d634218619ffab25bef057729e761a848883bbda6d114fd3445924241500d3c0f04851f810cebb8e8121882
   languageName: node
   linkType: hard
 
@@ -1149,10 +1166,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/hashes@npm:2.3.0, @noble/hashes@npm:~2.3.0":
+  version: 2.3.0
+  resolution: "@noble/hashes@npm:2.3.0"
+  checksum: 10c0/85651da4c1ea1db15fcacac7f38e4c4e6d60154cd116200b1002c198893bfad2733b31108352fde307126bab789f82f47b5bee8a12462b12f25fd0703aed7dce
+  languageName: node
+  linkType: hard
+
 "@noble/hashes@npm:^1.7.1":
   version: 1.8.0
   resolution: "@noble/hashes@npm:1.8.0"
   checksum: 10c0/06a0b52c81a6fa7f04d67762e08b2c476a00285858150caeaaff4037356dd5e119f45b2a530f638b77a5eeca013168ec1b655db41bae3236cb2e9d511484fc77
+  languageName: node
+  linkType: hard
+
+"@noble/post-quantum@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@noble/post-quantum@npm:0.7.0"
+  dependencies:
+    "@noble/ciphers": "npm:~2.3.0"
+    "@noble/curves": "npm:~2.3.0"
+    "@noble/hashes": "npm:~2.3.0"
+  checksum: 10c0/8149b3b78041572abd394187b37c0421977ca73dd0c2a59a890ac55f0a59449c9ae73c1efca0a4eb008b4df6844a75c8e5488c5caa7272c8304989bcc2cd7010
   languageName: node
   linkType: hard
 

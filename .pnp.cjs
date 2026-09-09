@@ -415,6 +415,10 @@ const RAW_RUNTIME_STATE =
       "npm:2.0.1"\
     ],\
     [\
+      "@noble/post-quantum",\
+      "npm:0.7.0"\
+    ],\
+    [\
       "@nodelib/fs.scandir",\
       "npm:2.1.5"\
     ],\
@@ -3339,6 +3343,7 @@ const RAW_RUNTIME_STATE =
           ["@noble/ciphers", "npm:2.1.1"],\
           ["@noble/curves", "npm:2.0.1"],\
           ["@noble/hashes", "npm:2.0.1"],\
+          ["@noble/post-quantum", "npm:0.7.0"],\
           ["@scure/bip39", "npm:2.0.1"],\
           ["@types/jasmine", "npm:4.6.1"],\
           ["@types/karma-firefox-launcher", "npm:2.1.0"],\
@@ -4327,6 +4332,13 @@ const RAW_RUNTIME_STATE =
           ["@noble/ciphers", "npm:2.1.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:2.3.0", {\
+        "packageLocation": "./.yarn/cache/@noble-ciphers-npm-2.3.0-b8d799a38f-fb7ca0838c.zip/node_modules/@noble/ciphers/",\
+        "packageDependencies": [\
+          ["@noble/ciphers", "npm:2.3.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@noble/curves", [\
@@ -4335,6 +4347,14 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@noble/curves", "npm:2.0.1"],\
           ["@noble/hashes", "npm:2.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.3.0", {\
+        "packageLocation": "./.yarn/cache/@noble-curves-npm-2.3.0-c92fef189d-c0a4bc7623.zip/node_modules/@noble/curves/",\
+        "packageDependencies": [\
+          ["@noble/curves", "npm:2.3.0"],\
+          ["@noble/hashes", "npm:2.3.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4351,6 +4371,25 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@noble-hashes-npm-2.0.1-3deaaa8c92-e81769ce21.zip/node_modules/@noble/hashes/",\
         "packageDependencies": [\
           ["@noble/hashes", "npm:2.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.3.0", {\
+        "packageLocation": "./.yarn/cache/@noble-hashes-npm-2.3.0-80ec0e7c02-85651da4c1.zip/node_modules/@noble/hashes/",\
+        "packageDependencies": [\
+          ["@noble/hashes", "npm:2.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@noble/post-quantum", [\
+      ["npm:0.7.0", {\
+        "packageLocation": "./.yarn/cache/@noble-post-quantum-npm-0.7.0-410bdb9113-8149b3b780.zip/node_modules/@noble/post-quantum/",\
+        "packageDependencies": [\
+          ["@noble/ciphers", "npm:2.3.0"],\
+          ["@noble/curves", "npm:2.3.0"],\
+          ["@noble/hashes", "npm:2.3.0"],\
+          ["@noble/post-quantum", "npm:0.7.0"]\
         ],\
         "linkType": "HARD"\
       }]\
