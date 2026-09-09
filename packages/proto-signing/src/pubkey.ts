@@ -1,9 +1,11 @@
 import {
   encodeEd25519Pubkey,
   encodeEthSecp256k1Pubkey,
+  encodeMldsa65Pubkey,
   encodeSecp256k1Pubkey,
   isEd25519Pubkey,
   isEthSecp256k1Pubkey,
+  isMldsa65Pubkey,
   isMultisigThresholdPubkey,
   isSecp256k1Pubkey,
   MultisigThresholdPubkey,
@@ -16,6 +18,15 @@ import { PubKey as CosmosCryptoEd25519Pubkey } from "cosmjs-types/cosmos/crypto/
 import { LegacyAminoPubKey } from "cosmjs-types/cosmos/crypto/multisig/keys";
 import { PubKey as CosmosCryptoSecp256k1Pubkey } from "cosmjs-types/cosmos/crypto/secp256k1/keys";
 import { Any } from "cosmjs-types/google/protobuf/any";
+
+/**
+ * Protobuf type URL of this chain's ML-DSA-65 public key.
+ *
+ * Named rather than inlined because anything that builds an `Any` for a pubkey - a wallet,
+ * an SDK, a test - has to spell it exactly the same, and a typo produces a transaction the
+ * chain rejects with no useful message.
+ */
+export const mldsa65PubkeyTypeUrl = "/cosmos.crypto.mldsa65.PubKey";
 
 /**
  * Takes a pubkey in the Amino JSON object style (type/value wrapper)
@@ -45,6 +56,16 @@ export function encodePubkey(pubkey: Pubkey): Any {
     });
     return Any.fromPartial({
       typeUrl: "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+      value: Uint8Array.from(CosmosCryptoSecp256k1Pubkey.encode(pubkeyProto).finish()),
+    });
+  } else if (isMldsa65Pubkey(pubkey)) {
+    // CHAIN-DEPENDENT type URL. The ML-DSA-65 PubKey proto is `{ bytes key = 1 }`, same structure
+    // as the secp256k1 PubKey, so we reuse that codec (like eth_secp256k1 above).
+    const pubkeyProto = CosmosCryptoSecp256k1Pubkey.fromPartial({
+      key: fromBase64(pubkey.value),
+    });
+    return Any.fromPartial({
+      typeUrl: mldsa65PubkeyTypeUrl,
       value: Uint8Array.from(CosmosCryptoSecp256k1Pubkey.encode(pubkeyProto).finish()),
     });
   } else if (isEd25519Pubkey(pubkey)) {
@@ -85,6 +106,10 @@ export function anyToSinglePubkey(pubkey: Any): SinglePubkey {
       const { key } = CosmosCryptoSecp256k1Pubkey.decode(pubkey.value);
       return encodeEthSecp256k1Pubkey(key);
     }
+    case mldsa65PubkeyTypeUrl: {
+      const { key } = CosmosCryptoSecp256k1Pubkey.decode(pubkey.value);
+      return encodeMldsa65Pubkey(key);
+    }
     case "/cosmos.crypto.ed25519.PubKey": {
       const { key } = CosmosCryptoEd25519Pubkey.decode(pubkey.value);
       return encodeEd25519Pubkey(key);
@@ -103,6 +128,7 @@ export function decodePubkey(pubkey: Any): Pubkey {
   switch (pubkey.typeUrl) {
     case "/cosmos.crypto.secp256k1.PubKey":
     case "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey":
+    case mldsa65PubkeyTypeUrl:
     case "/cosmos.crypto.ed25519.PubKey": {
       return anyToSinglePubkey(pubkey);
     }

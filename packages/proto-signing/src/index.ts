@@ -3,6 +3,12 @@ export { type DecodedTxRaw, decodeTxRaw } from "./decode";
 export type { DirectEthSecp256k1HdWalletOptions } from "./directethsecp256k1hdwallet";
 export { DirectEthSecp256k1HdWallet } from "./directethsecp256k1hdwallet";
 export { DirectEthSecp256k1Wallet } from "./directethsecp256k1wallet";
+export type {
+  DirectMldsa65HdWalletOptions,
+  DirectMldsa65HdWalletSerialization,
+} from "./directmldsa65hdwallet";
+export { deriveMldsa65Seed, DirectMldsa65HdWallet, mldsa65HkdfSalt } from "./directmldsa65hdwallet";
+export { DirectMldsa65Wallet } from "./directmldsa65wallet";
 export {
   type DirectSecp256k1HdWalletOptions,
   DirectSecp256k1HdWallet,
@@ -10,7 +16,13 @@ export {
 } from "./directsecp256k1hdwallet";
 export { DirectSecp256k1Wallet } from "./directsecp256k1wallet";
 export { makeCosmoshubPath } from "./paths";
-export { anyToSinglePubkey, decodeOptionalPubkey, decodePubkey, encodePubkey } from "./pubkey";
+export {
+  anyToSinglePubkey,
+  decodeOptionalPubkey,
+  decodePubkey,
+  encodePubkey,
+  mldsa65PubkeyTypeUrl,
+} from "./pubkey";
 export type {
   DecodeObject,
   EncodeObject,

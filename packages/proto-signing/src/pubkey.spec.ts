@@ -1,4 +1,6 @@
-import { fromBase64 } from "@bkc/encoding";
+import { encodeMldsa65Pubkey } from "@bkc/amino";
+import { Mldsa65 } from "@bkc/crypto";
+import { fromBase64, fromHex } from "@bkc/encoding";
 import { Any } from "cosmjs-types/google/protobuf/any";
 
 import { decodePubkey, encodePubkey } from "./pubkey";
@@ -70,6 +72,22 @@ describe("pubkey", () => {
         value: defaultPubkeyProtoBytes,
       };
       expect(() => decodePubkey(pubkey)).toThrowError(/not recognized/i);
+    });
+  });
+
+  describe("mldsa65", () => {
+    const seed = fromHex("00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff");
+
+    it("round-trips an ML-DSA-65 pubkey through Any and back", async () => {
+      const { pubkey } = await Mldsa65.makeKeypair(seed);
+      const aminoPubkey = encodeMldsa65Pubkey(pubkey);
+
+      const any = encodePubkey(aminoPubkey);
+      expect(any.typeUrl).toEqual("/cosmos.crypto.mldsa65.PubKey");
+      // Protobuf wire: field 1 (tag 0x0a) + varint length + raw pubkey bytes.
+      expect(any.value.slice(0, 1)).toEqual(Uint8Array.from([0x0a]));
+
+      expect(decodePubkey(any)).toEqual(aminoPubkey);
     });
   });
 });
