@@ -1,11 +1,11 @@
-# @cosmjs/stargate
+# @bkc/stargate
 
-![typescript](https://img.shields.io/npm/types/@cosmjs/stargate.svg)
-[![npm version](https://img.shields.io/npm/v/@cosmjs/stargate.svg)](https://www.npmjs.com/package/@cosmjs/stargate)
-[![license](https://img.shields.io/npm/l/@cosmjs/stargate.svg)](https://github.com/cosmos/cosmjs/blob/v0.35.0/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@cosmjs/stargate.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@cosmjs/stargate.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@cosmjs/stargate.svg)
+![typescript](https://img.shields.io/npm/types/@bkc/stargate.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc/stargate.svg)](https://www.npmjs.com/package/@bkc/stargate)
+[![license](https://img.shields.io/npm/l/@bkc/stargate.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc/stargate.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc/stargate.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc/stargate.svg)
 
 A client library for the Cosmos SDK 0.40+.
 

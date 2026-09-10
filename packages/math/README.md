@@ -1,11 +1,11 @@
-# @cosmjs/math
+# @bkc/math
 
-![typescript](https://img.shields.io/npm/types/@cosmjs/math.svg)
-[![npm version](https://img.shields.io/npm/v/@cosmjs/math.svg)](https://www.npmjs.com/package/@cosmjs/math)
-[![license](https://img.shields.io/npm/l/@cosmjs/math.svg)](https://github.com/cosmos/cosmjs/blob/v0.35.0/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@cosmjs/math.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@cosmjs/math.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@cosmjs/math.svg)
+![typescript](https://img.shields.io/npm/types/@bkc/math.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc/math.svg)](https://www.npmjs.com/package/@bkc/math)
+[![license](https://img.shields.io/npm/l/@bkc/math.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc/math.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc/math.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc/math.svg)
 
 ## License
 

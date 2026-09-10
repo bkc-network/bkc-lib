@@ -1,20 +1,22 @@
 # BKC Lib
 
-A fork of [CosmJS](https://github.com/cosmos/cosmjs) 0.39.0 (Apache-2.0), carrying the
-client stack for the BKC chain.
+A fork of [CosmJS](https://github.com/cosmos/cosmjs) 0.39.0 (Apache-2.0),
+carrying the client stack for the BKC chain.
 
 Two things differ from upstream:
 
-- **ML-DSA-65 signing.** BKC is post-quantum: it has no secp256k1 keys. `crypto`,
-  `amino` and `proto-signing` gained ML-DSA-65 (FIPS 204) key derivation, signing and
-  address handling, and `sdk` wraps the whole thing for application code.
-- **`@bkc` scope.** Every workspace package was renamed from `@cosmjs/*` to `@bkc/*`,
-  including the ones carrying no local changes, so a consumer never mixes the two.
-  None of them is published to npm; consumers install the tarballs that
-  `packages/sdk/scripts/pack-to.sh` writes into their `vendor/` directory.
+- **ML-DSA-65 signing.** BKC is post-quantum: it has no secp256k1 keys.
+  `crypto`, `amino` and `proto-signing` gained ML-DSA-65 (FIPS 204) key
+  derivation, signing and address handling, and `sdk` wraps the whole thing for
+  application code.
+- **`@bkc` scope.** Every workspace package was renamed from `@cosmjs/*` to
+  `@bkc/*`, including the ones carrying no local changes, so a consumer never
+  mixes the two. They publish to npm under that scope.
+  `packages/sdk/scripts/pack-to.sh` still writes tarballs into a consumer's
+  `vendor/` directory, which is the way to try a change before it is released.
 
-`cosmjs-types` stays as it is - that is the Cosmos team's protobuf package from npm, not
-part of this fork.
+`cosmjs-types` stays as it is - that is the Cosmos team's protobuf package from
+npm, not part of this fork.
 
 To pull a fix from upstream: `git fetch upstream && git log upstream/main`.
 
