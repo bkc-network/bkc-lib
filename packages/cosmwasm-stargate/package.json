@@ -13,6 +13,7 @@
     "default": "./build/index.js"
   },
   "files": [
+    "NOTICE",
     "build/",
     "*.md",
     "!*.spec.*",
@@ -22,7 +23,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/cosmos/cosmjs/tree/main/packages/cosmwasm-stargate"
+    "url": "https://github.com/bkc-network/bkc-lib.git",
+    "directory": "packages/cosmwasm-stargate"
   },
   "publishConfig": {
     "access": "public",
@@ -49,5 +51,9 @@
     "prettier": "^3.6.2",
     "typedoc": "^0.28",
     "typescript": "~5.9"
+  },
+  "homepage": "https://github.com/bkc-network/bkc-lib/tree/main/packages/cosmwasm-stargate#readme",
+  "bugs": {
+    "url": "https://github.com/bkc-network/bkc-lib/issues"
   }
 }

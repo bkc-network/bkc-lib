@@ -16,13 +16,15 @@
     }
   },
   "files": [
+    "NOTICE",
     "build/",
     "proto/",
     "*.md",
     "!*.spec.*"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "scripts": {
     "format": "prettier --write --log-level warn \"./src/**/*.ts\"",
@@ -50,5 +52,14 @@
     "prettier": "^3.6.2",
     "source-map-support": "^0.5.19",
     "typescript": "~5.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bkc-network/bkc-lib.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://github.com/bkc-network/bkc-lib/tree/main/packages/sdk#readme",
+  "bugs": {
+    "url": "https://github.com/bkc-network/bkc-lib/issues"
   }
 }

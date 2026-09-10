@@ -11,6 +11,7 @@
     "cosmos-faucet": "bin/cosmos-faucet"
   },
   "files": [
+    "NOTICE",
     "bin/",
     "build/",
     "*.md",
@@ -22,7 +23,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/cosmos/cosmjs/tree/main/packages/faucet"
+    "url": "https://github.com/bkc-network/bkc-lib.git",
+    "directory": "packages/faucet"
   },
   "publishConfig": {
     "access": "public",
@@ -66,5 +68,9 @@
     "typescript": "~5.9",
     "webpack": "^5.76.0",
     "webpack-cli": "^4.6.0"
+  },
+  "homepage": "https://github.com/bkc-network/bkc-lib/tree/main/packages/faucet#readme",
+  "bugs": {
+    "url": "https://github.com/bkc-network/bkc-lib/issues"
   }
 }

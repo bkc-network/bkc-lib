@@ -16,6 +16,7 @@
     "default": "./build/index.js"
   },
   "files": [
+    "NOTICE",
     "build/",
     "*.md",
     "!*.spec.*",
@@ -24,7 +25,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/cosmos/cosmjs/tree/main/packages/json-rpc"
+    "url": "https://github.com/bkc-network/bkc-lib.git",
+    "directory": "packages/json-rpc"
   },
   "publishConfig": {
     "access": "public",
@@ -69,5 +71,9 @@
     "typescript": "~5.9",
     "webpack": "^5.76.0",
     "webpack-cli": "^4.6.0"
+  },
+  "homepage": "https://github.com/bkc-network/bkc-lib/tree/main/packages/json-rpc#readme",
+  "bugs": {
+    "url": "https://github.com/bkc-network/bkc-lib/issues"
   }
 }
