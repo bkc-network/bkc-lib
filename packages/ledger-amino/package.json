@@ -1,6 +1,7 @@
 {
   "name": "@bkc/ledger-amino",
   "version": "0.39.0",
+  "private": true,
   "description": "A library for signing Amino-encoded transactions using Ledger devices",
   "contributors": [
     "Will Clark <willclarktech@users.noreply.github.com>",
@@ -28,10 +29,6 @@
     "type": "git",
     "url": "https://github.com/bkc-network/bkc-lib.git",
     "directory": "packages/ledger-amino"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
   },
   "scripts": {
     "docs": "typedoc",
