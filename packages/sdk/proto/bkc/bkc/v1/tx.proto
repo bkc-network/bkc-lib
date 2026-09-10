@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+// Extracted from the chain's proto/qrt/qrt/v1/tx.proto.
+//
+// Two deliberate differences, neither of which changes the wire format:
+//  - the package is `bkc.bkc.v1`, the name the deployed chain registers (the source repo
+//    still says `qrt.qrt.v1` from before the rebrand)
+//  - the cosmos_proto/amino/gogoproto options are dropped: they are annotations for the
+//    Go side and carry no bytes
+package bkc.bkc.v1;
+
+option go_package = "QRT/x/qrt/types";
+
+message MsgExecuteEvmCall {
+  string sender = 1;
+  string to = 2;
+  bytes data = 3;
+  string value = 4;
+  uint64 gas_limit = 5;
+  string max_fee_per_gas = 6;
+  string max_priority_fee_per_gas = 7;
+  uint64 call_nonce = 8;
+}
+
+message MsgExecuteEvmCallResponse {
+  bytes ret = 1;
+  uint64 gas_used = 2;
+  string vm_error = 3;
+}

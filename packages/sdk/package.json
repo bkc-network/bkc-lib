@@ -1,0 +1,54 @@
+{
+  "name": "@bkc/sdk",
+  "version": "0.39.0",
+  "description": "One package for building on the BKC post-quantum chain: ML-DSA-65 keys, signing, and EVM calls",
+  "license": "Apache-2.0",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./core": {
+      "types": "./build/core.d.ts",
+      "default": "./build/core.js"
+    }
+  },
+  "files": [
+    "build/",
+    "proto/",
+    "*.md",
+    "!*.spec.*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "format": "prettier --write --log-level warn \"./src/**/*.ts\"",
+    "test-node": "yarn node jasmine-testrunner.cjs",
+    "test": "yarn build-or-skip && yarn test-node",
+    "build": "rm -rf ./build && tsc",
+    "build-or-skip": "[ -n \"${SKIP_BUILD:-}\" ] || yarn build",
+    "proto-gen": "./scripts/proto-gen.sh",
+    "consumer-check": "./scripts/pack-and-check.sh"
+  },
+  "dependencies": {
+    "@bkc/amino": "workspace:^",
+    "@bkc/crypto": "workspace:^",
+    "@bkc/encoding": "workspace:^",
+    "@bkc/proto-signing": "workspace:^",
+    "@bkc/stargate": "workspace:^",
+    "@bufbuild/protobuf": "^2.10.2",
+    "cosmjs-types": "^0.11.0",
+    "ethers": "^6.17.0"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^4",
+    "jasmine": "^4",
+    "jasmine-spec-reporter": "^6",
+    "prettier": "^3.6.2",
+    "source-map-support": "^0.5.19",
+    "typescript": "~5.9"
+  }
+}
