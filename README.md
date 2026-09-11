@@ -1,131 +1,102 @@
+<p align="center">
+  <img alt="BKC" src="docs/bkc-logo.png" width="240" />
+</p>
+
 # BKC Lib
 
-A fork of [CosmJS](https://github.com/cosmos/cosmjs) 0.39.0 (Apache-2.0),
-carrying the client stack for the BKC chain.
+The JavaScript client stack for **BKC** - a Cosmos chain that signs with
+ML-DSA-65 (FIPS 204) instead of secp256k1, and runs an EVM over the same
+accounts.
 
-Two things differ from upstream:
+```sh
+npm i @bkc/sdk
+```
 
-- **ML-DSA-65 signing.** BKC is post-quantum: it has no secp256k1 keys.
-  `crypto`, `amino` and `proto-signing` gained ML-DSA-65 (FIPS 204) key
-  derivation, signing and address handling, and `sdk` wraps the whole thing for
-  application code.
-- **`@bkc` scope.** Every workspace package was renamed from `@cosmjs/*` to
-  `@bkc/*`, including the ones carrying no local changes, so a consumer never
-  mixes the two. They publish to npm under that scope.
-  `packages/sdk/scripts/pack-to.sh` still writes tarballs into a consumer's
-  `vendor/` directory, which is the way to try a change before it is released.
+```ts
+import { connectBkcWallet, Contract } from "@bkc/sdk";
 
-`cosmjs-types` stays as it is - that is the Cosmos team's protobuf package from
-npm, not part of this fork.
+const { signer } = await connectBkcWallet(endpoints);
+const counter = new Contract(address, abi, signer);
 
-To pull a fix from upstream: `git fetch upstream && git log upstream/main`.
+await (await counter.set(42)).wait();
+```
 
----
+You write ethers. Underneath, the call travels as a Cosmos message signed with a
+post-quantum key, because the chain has no ECDSA key to sign an Ethereum
+transaction with. [packages/sdk/README.md](packages/sdk/README.md) is the guide.
 
-<h1><p align="center"><img alt="CosmJS" src="docs/logo-vertical-light.png" width="180" /></p></h1>
-
-<div align="center">
-  <a href="https://github.com/cosmos/cosmjs/blob/main/LICENSE">
-    <img alt="License: Apache-2.0" src="https://img.shields.io/github/license/cosmos/cosmjs.svg" />
-  </a>
-</div>
-
-CosmJS is the Swiss Army knife to power JavaScript based client solutions
-ranging from Web apps/explorers over browser extensions to server-side clients
-like faucets/scrapers in the Cosmos ecosystem.
-
-"Cosm" is short for Cosmos and "JS" is short for _runs everywhere_ – we actually
-develop in TypeScript.
-
-## Documentation
-
-[Here is a list of examples][guided tour] using the Stargate package for use
-with [Cosmos SDK 0.41] applications (like [gaia 4]). Take a look at the wiki
-page,
-["What can CosmJS do for me?"](https://github.com/cosmos/cosmjs/wiki/What-can-CosmJS-do-for-me%3F)
-and various tests
-([ex](https://github.com/cosmos/cosmjs/blob/main/packages/stargate/src/signingstargateclient.spec.ts))
-for more example usage of the packages.
-
-[guided tour]:
-  https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9
-[cosmos sdk 0.41]: https://github.com/cosmos/cosmos-sdk/tree/v0.41.0
-[gaia 4]: https://github.com/cosmos/gaia/tree/v4.0.0
-
-### API documentation
-
-The full API documentation is hosted at [cosmos.github.io/cosmjs]. This is a bit
-tricky to navigate and requires basic TypeScript understanding. It is helpful if
-you want to look up details for advanced use cases. This documentation is
-auto-generated based on the current main branch and can occasionally diverge
-from the latest release.
-
-[cosmos.github.io/cosmjs]: https://cosmos.github.io/cosmjs
-
-### Using custom Stargate modules
-
-Documentation on how to use your own custom modules with CosmJS for Stargate
-chains (Cosmos SDK v0.41) can be found
-[here](https://github.com/cosmos/cosmjs/blob/main/packages/stargate/CUSTOM_PROTOBUF_CODECS.md).
+This is a fork of [CosmJS](https://github.com/cosmos/cosmjs) - see
+[Relationship to CosmJS](#relationship-to-cosmjs) for what changed and why.
 
 ## Packages
 
-CosmJS is a library that consists of many smaller npm packages within the
-[@cosmjs namespace](https://www.npmjs.com/org/cosmjs), a so-called monorepo.
-Here are some of them to get an idea:
+Twelve packages publish under the [`@bkc` scope](https://www.npmjs.com/org/bkc).
+Most applications need only the first one.
 
-| Package                               | Description                                                                                                                                                                                                                              | Latest                                                                                                              |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [@cosmjs/stargate](packages/stargate) | A client library for the Cosmos SDK 0.40+ (Stargate)                                                                                                                                                                                     | [![npm version](https://img.shields.io/npm/v/@cosmjs/stargate.svg)](https://www.npmjs.com/package/@cosmjs/stargate) |
-| [@cosmjs/faucet](packages/faucet)     | A faucet application for node.js                                                                                                                                                                                                         | [![npm version](https://img.shields.io/npm/v/@cosmjs/faucet.svg)](https://www.npmjs.com/package/@cosmjs/faucet)     |
-| [@cosmjs/cosmwasm](packages/cosmwasm) | Client for Stargate chains with the CosmWasm module enabled                                                                                                                                                                              | [![npm version](https://img.shields.io/npm/v/@cosmjs/cosmwasm.svg)](https://www.npmjs.com/package/@cosmjs/cosmwasm) |
-| [@cosmjs/crypto](packages/crypto)     | Cryptography for blockchain projects, e.g. hashing (SHA-2, Keccak256, Ripemd160), signing (secp256k1, ed25519), HD key derivation (BIP-39, SLIP-0010), KDFs and symmetric encryption for key storage (PBKDF2, Argon2, XChaCha20Poly1305) | [![npm version](https://img.shields.io/npm/v/@cosmjs/crypto.svg)](https://www.npmjs.com/package/@cosmjs/crypto)     |
-| [@cosmjs/encoding](packages/encoding) | Encoding helpers for blockchain projects                                                                                                                                                                                                 | [![npm version](https://img.shields.io/npm/v/@cosmjs/encoding.svg)](https://www.npmjs.com/package/@cosmjs/encoding) |
-| [@cosmjs/math](packages/math)         | Safe integers; decimals for handling financial amounts                                                                                                                                                                                   | [![npm version](https://img.shields.io/npm/v/@cosmjs/math.svg)](https://www.npmjs.com/package/@cosmjs/math)         |
+| Package                                                                                              | What it is                                                                                                                                  |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [@bkc/sdk](packages/sdk)                                                                             | One import for building on BKC: ethers-compatible Provider and Signer, the `bkc.bkc.v1` codec, chain constants and helpers. **Start here.** |
+| [@bkc/stargate](packages/stargate)                                                                   | Cosmos SDK 0.40+ client - accounts, bank, staking, governance, and broadcasting                                                             |
+| [@bkc/proto-signing](packages/proto-signing)                                                         | Protobuf (Direct) signing and the ML-DSA-65 wallets                                                                                         |
+| [@bkc/amino](packages/amino)                                                                         | Address, public key and signature encoding                                                                                                  |
+| [@bkc/crypto](packages/crypto)                                                                       | Hashing, ML-DSA-65 (FIPS 204), HD derivation, KDFs, keystore encryption                                                                     |
+| [@bkc/tendermint-rpc](packages/tendermint-rpc)                                                       | RPC client for the CometBFT layer                                                                                                           |
+| [@bkc/encoding](packages/encoding)                                                                   | hex, base64, bech32, utf8                                                                                                                   |
+| [@bkc/math](packages/math)                                                                           | Safe integers and decimals for token amounts                                                                                                |
+| [@bkc/utils](packages/utils)                                                                         | Assertions and small helpers                                                                                                                |
+| [@bkc/stream](packages/stream) · [@bkc/socket](packages/socket) · [@bkc/json-rpc](packages/json-rpc) | Transport plumbing the RPC client is built on                                                                                               |
 
-### Modularity
+`cosmwasm`, `cosmwasm-stargate`, `ledger-amino`, `faucet` and `faucet-client`
+stay in the repository but are not published: BKC runs an EVM rather than
+`x/wasm`, and Ledger has no ML-DSA-65 applet, so none of them can work against
+this chain.
 
-We're pretty proud of the modularity and a clean dependency tree in this
-monorepo. This ensures software quality on our side and lets users pick exactly
-what they need. Here you see how everything fits together (every item is a npm
-package; right depends on left):
+### The dependency tree
 
-![CosmJS dependency tree](docs/cosmjs-tree.png)
+Every package depends only on lower-level ones, and the graph has no cycles.
+That is what lets an application pull in `@bkc/encoding` without dragging a
+chain client along with it.
 
-If this was not enough to scare you away, check out the version including app
-runtime dependencies: [cosmjs-tree-full.png](docs/cosmjs-tree-full.png).
+```mermaid
+graph LR
+  utils --> crypto
+  math --> crypto
+  encoding --> crypto
+  crypto --> amino
+  amino --> proto-signing
+  proto-signing --> stargate
+  stream --> socket
+  stream --> json-rpc
+  socket --> tendermint-rpc
+  json-rpc --> tendermint-rpc
+  crypto --> tendermint-rpc
+  tendermint-rpc --> stargate
+  stargate --> sdk
+```
 
-<!--
-Build with depsight (https://github.com/webmaster128/depsight), using:
+## Documentation
 
-from_npm . | depsight --include "^@cosmjs" --format png --dpi 150 --output docs/cosmjs-tree.png
-from_npm . | depsight --exclude cosmjs-monorepo-root --format png --dpi 150 --output docs/cosmjs-tree-full.png
-optipng docs/cosmjs-tree*.png
--->
+[packages/sdk/README.md](packages/sdk/README.md) is the guide: installing,
+writing ethers against the chain, what works and what cannot, connecting to a
+wallet extension in the browser, and the Cosmos side for staking and governance.
 
-### Supported JS environments
+For adding a chain module of your own, see
+[CUSTOM_PROTOBUF_CODECS.md](packages/stargate/CUSTOM_PROTOBUF_CODECS.md).
 
-Currently the codebase supports the following runtime environments:
+## Supported JS environments
 
-1. Node.js 20+
-2. Modern browsers (Chromium/Firefox/Safari, no Internet Explorer or
-   [Edge Legacy](https://en.wikipedia.org/wiki/Microsoft_Edge_Legacy))
+1. Node.js 22+
+2. Modern browsers (Chromium/Firefox/Safari)
 3. Browser extensions (Chromium/Firefox)
 
-Our current JavaScript target standard is ES2020. We use WebAssembly to
-implement certain cryptographic functions.
+The target standard is ES2022. There is no WebAssembly anywhere in the tree -
+the cryptography is pure JavaScript, through `@noble/*` and `@scure/bip39`,
+which is what makes it run unchanged inside a browser extension.
 
-We're happy to adjust this list according to users' needs as long as you don't
-ask for Internet Explorer support. If your environment does not support Wasm, we
-can work on a solution with swappable implementations.
+### Bundling for the browser
 
-## Webpack Configs
-
-With Webpack 5, you have to be explicit about the usage of Node.js types and
-modules that were simply replaced with re-implementations for browsers in
-Webpack 4.
-
-Configs for 0.28 and later:
+Webpack 5 stopped substituting Node built-ins automatically, so a browser or
+extension build has to say it does not want them:
 
 ```js
 module.exports = [
@@ -152,76 +123,37 @@ module.exports = [
 ];
 ```
 
-Configs for CosmJS < 0.28
+## Relationship to CosmJS
 
-```js
-module.exports = [
-  {
-    // ...
-    plugins: [
-      ...,
-      new webpack.ProvidePlugin({
-        Buffer: ["buffer", "Buffer"],
-      }),
-    ],
-    // ...
-    resolve: {
-      fallback: {
-        buffer: false,
-        crypto: false,
-        events: false,
-        path: false,
-        stream: require.resolve("stream-browserify"),
-        string_decoder: false,
-      },
-    },
-  },
-];
-```
+This is a fork of [CosmJS](https://github.com/cosmos/cosmjs), taken at version
+0.39.0 and licensed Apache-2.0. The upstream authors wrote most of the code
+here, and `NOTICE` records that as the licence requires.
 
-## Roadmap
+What the fork changes:
 
-There is no roadmap anymore. Just keeping things alive, nice and clean.
+- **ML-DSA-65 signing.** BKC has no secp256k1 keys, so `crypto`, `amino` and
+  `proto-signing` gained FIPS 204 key derivation, signing and address handling.
+- **EVM over Cosmos.** The chain refuses `eth_sendRawTransaction`, so contract
+  calls travel as `/bkc.bkc.v1.MsgExecuteEvmCall`. `@bkc/sdk` is the package
+  that hides this behind an ordinary ethers `Signer`.
+- **The `@bkc` scope**, applied to every package including the untouched ones,
+  so an application can never resolve one of each.
 
-## Known limitations
+`cosmjs-types` is not part of the fork and keeps its name: that is the Cosmos
+team's protobuf package, installed from npm like any other dependency.
 
-### 0.26
-
-1. When connecting to a Cosmos SDK 0.44+ backend, the verified queries from
-   `AuthExtension` and `BankExtension` as well as
-   `StargateClient.getAccountVerified` will fail because the storage keys are
-   not stable. Unverified queries can be used instead. Those queries are
-   deprecated now and will be removed in 0.27 ([#910]).
-
-[#910]: https://github.com/cosmos/cosmjs/pull/910
-
-### 0.25
-
-1. Decoding blocks of height 1 is unsupported. This is fixed in [#815] and will
-   be released as part of CosmJS 0.26.
-
-[#815]: https://github.com/cosmos/cosmjs/pull/815
-
-### 0.24
-
-1. `AuthExtension` and all higher level Stargate clients only support
-   `BaseAccount`s for all functionality, including getting account numbers and
-   sequences for transaction signing. This will be implemented for all common
-   Cosmos SDK account types in the 0.25 series.
-
-## Get in touch
-
-The CosmJS development team is happy to get in touch with you for all questions
-and suggestions.
-
-- [GitHub issues](https://github.com/cosmos/cosmjs/issues) for bugs and feature
-  requests
-- The `#dev-chat` channel, or `#dev-support-ai` on the
-  [interchain Discord server](https://discord.gg/interchain) for questions and
-  open discussions
-- [#CosmJS on Twitter](https://twitter.com/search?q=%23CosmJS) to spread the
-  word
+Versions restart at 1.0.0 and no longer track upstream's. To pull a fix from
+CosmJS: `git fetch upstream && git log upstream/main`.
 
 ## Development
 
 See [HACKING.md](HACKING.md).
+
+## Get in touch
+
+- [GitHub issues](https://github.com/bkc-network/bkc-lib/issues) for bugs and
+  feature requests in this fork
+
+Questions about CosmJS itself, rather than about BKC, belong
+[upstream](https://github.com/cosmos/cosmjs/issues) - please do not file those
+here, and do not file BKC issues there.

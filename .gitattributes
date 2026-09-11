@@ -1,3 +1,8 @@
 *.png filter=lfs diff=lfs merge=lfs -text
 *.wasm filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
+
+# The README logo is a plain git blob, not an LFS object. LFS keeps a text pointer in
+# the index, so editors show a broken image instead of the artwork, and every view of
+# the README on GitHub would spend LFS bandwidth. At this size that buys nothing.
+docs/bkc-logo.png !filter !diff !merge -text
