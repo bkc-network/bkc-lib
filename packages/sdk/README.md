@@ -144,7 +144,8 @@ import {
 
 And the pieces the ethers layer is built from, should you want them directly:
 `makeEvmCallMessage`, `withGasHeadroom`, `cosmosGasForEvmCall`,
-`findEthereumTxHash`, `toEvmAddress`, `tryToEvmAddress`, `feeFor`.
+`findEthereumTxHash`, `toEvmAddress`, `tryToEvmAddress`, and `calculateFee` from
+`@bkc/stargate` for turning a gas budget into a fee.
 
 ## In a browser, with a wallet extension
 

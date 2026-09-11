@@ -1,10 +1,11 @@
 // Runs as a builder would: importing only from @bkc/sdk, touching nothing in the monorepo.
 import {
   bkcChain,
+  calculateFee,
   cosmosGasForEvmCall,
   DirectMldsa65Wallet,
-  feeFor,
   fromHex,
+  GasPrice,
   makeBkcRegistry,
   makeEvmCallMessage,
   Mldsa65,
@@ -52,4 +53,8 @@ ok(
 );
 
 const gas = cosmosGasForEvmCall(withGasHeadroom(44846n));
-ok(gas === bkcChain.baseGasLimit + 58299n, `cosmos gas = ${gas} (fee ${feeFor(gas)})`);
+const fee = calculateFee(Number(gas), GasPrice.fromString(`${bkcChain.gasPrice}${bkcChain.denom}`));
+ok(
+  gas === bkcChain.baseGasLimit + 58299n,
+  `cosmos gas = ${gas} (fee ${fee.amount[0].amount}${fee.amount[0].denom})`,
+);

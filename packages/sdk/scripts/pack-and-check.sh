@@ -14,7 +14,9 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 OUT="${OUT:-/tmp/bkcpkg}"
 WORK="${WORK:-/tmp/bkc-sdk-consumer}"
-PACKAGES=(encoding crypto amino proto-signing tendermint-rpc stargate sdk)
+# The full dependency closure of @bkc/sdk. Anything missing here is fetched from the
+# real registry instead, so the check fails on a 404 rather than on the code.
+PACKAGES=(utils math encoding json-rpc socket stream crypto amino proto-signing tendermint-rpc stargate sdk)
 
 rm -rf "$OUT" "$WORK"
 mkdir -p "$OUT" "$WORK"
@@ -25,9 +27,11 @@ for name in "${PACKAGES[@]}"; do
 done
 
 cd "$WORK"
-node -e "
-const deps = { '@bkc/sdk': 'file:$OUT/sdk.tgz' };
-for (const name of ['encoding','crypto','amino','proto-signing','stargate','tendermint-rpc']) {
+# Driven by PACKAGES above, so the two lists cannot drift apart again: a package packed
+# but not depended on here still resolves from the real registry, and 404s.
+NAMES="${PACKAGES[*]}" node -e "
+const deps = {};
+for (const name of process.env.NAMES.split(' ')) {
   deps['@bkc/' + name] = 'file:$OUT/' + name + '.tgz';
 }
 require('fs').writeFileSync('package.json', JSON.stringify({ name: 'bkc-sdk-consumer', private: true, dependencies: deps }, null, 2));
