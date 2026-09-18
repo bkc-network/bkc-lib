@@ -1,5 +1,5 @@
-import { fromHex } from "@bkc/encoding";
-import { Uint32 } from "@bkc/math";
+import { fromHex } from "@bkc-network-lib/encoding";
+import { Uint32 } from "@bkc-network-lib/math";
 
 import { gzip } from "./compression";
 

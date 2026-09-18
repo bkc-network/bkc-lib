@@ -1,4 +1,4 @@
-import { fromBase64, fromBech32, toHex } from "@bkc/encoding";
+import { fromBase64, fromBech32, toHex } from "@bkc-network-lib/encoding";
 import { TxBody, TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import { evmCallTypeUrl } from "./chain";

@@ -1,10 +1,14 @@
 #!/usr/bin/env -S yarn node
 
-const { coins } = require("@bkc/amino");
-const { Random } = require("@bkc/crypto");
-const { toBech32 } = require("@bkc/encoding");
-const { DirectSecp256k1HdWallet } = require("@bkc/proto-signing");
-const { assertIsDeliverTxSuccess, SigningStargateClient, calculateFee } = require("@bkc/stargate");
+const { coins } = require("@bkc-network-lib/amino");
+const { Random } = require("@bkc-network-lib/crypto");
+const { toBech32 } = require("@bkc-network-lib/encoding");
+const { DirectSecp256k1HdWallet } = require("@bkc-network-lib/proto-signing");
+const {
+  assertIsDeliverTxSuccess,
+  SigningStargateClient,
+  calculateFee,
+} = require("@bkc-network-lib/stargate");
 
 const rpcUrl = "http://localhost:26659";
 const prefix = "wasm";

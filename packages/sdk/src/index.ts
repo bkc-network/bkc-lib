@@ -1,5 +1,5 @@
 /**
- * @bkc/sdk - everything needed to build on the BKC post-quantum chain.
+ * @bkc-network-lib/sdk - everything needed to build on the BKC post-quantum chain.
  *
  * BKC replaces secp256k1 with ML-DSA-65 (FIPS 204) and runs an EVM over the same account,
  * which breaks two assumptions every off-the-shelf library makes:
@@ -14,9 +14,12 @@
 
 // ---------------------------------------------------------------- keys and signing
 
-export { hkdfSha256, keccak256, Mldsa65, mldsa65, Mldsa65Keypair, sha256 } from "@bkc/crypto";
-export type { AccountData, DirectSignResponse, OfflineDirectSigner } from "@bkc/proto-signing";
-export type { DirectMldsa65HdWalletOptions, DirectMldsa65HdWalletSerialization } from "@bkc/proto-signing";
+export { hkdfSha256, keccak256, Mldsa65, mldsa65, Mldsa65Keypair, sha256 } from "@bkc-network-lib/crypto";
+export type { AccountData, DirectSignResponse, OfflineDirectSigner } from "@bkc-network-lib/proto-signing";
+export type {
+  DirectMldsa65HdWalletOptions,
+  DirectMldsa65HdWalletSerialization,
+} from "@bkc-network-lib/proto-signing";
 export {
   deriveMldsa65Seed,
   DirectMldsa65HdWallet,
@@ -27,26 +30,42 @@ export {
   mldsa65HkdfSalt,
   mldsa65PubkeyTypeUrl,
   Registry,
-} from "@bkc/proto-signing";
+} from "@bkc-network-lib/proto-signing";
 
 // ---------------------------------------------------------------- addresses and pubkeys
 
-export type { Mldsa65Pubkey } from "@bkc/amino";
+export type { Mldsa65Pubkey } from "@bkc-network-lib/amino";
 export {
   encodeMldsa65Pubkey,
   encodeMldsa65Signature,
   isMldsa65Pubkey,
   pubkeyType,
   rawMldsa65PubkeyToRawAddress,
-} from "@bkc/amino";
-export { fromBase64, fromBech32, fromHex, fromUtf8, toBase64, toBech32, toHex, toUtf8 } from "@bkc/encoding";
+} from "@bkc-network-lib/amino";
+export {
+  fromBase64,
+  fromBech32,
+  fromHex,
+  fromUtf8,
+  toBase64,
+  toBech32,
+  toHex,
+  toUtf8,
+} from "@bkc-network-lib/encoding";
 
 // ---------------------------------------------------------------- talking to a node
 
 // Re-exported so nothing built on BKC ever needs a second package: a consumer installs
-// @bkc/sdk and has the whole path from a seed to a broadcast transaction.
-export type { DeliverTxResponse, StdFee } from "@bkc/stargate";
-export { calculateFee, coin, coins, GasPrice, SigningStargateClient, StargateClient } from "@bkc/stargate";
+// @bkc-network-lib/sdk and has the whole path from a seed to a broadcast transaction.
+export type { DeliverTxResponse, StdFee } from "@bkc-network-lib/stargate";
+export {
+  calculateFee,
+  coin,
+  coins,
+  GasPrice,
+  SigningStargateClient,
+  StargateClient,
+} from "@bkc-network-lib/stargate";
 
 // ---------------------------------------------------------------- in a browser, with a wallet
 

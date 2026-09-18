@@ -1,5 +1,5 @@
-import { Random } from "@bkc/crypto";
-import { toBech32 } from "@bkc/encoding";
+import { Random } from "@bkc-network-lib/crypto";
+import { toBech32 } from "@bkc-network-lib/encoding";
 
 import { AminoMsg, escapeCharacters, makeSignDoc, sortedJsonStringify } from "./signdoc";
 

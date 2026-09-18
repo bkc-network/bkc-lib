@@ -1,4 +1,4 @@
-import { Decimal, Uint53 } from "@bkc/math";
+import { Decimal, Uint53 } from "@bkc-network-lib/math";
 
 export interface Coin {
   readonly denom: string;
@@ -52,11 +52,11 @@ export function coins(amount: number | string, denom: string): Coin[] {
  * separately in the caller.
  *
  * ```
- * import { parseCoins } from "@bkc/proto-signing";
+ * import { parseCoins } from "@bkc-network-lib/proto-signing";
  * // equals
- * import { parseCoins } from "@bkc/stargate";
+ * import { parseCoins } from "@bkc-network-lib/stargate";
  * // equals
- * import { parseCoins } from "@bkc/amino";
+ * import { parseCoins } from "@bkc-network-lib/amino";
  * ```
  *
  * This function is not made for supporting decimal amounts and does not support

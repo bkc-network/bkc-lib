@@ -1,4 +1,4 @@
-import { fromBase64, toBase64 } from "@bkc/encoding";
+import { fromBase64, toBase64 } from "@bkc-network-lib/encoding";
 import {
   decodeTxRaw,
   DirectSecp256k1HdWallet,
@@ -7,7 +7,7 @@ import {
   makeSignDoc,
   Registry,
   TxBodyEncodeObject,
-} from "@bkc/proto-signing";
+} from "@bkc-network-lib/proto-signing";
 import {
   Coin,
   coins,
@@ -15,8 +15,8 @@ import {
   isDeliverTxFailure,
   isDeliverTxSuccess,
   isMsgSendEncodeObject,
-} from "@bkc/stargate";
-import { assert, sleep } from "@bkc/utils";
+} from "@bkc-network-lib/stargate";
+import { assert, sleep } from "@bkc-network-lib/utils";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import { CosmWasmClient } from "./cosmwasmclient";

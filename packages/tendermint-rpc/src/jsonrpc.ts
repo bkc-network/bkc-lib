@@ -1,4 +1,4 @@
-import { JsonRpcRequest } from "@bkc/json-rpc";
+import { JsonRpcRequest } from "@bkc-network-lib/json-rpc";
 
 const numbersWithoutZero = "123456789";
 

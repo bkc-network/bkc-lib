@@ -1,8 +1,8 @@
 {
-  "name": "@bkc/cosmwasm-stargate",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/cosmwasm-stargate",
+  "version": "1.0.0",
   "private": true,
-  "description": "Old name of @bkc/cosmwasm. Use @bkc/cosmwasm instead.",
+  "description": "Old name of @bkc-network-lib/cosmwasm. Use @bkc-network-lib/cosmwasm instead.",
   "contributors": [
     "Simon Warta <webmaster128@users.noreply.github.com>"
   ],
@@ -40,7 +40,7 @@
     "coverage": "exit 0"
   },
   "dependencies": {
-    "@bkc/cosmwasm": "workspace:^"
+    "@bkc-network-lib/cosmwasm": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "*",

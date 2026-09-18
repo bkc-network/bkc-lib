@@ -1,4 +1,4 @@
-import { isNonNullObject } from "@bkc/utils";
+import { isNonNullObject } from "@bkc-network-lib/utils";
 
 import { HttpError } from "./httperror";
 

@@ -4,8 +4,8 @@ import {
   Random,
   xchacha20NonceLength,
   Xchacha20poly1305Ietf,
-} from "@bkc/crypto";
-import { toAscii } from "@bkc/encoding";
+} from "@bkc-network-lib/crypto";
+import { toAscii } from "@bkc-network-lib/encoding";
 
 /**
  * A fixed salt is chosen to archive a deterministic password to key derivation.

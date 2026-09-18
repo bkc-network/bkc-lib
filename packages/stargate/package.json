@@ -1,6 +1,6 @@
 {
-  "name": "@bkc/stargate",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/stargate",
+  "version": "1.0.0",
   "description": "Utilities for Cosmos SDK 0.40",
   "contributors": [
     "Simon Warta <webmaster128@users.noreply.github.com>"
@@ -44,17 +44,17 @@
     "pack-web": "yarn build-or-skip && webpack --mode development --config webpack.web.config.cjs"
   },
   "dependencies": {
-    "@bkc/amino": "workspace:^",
-    "@bkc/encoding": "workspace:^",
-    "@bkc/math": "workspace:^",
-    "@bkc/proto-signing": "workspace:^",
-    "@bkc/stream": "workspace:^",
-    "@bkc/tendermint-rpc": "workspace:^",
-    "@bkc/utils": "workspace:^",
+    "@bkc-network-lib/amino": "workspace:^",
+    "@bkc-network-lib/encoding": "workspace:^",
+    "@bkc-network-lib/math": "workspace:^",
+    "@bkc-network-lib/proto-signing": "workspace:^",
+    "@bkc-network-lib/stream": "workspace:^",
+    "@bkc-network-lib/tendermint-rpc": "workspace:^",
+    "@bkc-network-lib/utils": "workspace:^",
     "cosmjs-types": "^0.11.0"
   },
   "devDependencies": {
-    "@bkc/crypto": "workspace:^",
+    "@bkc-network-lib/crypto": "workspace:^",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/jasmine": "^4",
     "@types/karma-firefox-launcher": "^2",

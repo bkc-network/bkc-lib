@@ -1,4 +1,4 @@
-import { Coin } from "@bkc/stargate";
+import { Coin } from "@bkc-network-lib/stargate";
 
 export interface SendJob {
   readonly sender: string;

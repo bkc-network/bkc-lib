@@ -1,6 +1,6 @@
-import { fixUint8Array, fromHex, toAscii, toHex } from "@bkc/encoding";
-import { Uint32, Uint53 } from "@bkc/math";
-import { assert } from "@bkc/utils";
+import { fixUint8Array, fromHex, toAscii, toHex } from "@bkc-network-lib/encoding";
+import { Uint32, Uint53 } from "@bkc-network-lib/math";
+import { assert } from "@bkc-network-lib/utils";
 import { secp256k1 } from "@noble/curves/secp256k1.js";
 
 import { Hmac } from "./hmac";
@@ -69,7 +69,7 @@ export class Slip10RawIndex extends Uint32 {
  * This can be constructed via string parsing:
  *
  * ```ts
- * import { stringToPath } from "@bkc/crypto";
+ * import { stringToPath } from "@bkc-network-lib/crypto";
  *
  * const path = stringToPath("m/0'/1/2'/2/1000000000");
  * ```
@@ -77,7 +77,7 @@ export class Slip10RawIndex extends Uint32 {
  * or manually:
  *
  * ```ts
- * import { HdPath, Slip10RawIndex } from "@bkc/crypto";
+ * import { HdPath, Slip10RawIndex } from "@bkc-network-lib/crypto";
  *
  * // m/0'/1/2'/2/1000000000
  * const path: HdPath = [

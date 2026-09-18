@@ -1,5 +1,5 @@
-import { AminoMsg } from "@bkc/amino";
-import { EncodeObject } from "@bkc/proto-signing";
+import { AminoMsg } from "@bkc-network-lib/amino";
+import { EncodeObject } from "@bkc-network-lib/proto-signing";
 
 export interface AminoConverter {
   readonly aminoType: string;

@@ -1,5 +1,5 @@
 /**
- * @bkc/sdk/core - the BKC chain, without a transport.
+ * @bkc-network-lib/sdk/core - the BKC chain, without a transport.
  *
  * The main entry point brings ethers and a Cosmos client with it, because that is what an
  * application wants. A wallet does not: it already has its own keyring, its own RPC layer
@@ -7,10 +7,10 @@
  * get wrong - key sizes, address derivation, the chain's own message encoding, the gas
  * rules - and none of that needs a transport.
  *
- * Importing from here pulls in no ethers, no `@bkc/stargate` and no `@bkc/tendermint-rpc`,
+ * Importing from here pulls in no ethers, no `@bkc-network-lib/stargate` and no `@bkc-network-lib/tendermint-rpc`,
  * so a bundle stays the size it was.
  *
- *     import { MsgExecuteEvmCall, makeEvmCallMessage, bkcChain } from "@bkc/sdk/core";
+ *     import { MsgExecuteEvmCall, makeEvmCallMessage, bkcChain } from "@bkc-network-lib/sdk/core";
  */
 
 // ---------------------------------------------------------------- the chain itself
@@ -24,11 +24,20 @@ export { isMldsa65Algo, mldsa65Algo, mldsa65RawAddress } from "./mldsa65";
 
 // Owned by the packages below, not restated here. One definition each, so the wallet, the
 // SDK and a script cannot disagree about what the chain expects.
-export { pubkeyType, rawMldsa65PubkeyToRawAddress } from "@bkc/amino";
-export type { Mldsa65Keypair } from "@bkc/crypto";
-export { hkdfSha256, keccak256, Mldsa65, mldsa65, sha256 } from "@bkc/crypto";
-export { fromBase64, fromBech32, fromHex, fromUtf8, toBase64, toBech32, toHex, toUtf8 } from "@bkc/encoding";
-export { deriveMldsa65Seed, mldsa65HkdfSalt, mldsa65PubkeyTypeUrl } from "@bkc/proto-signing";
+export { pubkeyType, rawMldsa65PubkeyToRawAddress } from "@bkc-network-lib/amino";
+export type { Mldsa65Keypair } from "@bkc-network-lib/crypto";
+export { hkdfSha256, keccak256, Mldsa65, mldsa65, sha256 } from "@bkc-network-lib/crypto";
+export {
+  fromBase64,
+  fromBech32,
+  fromHex,
+  fromUtf8,
+  toBase64,
+  toBech32,
+  toHex,
+  toUtf8,
+} from "@bkc-network-lib/encoding";
+export { deriveMldsa65Seed, mldsa65HkdfSalt, mldsa65PubkeyTypeUrl } from "@bkc-network-lib/proto-signing";
 
 // ---------------------------------------------------------------- EVM calls
 

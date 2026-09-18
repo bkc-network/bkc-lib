@@ -1,11 +1,11 @@
-# @bkc/proto-signing
+# @bkc-network-lib/proto-signing
 
-![typescript](https://img.shields.io/npm/types/@bkc/proto-signing.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/proto-signing.svg)](https://www.npmjs.com/package/@bkc/proto-signing)
-[![license](https://img.shields.io/npm/l/@bkc/proto-signing.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/proto-signing.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/proto-signing.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/proto-signing.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/proto-signing.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/proto-signing.svg)](https://www.npmjs.com/package/@bkc-network-lib/proto-signing)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/proto-signing.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/proto-signing.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/proto-signing.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/proto-signing.svg)
 
 Utilities for protobuf based signing (for Cosmos SDK 0.40+) as documented in
 [ADR-020](https://github.com/cosmos/cosmos-sdk/blob/66c5798cec/docs/architecture/adr-020-protobuf-transaction-encoding.md)

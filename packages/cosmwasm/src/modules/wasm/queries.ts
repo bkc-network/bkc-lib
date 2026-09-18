@@ -1,5 +1,5 @@
-import { fromUtf8, toUtf8 } from "@bkc/encoding";
-import { createPagination, createProtobufRpcClient, QueryClient } from "@bkc/stargate";
+import { fromUtf8, toUtf8 } from "@bkc-network-lib/encoding";
+import { createPagination, createProtobufRpcClient, QueryClient } from "@bkc-network-lib/stargate";
 import {
   QueryAllContractStateResponse,
   QueryClientImpl,

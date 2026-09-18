@@ -1,6 +1,6 @@
 #!/usr/bin/env -S yarn node
 
-const { encodeSecp256k1Pubkey, makeCosmoshubPath, Secp256k1HdWallet } = require("@bkc/amino");
+const { encodeSecp256k1Pubkey, makeCosmoshubPath, Secp256k1HdWallet } = require("@bkc-network-lib/amino");
 
 const prefix = "wasm";
 const accountsToCreate = [

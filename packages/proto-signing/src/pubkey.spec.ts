@@ -1,6 +1,6 @@
-import { encodeMldsa65Pubkey } from "@bkc/amino";
-import { Mldsa65 } from "@bkc/crypto";
-import { fromBase64, fromHex } from "@bkc/encoding";
+import { encodeMldsa65Pubkey } from "@bkc-network-lib/amino";
+import { Mldsa65 } from "@bkc-network-lib/crypto";
+import { fromBase64, fromHex } from "@bkc-network-lib/encoding";
 import { Any } from "cosmjs-types/google/protobuf/any";
 
 import { decodePubkey, encodePubkey } from "./pubkey";

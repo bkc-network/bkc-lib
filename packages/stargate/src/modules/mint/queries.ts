@@ -1,5 +1,5 @@
-import { Decimal } from "@bkc/math";
-import { assert } from "@bkc/utils";
+import { Decimal } from "@bkc-network-lib/math";
+import { assert } from "@bkc-network-lib/utils";
 import { Params } from "cosmjs-types/cosmos/mint/v1beta1/mint";
 import { QueryClientImpl } from "cosmjs-types/cosmos/mint/v1beta1/query";
 

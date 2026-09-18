@@ -1,6 +1,6 @@
-import { sha256 } from "@bkc/crypto";
-import { fromAscii, fromBase64, fromHex, toAscii } from "@bkc/encoding";
-import { Int53 } from "@bkc/math";
+import { sha256 } from "@bkc-network-lib/crypto";
+import { fromAscii, fromBase64, fromHex, toAscii } from "@bkc-network-lib/encoding";
+import { Int53 } from "@bkc-network-lib/math";
 import {
   DirectSecp256k1HdWallet,
   encodePubkey,
@@ -8,9 +8,9 @@ import {
   makeSignDoc,
   Registry,
   TxBodyEncodeObject,
-} from "@bkc/proto-signing";
-import { assertIsDeliverTxSuccess, coins, MsgSendEncodeObject, StdFee } from "@bkc/stargate";
-import { assert, sleep } from "@bkc/utils";
+} from "@bkc-network-lib/proto-signing";
+import { assertIsDeliverTxSuccess, coins, MsgSendEncodeObject, StdFee } from "@bkc-network-lib/stargate";
+import { assert, sleep } from "@bkc-network-lib/utils";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { ReadonlyDate } from "readonly-date-esm";
 

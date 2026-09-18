@@ -27,6 +27,6 @@ export const bkcChain = {
   isSimulable: false,
 } as const;
 
-// No fee helper here on purpose: `calculateFee(gasLimit, gasPrice)` in `@bkc/stargate`
+// No fee helper here on purpose: `calculateFee(gasLimit, gasPrice)` in `@bkc-network-lib/stargate`
 // already turns a gas budget into an StdFee, and it handles amounts past the safe integer
 // range. A second one would be the same arithmetic with fewer of the edge cases covered.

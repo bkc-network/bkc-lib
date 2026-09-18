@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { omitDefault } from "@bkc/amino";
-import { fromBase64, fromUtf8, toBase64, toUtf8 } from "@bkc/encoding";
-import { AminoConverters, Coin } from "@bkc/stargate";
+import { omitDefault } from "@bkc-network-lib/amino";
+import { fromBase64, fromUtf8, toBase64, toUtf8 } from "@bkc-network-lib/encoding";
+import { AminoConverters, Coin } from "@bkc-network-lib/stargate";
 import {
   MsgClearAdmin,
   MsgExecuteContract,

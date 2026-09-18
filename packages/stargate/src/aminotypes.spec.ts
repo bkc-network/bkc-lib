@@ -1,4 +1,4 @@
-import { coin } from "@bkc/proto-signing";
+import { coin } from "@bkc-network-lib/proto-signing";
 import { MsgDelegate } from "cosmjs-types/cosmos/staking/v1beta1/tx";
 
 import { AminoTypes } from "./aminotypes";

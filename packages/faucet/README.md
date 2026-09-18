@@ -1,11 +1,11 @@
-# @bkc/faucet
+# @bkc-network-lib/faucet
 
-![typescript](https://img.shields.io/npm/types/@bkc/faucet.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/faucet.svg)](https://www.npmjs.com/package/@bkc/faucet)
-[![license](https://img.shields.io/npm/l/@bkc/faucet.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/faucet.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/faucet.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/faucet.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/faucet.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/faucet.svg)](https://www.npmjs.com/package/@bkc-network-lib/faucet)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/faucet.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/faucet.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/faucet.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/faucet.svg)
 
 The faucet is built as part of the monorepo. In the repo root do:
 

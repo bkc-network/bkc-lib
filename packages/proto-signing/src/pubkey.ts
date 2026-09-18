@@ -11,9 +11,9 @@ import {
   MultisigThresholdPubkey,
   Pubkey,
   SinglePubkey,
-} from "@bkc/amino";
-import { fromBase64 } from "@bkc/encoding";
-import { Uint53 } from "@bkc/math";
+} from "@bkc-network-lib/amino";
+import { fromBase64 } from "@bkc-network-lib/encoding";
+import { Uint53 } from "@bkc-network-lib/math";
 import { PubKey as CosmosCryptoEd25519Pubkey } from "cosmjs-types/cosmos/crypto/ed25519/keys";
 import { LegacyAminoPubKey } from "cosmjs-types/cosmos/crypto/multisig/keys";
 import { PubKey as CosmosCryptoSecp256k1Pubkey } from "cosmjs-types/cosmos/crypto/secp256k1/keys";

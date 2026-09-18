@@ -1,6 +1,6 @@
-import { coins, makeCosmoshubPath } from "@bkc/amino";
-import { Secp256k1, Secp256k1Signature, sha256 } from "@bkc/crypto";
-import { fromBase64, fromHex } from "@bkc/encoding";
+import { coins, makeCosmoshubPath } from "@bkc-network-lib/amino";
+import { Secp256k1, Secp256k1Signature, sha256 } from "@bkc-network-lib/crypto";
+import { fromBase64, fromHex } from "@bkc-network-lib/encoding";
 
 import { DirectSecp256k1HdWallet, extractKdfConfiguration } from "./directsecp256k1hdwallet";
 import { makeAuthInfoBytes, makeSignBytes, makeSignDoc } from "./signing";

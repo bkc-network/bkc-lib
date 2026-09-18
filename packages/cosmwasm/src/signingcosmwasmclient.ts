@@ -1,7 +1,11 @@
-import { encodeSecp256k1Pubkey, getAminoPubkey, makeSignDoc as makeSignDocAmino } from "@bkc/amino";
-import { sha256 } from "@bkc/crypto";
-import { fromBase64, toHex, toUtf8 } from "@bkc/encoding";
-import { Int53, Uint53 } from "@bkc/math";
+import {
+  encodeSecp256k1Pubkey,
+  getAminoPubkey,
+  makeSignDoc as makeSignDocAmino,
+} from "@bkc-network-lib/amino";
+import { sha256 } from "@bkc-network-lib/crypto";
+import { fromBase64, toHex, toUtf8 } from "@bkc-network-lib/encoding";
+import { Int53, Uint53 } from "@bkc-network-lib/math";
 import {
   EncodeObject,
   encodePubkey,
@@ -11,7 +15,7 @@ import {
   OfflineSigner,
   Registry,
   TxBodyEncodeObject,
-} from "@bkc/proto-signing";
+} from "@bkc-network-lib/proto-signing";
 import {
   AminoTypes,
   Attribute,
@@ -34,9 +38,9 @@ import {
   queryDynamicGasPrice,
   SignerData,
   StdFee,
-} from "@bkc/stargate";
-import { CometClient, connectComet, HttpEndpoint } from "@bkc/tendermint-rpc";
-import { assert, assertDefined } from "@bkc/utils";
+} from "@bkc-network-lib/stargate";
+import { CometClient, connectComet, HttpEndpoint } from "@bkc-network-lib/tendermint-rpc";
+import { assert, assertDefined } from "@bkc-network-lib/utils";
 import { MsgWithdrawDelegatorReward } from "cosmjs-types/cosmos/distribution/v1beta1/tx";
 import { MsgDelegate, MsgUndelegate } from "cosmjs-types/cosmos/staking/v1beta1/tx";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";

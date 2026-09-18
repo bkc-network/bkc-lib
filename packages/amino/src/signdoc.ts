@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { toUtf8 } from "@bkc/encoding";
-import { Uint53, Uint64 } from "@bkc/math";
+import { toUtf8 } from "@bkc-network-lib/encoding";
+import { Uint53, Uint64 } from "@bkc-network-lib/math";
 
 import { Coin } from "./coins";
 

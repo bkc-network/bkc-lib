@@ -1,5 +1,5 @@
-import { fixUint8Array, fromUtf8, toHex } from "@bkc/encoding";
-import { Uint53 } from "@bkc/math";
+import { fixUint8Array, fromUtf8, toHex } from "@bkc-network-lib/encoding";
+import { Uint53 } from "@bkc-network-lib/math";
 import {
   Account,
   accountFromAny,
@@ -21,9 +21,14 @@ import {
   setupTxExtension,
   TimeoutError,
   TxExtension,
-} from "@bkc/stargate";
-import { CometClient, connectComet, HttpEndpoint, toRfc3339WithNanoseconds } from "@bkc/tendermint-rpc";
-import { assert, sleep } from "@bkc/utils";
+} from "@bkc-network-lib/stargate";
+import {
+  CometClient,
+  connectComet,
+  HttpEndpoint,
+  toRfc3339WithNanoseconds,
+} from "@bkc-network-lib/tendermint-rpc";
+import { assert, sleep } from "@bkc-network-lib/utils";
 import { TxMsgData } from "cosmjs-types/cosmos/base/abci/v1beta1/abci";
 import {
   CodeInfoResponse,
@@ -257,7 +262,7 @@ export class CosmWasmClient {
    * If the transaction is included in a block, a `DeliverTxResponse` is returned. The caller then
    * usually needs to check for execution success or failure.
    */
-  // NOTE: This method is tested against slow chains and timeouts in the @bkc/stargate package.
+  // NOTE: This method is tested against slow chains and timeouts in the @bkc-network-lib/stargate package.
   // Make sure it is kept in sync!
   public async broadcastTx(
     tx: Uint8Array,

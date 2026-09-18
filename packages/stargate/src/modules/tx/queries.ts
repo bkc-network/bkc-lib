@@ -1,6 +1,6 @@
-import { Pubkey, pubkeyType } from "@bkc/amino";
-import { mldsa65 } from "@bkc/crypto";
-import { encodePubkey } from "@bkc/proto-signing";
+import { Pubkey, pubkeyType } from "@bkc-network-lib/amino";
+import { mldsa65 } from "@bkc-network-lib/crypto";
+import { encodePubkey } from "@bkc-network-lib/proto-signing";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import {
   GetTxRequest,

@@ -1,4 +1,4 @@
-import { fromHex } from "@bkc/encoding";
+import { fromHex } from "@bkc-network-lib/encoding";
 
 import { instantiate2Address } from "./instantiate2";
 

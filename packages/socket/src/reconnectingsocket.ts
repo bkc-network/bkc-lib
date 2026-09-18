@@ -1,4 +1,4 @@
-import { ValueAndUpdates } from "@bkc/stream";
+import { ValueAndUpdates } from "@bkc-network-lib/stream";
 import { Listener, Producer, Stream } from "xstream";
 
 import { ConnectionStatus, QueueingStreamingSocket } from "./queueingstreamingsocket";

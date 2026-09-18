@@ -1,6 +1,6 @@
-import { encodeMldsa65Signature, rawMldsa65PubkeyToRawAddress } from "@bkc/amino";
-import { Mldsa65 } from "@bkc/crypto";
-import { toBech32 } from "@bkc/encoding";
+import { encodeMldsa65Signature, rawMldsa65PubkeyToRawAddress } from "@bkc-network-lib/amino";
+import { Mldsa65 } from "@bkc-network-lib/crypto";
+import { toBech32 } from "@bkc-network-lib/encoding";
 import { SignDoc } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import { AccountData, DirectSignResponse, OfflineDirectSigner } from "./signer";

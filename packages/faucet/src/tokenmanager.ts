@@ -1,5 +1,5 @@
-import { Decimal, Uint53 } from "@bkc/math";
-import { Coin } from "@bkc/stargate";
+import { Decimal, Uint53 } from "@bkc-network-lib/math";
+import { Coin } from "@bkc-network-lib/stargate";
 
 import { MinimalAccount } from "./types";
 

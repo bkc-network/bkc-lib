@@ -1,13 +1,14 @@
-# @bkc/stream
+# @bkc-network-lib/stream
 
-![typescript](https://img.shields.io/npm/types/@bkc/stream.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/stream.svg)](https://www.npmjs.com/package/@bkc/stream)
-[![license](https://img.shields.io/npm/l/@bkc/stream.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/stream.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/stream.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/stream.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/stream.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/stream.svg)](https://www.npmjs.com/package/@bkc-network-lib/stream)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/stream.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/stream.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/stream.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/stream.svg)
 
-@bkc/stream are some helper methods and classes to help with stream processing.
+@bkc-network-lib/stream are some helper methods and classes to help with stream
+processing.
 
 ## License
 

@@ -1,11 +1,11 @@
-# @bkc/cosmwasm
+# @bkc-network-lib/cosmwasm
 
-![typescript](https://img.shields.io/npm/types/@bkc/cosmwasm.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/cosmwasm.svg)](https://www.npmjs.com/package/@bkc/cosmwasm)
-[![license](https://img.shields.io/npm/l/@bkc/cosmwasm.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/cosmwasm.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/cosmwasm.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/cosmwasm.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/cosmwasm.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/cosmwasm.svg)](https://www.npmjs.com/package/@bkc-network-lib/cosmwasm)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/cosmwasm.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/cosmwasm.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/cosmwasm.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/cosmwasm.svg)
 
 An SDK to build CosmWasm clients.
 

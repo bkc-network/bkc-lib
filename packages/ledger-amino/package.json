@@ -1,6 +1,6 @@
 {
-  "name": "@bkc/ledger-amino",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/ledger-amino",
+  "version": "1.0.0",
   "private": true,
   "description": "A library for signing Amino-encoded transactions using Ledger devices",
   "contributors": [
@@ -43,16 +43,16 @@
     "pack-demo-web": "yarn build-or-skip && webpack --mode development --config webpack.demo.config.cjs"
   },
   "dependencies": {
-    "@bkc/amino": "workspace:^",
-    "@bkc/crypto": "workspace:^",
-    "@bkc/encoding": "workspace:^",
-    "@bkc/math": "workspace:^",
-    "@bkc/utils": "workspace:^",
+    "@bkc-network-lib/amino": "workspace:^",
+    "@bkc-network-lib/crypto": "workspace:^",
+    "@bkc-network-lib/encoding": "workspace:^",
+    "@bkc-network-lib/math": "workspace:^",
+    "@bkc-network-lib/utils": "workspace:^",
     "@zondax/ledger-cosmos-js": "^4.0.1",
     "semver": "^7.5.2"
   },
   "devDependencies": {
-    "@bkc/stargate": "workspace:^",
+    "@bkc-network-lib/stargate": "workspace:^",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@ledgerhq/hw-transport": "^6.31.4",
     "@ledgerhq/hw-transport-node-hid": "^6.29.5",

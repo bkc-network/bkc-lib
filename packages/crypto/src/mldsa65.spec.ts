@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-import { fromHex, toAscii } from "@bkc/encoding";
+import { fromHex, toAscii } from "@bkc-network-lib/encoding";
 
 import { Mldsa65, mldsa65, Mldsa65Keypair } from "./mldsa65";
 import { sha256 } from "./sha";

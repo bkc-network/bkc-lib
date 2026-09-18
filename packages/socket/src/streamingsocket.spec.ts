@@ -1,4 +1,4 @@
-import { toListPromise } from "@bkc/stream";
+import { toListPromise } from "@bkc-network-lib/stream";
 
 import { StreamingSocket } from "./streamingsocket";
 

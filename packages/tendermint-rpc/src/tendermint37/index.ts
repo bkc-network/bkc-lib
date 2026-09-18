@@ -1,5 +1,5 @@
 // Note: all exports in this module are publicly available via
-// `import { tendermint37 } from "@bkc/tendermint-rpc"`
+// `import { tendermint37 } from "@bkc-network-lib/tendermint-rpc"`
 
 export type {
   AbciInfoRequest,

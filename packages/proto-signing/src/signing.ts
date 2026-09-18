@@ -1,5 +1,5 @@
-import { fixUint8Array } from "@bkc/encoding";
-import { assert } from "@bkc/utils";
+import { fixUint8Array } from "@bkc-network-lib/encoding";
+import { assert } from "@bkc-network-lib/utils";
 import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { AuthInfo, SignDoc, SignerInfo } from "cosmjs-types/cosmos/tx/v1beta1/tx";

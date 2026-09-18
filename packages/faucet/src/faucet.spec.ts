@@ -1,7 +1,7 @@
-import { Random } from "@bkc/crypto";
-import { toBech32 } from "@bkc/encoding";
-import { makeCosmoshubPath, StargateClient } from "@bkc/stargate";
-import { assert } from "@bkc/utils";
+import { Random } from "@bkc-network-lib/crypto";
+import { toBech32 } from "@bkc-network-lib/encoding";
+import { makeCosmoshubPath, StargateClient } from "@bkc-network-lib/stargate";
+import { assert } from "@bkc-network-lib/utils";
 
 import { Faucet } from "./faucet";
 import { simappEnabled } from "./testutils";

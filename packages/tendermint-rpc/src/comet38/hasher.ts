@@ -1,4 +1,4 @@
-import { Sha256, sha256 } from "@bkc/crypto";
+import { Sha256, sha256 } from "@bkc-network-lib/crypto";
 
 import {
   encodeBlockId,

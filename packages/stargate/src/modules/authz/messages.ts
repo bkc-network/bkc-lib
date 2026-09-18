@@ -1,4 +1,4 @@
-import { GeneratedType } from "@bkc/proto-signing";
+import { GeneratedType } from "@bkc-network-lib/proto-signing";
 import { MsgExec, MsgGrant, MsgRevoke } from "cosmjs-types/cosmos/authz/v1beta1/tx";
 
 export const authzTypes: ReadonlyArray<[string, GeneratedType]> = [

@@ -1,7 +1,12 @@
-import { encodeSecp256k1Pubkey, makeCosmoshubPath, pubkeyToAddress, Secp256k1Pubkey } from "@bkc/amino";
-import { HdPath, pathToString, Secp256k1Signature } from "@bkc/crypto";
-import { fromUtf8 } from "@bkc/encoding";
-import { assert } from "@bkc/utils";
+import {
+  encodeSecp256k1Pubkey,
+  makeCosmoshubPath,
+  pubkeyToAddress,
+  Secp256k1Pubkey,
+} from "@bkc-network-lib/amino";
+import { HdPath, pathToString, Secp256k1Signature } from "@bkc-network-lib/crypto";
+import { fromUtf8 } from "@bkc-network-lib/encoding";
+import { assert } from "@bkc-network-lib/utils";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import Transport from "@ledgerhq/hw-transport";
 // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -1,4 +1,4 @@
-import { toUtf8 } from "@bkc/encoding";
+import { toUtf8 } from "@bkc-network-lib/encoding";
 
 import { ReadonlyDateWithNanoseconds } from "../dates";
 import { BlockId, Version } from "./responses";

@@ -1,5 +1,5 @@
-import { toAscii } from "@bkc/encoding";
-import { sleep } from "@bkc/utils";
+import { toAscii } from "@bkc-network-lib/encoding";
+import { sleep } from "@bkc-network-lib/utils";
 
 export const nonNegativeIntegerMatcher = /^[0-9]+$/;
 export const anyMatcher = /^.*$/; // Any string, including empty. Does not do more than a type check.

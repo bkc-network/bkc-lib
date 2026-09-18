@@ -1,6 +1,6 @@
-import { pathToString } from "@bkc/crypto";
-import { DirectSecp256k1HdWallet, OfflineSigner } from "@bkc/proto-signing";
-import { SigningStargateClient } from "@bkc/stargate";
+import { pathToString } from "@bkc-network-lib/crypto";
+import { DirectSecp256k1HdWallet, OfflineSigner } from "@bkc-network-lib/proto-signing";
+import { SigningStargateClient } from "@bkc-network-lib/stargate";
 
 import { PathBuilder } from "./pathbuilder";
 

@@ -3,7 +3,7 @@ import {
   JsonRpcRequest,
   JsonRpcSuccessResponse,
   parseJsonRpcResponse,
-} from "@bkc/json-rpc";
+} from "@bkc-network-lib/json-rpc";
 
 import { http } from "./http";
 import { hasProtocol, RpcClient } from "./rpcclient";

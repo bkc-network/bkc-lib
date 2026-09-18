@@ -39,5 +39,5 @@ export { makeAuthInfoBytes, makeSignBytes, makeSignDoc } from "./signing";
 export { type KdfConfiguration, executeKdf } from "./wallet";
 
 // re-exports
-export type { Coin } from "@bkc/amino";
-export { coin, coins, parseCoins } from "@bkc/amino";
+export type { Coin } from "@bkc-network-lib/amino";
+export { coin, coins, parseCoins } from "@bkc-network-lib/amino";

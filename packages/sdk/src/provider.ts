@@ -1,6 +1,6 @@
-import { fromHex, toHex } from "@bkc/encoding";
-import { OfflineDirectSigner } from "@bkc/proto-signing";
-import { calculateFee, GasPrice, SigningStargateClient } from "@bkc/stargate";
+import { fromHex, toHex } from "@bkc-network-lib/encoding";
+import { OfflineDirectSigner } from "@bkc-network-lib/proto-signing";
+import { calculateFee, GasPrice, SigningStargateClient } from "@bkc-network-lib/stargate";
 
 import { toEvmAddress } from "./address";
 import { bkcChain } from "./chain";

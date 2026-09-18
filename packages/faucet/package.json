@@ -1,6 +1,6 @@
 {
-  "name": "@bkc/faucet",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/faucet",
+  "version": "1.0.0",
   "private": true,
   "description": "The faucet",
   "contributors": [
@@ -41,12 +41,12 @@
     "pack-node": "yarn build-or-skip && webpack --mode production --config webpack.node.config.cjs"
   },
   "dependencies": {
-    "@bkc/crypto": "workspace:^",
-    "@bkc/encoding": "workspace:^",
-    "@bkc/math": "workspace:^",
-    "@bkc/proto-signing": "workspace:^",
-    "@bkc/stargate": "workspace:^",
-    "@bkc/utils": "workspace:^",
+    "@bkc-network-lib/crypto": "workspace:^",
+    "@bkc-network-lib/encoding": "workspace:^",
+    "@bkc-network-lib/math": "workspace:^",
+    "@bkc-network-lib/proto-signing": "workspace:^",
+    "@bkc-network-lib/stargate": "workspace:^",
+    "@bkc-network-lib/utils": "workspace:^",
     "@koa/bodyparser": "^6.0.0",
     "@koa/cors": "^5.0",
     "koa": "^3.1.2"

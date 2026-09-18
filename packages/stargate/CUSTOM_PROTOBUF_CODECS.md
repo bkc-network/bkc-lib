@@ -14,15 +14,16 @@ CosmJS.
 
 - You are working on a TypeScript project. (Plain JS is possible but not covered
   by this document. It should work if you just strip out the type information.)
-- You have installed `@bkc/proto-signing`, `@bkc/stargate` and
-  `@bkc/tendermint-rpc` as dependencies. In general these dependencies should
-  all have the same version. This document was written upstream for CosmJS 0.26
-  and has not been re-verified since.
+- You have installed `@bkc-network-lib/proto-signing`,
+  `@bkc-network-lib/stargate` and `@bkc-network-lib/tendermint-rpc` as
+  dependencies. In general these dependencies should all have the same version.
+  This document was written upstream for CosmJS 0.26 and has not been
+  re-verified since.
   ```
   "dependencies": {
-    "@bkc/proto-signing": "^0.39.0",
-    "@bkc/stargate": "^0.39.0",
-    "@bkc/tendermint-rpc": "^0.39.0",
+    "@bkc-network-lib/proto-signing": "^0.39.0",
+    "@bkc-network-lib/stargate": "^0.39.0",
+    "@bkc-network-lib/tendermint-rpc": "^0.39.0",
     // ...
   }
   ```
@@ -103,15 +104,19 @@ generation). Now we look into using this codec. This section is split into
 This section assumes that your definition files included `MsgXxx` `message`
 definitions for use in submitting transactions to a Cosmos SDK blockchain. You
 can instantiate a signing client for Stargate which supports those message types
-using a custom registry. We expose a `Registry` class from `@bkc/proto-signing`
-for you to use, which maps type URLs to codec objects. For example:
+using a custom registry. We expose a `Registry` class from
+`@bkc-network-lib/proto-signing` for you to use, which maps type URLs to codec
+objects. For example:
 
 ```ts
-import { DirectSecp256k1HdWallet, Registry } from "@bkc/proto-signing";
+import {
+  DirectSecp256k1HdWallet,
+  Registry,
+} from "@bkc-network-lib/proto-signing";
 import {
   defaultRegistryTypes as defaultStargateTypes,
   SigningStargateClient,
-} from "@bkc/stargate";
+} from "@bkc-network-lib/stargate";
 import { MsgXxx } from "./path/to/generated/codec/my/custom/tx"; // Replace with your own Msg import
 
 const myRegistry = new Registry(defaultStargateTypes);
@@ -171,8 +176,11 @@ currently requires a few layers of abstraction. Here is how you can achieve it
 using CosmJS helpers:
 
 ```ts
-import { createProtobufRpcClient, QueryClient } from "@bkc/stargate";
-import { Tendermint34Client } from "@bkc/tendermint-rpc";
+import {
+  createProtobufRpcClient,
+  QueryClient,
+} from "@bkc-network-lib/stargate";
+import { Tendermint34Client } from "@bkc-network-lib/tendermint-rpc";
 import { QueryClientImpl } from "./path/to/generated/codec/my/custom/query";
 
 // Inside an async function...
@@ -194,10 +202,10 @@ const queryResult = await queryService.MyCustomQuery({
 });
 ```
 
-Additionally, we provide a system for extending `@bkc/stargate`’s `QueryClient`
-with methods of your own design, wrapping those of the query service. For this
-you will need to define your own `setupXxxExtension` functions and pass them to
-the `QueryClient.withExtensions` static method like this:
+Additionally, we provide a system for extending `@bkc-network-lib/stargate`’s
+`QueryClient` with methods of your own design, wrapping those of the query
+service. For this you will need to define your own `setupXxxExtension` functions
+and pass them to the `QueryClient.withExtensions` static method like this:
 
 ```ts
 // Define your extensions

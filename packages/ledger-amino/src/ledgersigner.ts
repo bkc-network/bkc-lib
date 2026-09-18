@@ -6,8 +6,8 @@ import {
   OfflineAminoSigner,
   serializeSignDoc,
   StdSignDoc,
-} from "@bkc/amino";
-import { HdPath } from "@bkc/crypto";
+} from "@bkc-network-lib/amino";
+import { HdPath } from "@bkc-network-lib/crypto";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import Transport from "@ledgerhq/hw-transport";
 

@@ -1,5 +1,5 @@
-import { GeneratedType, Registry, TsProto2GeneratedType } from "@bkc/proto-signing";
-import { defaultRegistryTypes } from "@bkc/stargate";
+import { GeneratedType, Registry, TsProto2GeneratedType } from "@bkc-network-lib/proto-signing";
+import { defaultRegistryTypes } from "@bkc-network-lib/stargate";
 
 import { evmCallTypeUrl } from "./chain";
 import { MsgExecuteEvmCall } from "./codec/bkc/bkc/v1/tx";

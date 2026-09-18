@@ -1,4 +1,4 @@
-import { Int53 } from "@bkc/math";
+import { Int53 } from "@bkc-network-lib/math";
 
 import { jCheckString } from "./jsonchecks";
 

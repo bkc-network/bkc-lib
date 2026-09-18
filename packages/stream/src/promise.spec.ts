@@ -1,4 +1,4 @@
-import { sleep } from "@bkc/utils";
+import { sleep } from "@bkc-network-lib/utils";
 import { Producer, Stream } from "xstream";
 
 import { firstEvent, fromListPromise, toListPromise } from "./promise";

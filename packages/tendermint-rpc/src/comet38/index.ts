@@ -1,5 +1,5 @@
 // Note: all exports in this module are publicly available via
-// `import { comet38 } from "@bkc/tendermint-rpc"`
+// `import { comet38 } from "@bkc-network-lib/tendermint-rpc"`
 
 export { Comet38Client } from "./comet38client";
 export type {

@@ -1,7 +1,7 @@
-import { coin } from "@bkc/amino";
-import { DirectEthSecp256k1HdWallet, DirectSecp256k1HdWallet } from "@bkc/proto-signing";
-import { CometClient, connectComet } from "@bkc/tendermint-rpc";
-import { assert } from "@bkc/utils";
+import { coin } from "@bkc-network-lib/amino";
+import { DirectEthSecp256k1HdWallet, DirectSecp256k1HdWallet } from "@bkc-network-lib/proto-signing";
+import { CometClient, connectComet } from "@bkc-network-lib/tendermint-rpc";
+import { assert } from "@bkc-network-lib/utils";
 import {
   QueryAllBalancesRequest,
   QueryAllBalancesResponse,

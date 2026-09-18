@@ -1,5 +1,5 @@
-import { keccak256 } from "@bkc/crypto";
-import { fromBech32, fromHex, toBech32, toHex, toUtf8 } from "@bkc/encoding";
+import { keccak256 } from "@bkc-network-lib/crypto";
+import { fromBech32, fromHex, toBech32, toHex, toUtf8 } from "@bkc-network-lib/encoding";
 
 import { bkcChain } from "./chain";
 

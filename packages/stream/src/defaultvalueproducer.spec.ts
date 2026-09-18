@@ -1,4 +1,4 @@
-import { sleep } from "@bkc/utils";
+import { sleep } from "@bkc-network-lib/utils";
 import { Stream } from "xstream";
 
 import { DefaultValueProducer } from "./defaultvalueproducer";

@@ -1,4 +1,4 @@
-import { DefaultValueProducer, ValueAndUpdates } from "@bkc/stream";
+import { DefaultValueProducer, ValueAndUpdates } from "@bkc-network-lib/stream";
 import { Listener, Producer, Stream } from "xstream";
 
 import { SocketWrapperMessageEvent } from "./socketwrapper";

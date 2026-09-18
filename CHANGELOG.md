@@ -4,51 +4,57 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0] - 2026-09-18
 
 Everything below is the BKC fork. Releases up to 0.39.0 are upstream CosmJS and
 are recorded under their original `@cosmjs` names.
 
 ### Added
 
-- @bkc/crypto: `Mldsa65`, `Mldsa65Keypair` and the `mldsa65` length constants,
-  wrapping `@noble/post-quantum` for ML-DSA-65 (FIPS 204). The sizes are fixed:
-  32-byte seed, 1952-byte public key, 4032-byte private key, 3309-byte
-  signature. Adds `@noble/post-quantum` as a runtime dependency.
-- @bkc/crypto: `hkdfSha256`, used to derive ML-DSA-65 seeds for HD wallets.
-  ML-DSA has no SLIP-0010 equivalent, so derivation goes through HKDF instead.
-- @bkc/amino: ML-DSA-65 handling in the pubkey, address and signature encoders.
-  `Algo` gained `"mldsa65"`.
-- @bkc/proto-signing: `DirectMldsa65Wallet` and `DirectMldsa65HdWallet`.
-- @bkc/tendermint-rpc: decoding for ML-DSA-65 consensus public keys.
-- @bkc/sdk: new package. Carries the `bkc.bkc.v1` codec (`MsgExecuteEvmCall`),
-  an ethers v6 Provider and Signer backed by the Cosmos transaction path, and
-  fee, log and address helpers. EVM calls travel through Cosmos rather than
-  `eth_sendRawTransaction`, because the chain rejects secp256k1 signatures on
-  the write path.
+- @bkc-network-lib/crypto: `Mldsa65`, `Mldsa65Keypair` and the `mldsa65` length
+  constants, wrapping `@noble/post-quantum` for ML-DSA-65 (FIPS 204). The sizes
+  are fixed: 32-byte seed, 1952-byte public key, 4032-byte private key,
+  3309-byte signature. Adds `@noble/post-quantum` as a runtime dependency.
+- @bkc-network-lib/crypto: `hkdfSha256`, used to derive ML-DSA-65 seeds for HD
+  wallets. ML-DSA has no SLIP-0010 equivalent, so derivation goes through HKDF
+  instead.
+- @bkc-network-lib/amino: ML-DSA-65 handling in the pubkey, address and
+  signature encoders. `Algo` gained `"mldsa65"`.
+- @bkc-network-lib/proto-signing: `DirectMldsa65Wallet` and
+  `DirectMldsa65HdWallet`.
+- @bkc-network-lib/tendermint-rpc: decoding for ML-DSA-65 consensus public keys.
+- @bkc-network-lib/sdk: new package. Carries the `bkc.bkc.v1` codec
+  (`MsgExecuteEvmCall`), an ethers v6 Provider and Signer backed by the Cosmos
+  transaction path, and fee, log and address helpers. EVM calls travel through
+  Cosmos rather than `eth_sendRawTransaction`, because the chain rejects
+  secp256k1 signatures on the write path.
 
 ### Changed
 
-- all: renamed from the `@cosmjs` scope to `@bkc`, including the packages that
-  carry no local changes, so an application never resolves one of each.
-- @bkc/amino, @bkc/proto-signing: `cosmjsSalt` is now `keystoreKdfSalt`. The
-  bytes it spells are deliberately unchanged. They go into Argon2 when a wallet
-  is serialised, so they are part of the on-disk keystore format rather than a
-  label, and changing them would lock every existing wallet out.
-- @bkc/stargate: `simulate()` now builds the throwaway transaction with
-  `SIGN_MODE_DIRECT` and a full-length 3309-byte placeholder signature when the
-  account signs with ML-DSA-65. Gas is charged per byte, so the previous empty
-  placeholder under-estimated it. secp256k1 and ed25519 keep the old behaviour.
-- @bkc/stargate: public key encoding is selected by the account's algorithm.
+- all: renamed from the `@cosmjs` scope to `@bkc-network-lib`, including the
+  packages that carry no local changes, so an application never resolves one of
+  each.
+- @bkc-network-lib/amino, @bkc-network-lib/proto-signing: `cosmjsSalt` is now
+  `keystoreKdfSalt`. The bytes it spells are deliberately unchanged. They go
+  into Argon2 when a wallet is serialised, so they are part of the on-disk
+  keystore format rather than a label, and changing them would lock every
+  existing wallet out.
+- @bkc-network-lib/stargate: `simulate()` now builds the throwaway transaction
+  with `SIGN_MODE_DIRECT` and a full-length 3309-byte placeholder signature when
+  the account signs with ML-DSA-65. Gas is charged per byte, so the previous
+  empty placeholder under-estimated it. secp256k1 and ed25519 keep the old
+  behaviour.
+- @bkc-network-lib/stargate: public key encoding is selected by the account's
+  algorithm.
 - all: package metadata points at this repository, and every package now ships
   `LICENSE` and `NOTICE`.
 
 ### Fixed
 
-- @bkc/encoding: `fromBech32` passed `Infinity` as the length limit, which
-  `@scure/base` 2.1 and newer reject. It now passes a finite bound, so decoding
-  no longer throws for an install that resolves a newer `@scure/base` than this
-  repository's lockfile pins.
+- @bkc-network-lib/encoding: `fromBech32` passed `Infinity` as the length limit,
+  which `@scure/base` 2.1 and newer reject. It now passes a finite bound, so
+  decoding no longer throws for an install that resolves a newer `@scure/base`
+  than this repository's lockfile pins.
 
 ## [0.39.0] - 2026-05-04
 

@@ -1,4 +1,4 @@
-import { fromBase64, fromHex } from "@bkc/encoding";
+import { fromBase64, fromHex } from "@bkc-network-lib/encoding";
 import { ReadonlyDate } from "readonly-date-esm";
 
 import { ReadonlyDateWithNanoseconds } from "../dates";

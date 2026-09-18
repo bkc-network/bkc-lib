@@ -1,4 +1,4 @@
-import { OfflineAminoSigner, StdSignature } from "@bkc/amino";
+import { OfflineAminoSigner, StdSignature } from "@bkc-network-lib/amino";
 import { SignDoc } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 export type Algo = "secp256k1" | "eth_secp256k1" | "ethsecp256k1" | "ed25519" | "sr25519" | "mldsa65";

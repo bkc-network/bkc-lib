@@ -1,4 +1,4 @@
-import { fromBase64, fromHex, toBase64 } from "@bkc/encoding";
+import { fromBase64, fromHex, toBase64 } from "@bkc-network-lib/encoding";
 
 import { decodeEvent, decodeValidatorGenesis, decodeValidatorInfo, decodeValidatorUpdate } from "./responses";
 

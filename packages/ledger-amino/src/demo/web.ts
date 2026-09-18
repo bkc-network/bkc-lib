@@ -1,8 +1,8 @@
-import { AccountData, StdSignDoc } from "@bkc/amino";
-import { HdPath, pathToString, stringToPath } from "@bkc/crypto";
-import { toBase64 } from "@bkc/encoding";
-import { Uint53 } from "@bkc/math";
-import { assert } from "@bkc/utils";
+import { AccountData, StdSignDoc } from "@bkc-network-lib/amino";
+import { HdPath, pathToString, stringToPath } from "@bkc-network-lib/crypto";
+import { toBase64 } from "@bkc-network-lib/encoding";
+import { Uint53 } from "@bkc-network-lib/math";
+import { assert } from "@bkc-network-lib/utils";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 

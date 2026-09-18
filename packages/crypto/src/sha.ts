@@ -1,4 +1,4 @@
-import { fixUint8Array } from "@bkc/encoding";
+import { fixUint8Array } from "@bkc-network-lib/encoding";
 import { sha256 as nobleSha256, sha512 as nobleSha512 } from "@noble/hashes/sha2.js";
 
 import { HashFunction } from "./hash";

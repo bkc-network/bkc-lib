@@ -1,6 +1,11 @@
-import { coin, coins, DirectEthSecp256k1HdWallet, DirectSecp256k1HdWallet } from "@bkc/proto-signing";
-import { CometClient, connectComet } from "@bkc/tendermint-rpc";
-import { sleep } from "@bkc/utils";
+import {
+  coin,
+  coins,
+  DirectEthSecp256k1HdWallet,
+  DirectSecp256k1HdWallet,
+} from "@bkc-network-lib/proto-signing";
+import { CometClient, connectComet } from "@bkc-network-lib/tendermint-rpc";
+import { sleep } from "@bkc-network-lib/utils";
 import { MsgDelegate } from "cosmjs-types/cosmos/staking/v1beta1/tx";
 
 import { QueryClient } from "../../queryclient";

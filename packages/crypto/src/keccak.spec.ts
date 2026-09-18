@@ -1,4 +1,4 @@
-import { fromHex, toHex } from "@bkc/encoding";
+import { fromHex, toHex } from "@bkc-network-lib/encoding";
 
 import { Keccak256, keccak256 } from "./keccak";
 import keccakVectors from "./testdata/keccak.json";

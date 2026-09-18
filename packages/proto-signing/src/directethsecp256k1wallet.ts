@@ -1,6 +1,6 @@
-import { encodeEthSecp256k1Signature, rawEthSecp256k1PubkeyToRawAddress } from "@bkc/amino";
-import { keccak256, Secp256k1 } from "@bkc/crypto";
-import { toBech32 } from "@bkc/encoding";
+import { encodeEthSecp256k1Signature, rawEthSecp256k1PubkeyToRawAddress } from "@bkc-network-lib/amino";
+import { keccak256, Secp256k1 } from "@bkc-network-lib/crypto";
+import { toBech32 } from "@bkc-network-lib/encoding";
 import { SignDoc } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import { AccountData, DirectSignResponse, OfflineDirectSigner } from "./signer";

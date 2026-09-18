@@ -1,4 +1,4 @@
-import { fixUint8Array } from "@bkc/encoding";
+import { fixUint8Array } from "@bkc-network-lib/encoding";
 import type * as bbw from "@bufbuild/protobuf/wire";
 import { BinaryWriter } from "cosmjs-types/binary";
 import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
@@ -161,7 +161,7 @@ export class Registry {
    * If you need to work with the result type in TypeScript, you can use:
    *
    * ```
-   * import { assert } from "@bkc/utils";
+   * import { assert } from "@bkc-network-lib/utils";
    *
    * const Coin = registry.lookupType("/cosmos.base.v1beta1.Coin");
    * assert(Coin); // Ensures not unset

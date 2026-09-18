@@ -1,4 +1,4 @@
-import { StargateClient } from "@bkc/stargate";
+import { StargateClient } from "@bkc-network-lib/stargate";
 
 import { Webserver } from "../api/webserver";
 import * as constants from "../constants";

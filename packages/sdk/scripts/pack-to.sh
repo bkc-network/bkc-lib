@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Packs the SDK and everything it depends on into a directory a consumer can install from.
 #
-# @bkc/* is not on any npm registry, so a consumer installs tarballs. Those tarballs must
+# @bkc-network-lib/* is not on any npm registry, so a consumer installs tarballs. Those tarballs must
 # live somewhere stable and inside the consumer's own repository: a path under /tmp is
 # wiped on reboot and means nothing on anyone else's machine, and two consumers packed at
 # different times silently end up on different versions of the SDK - which defeats the
@@ -16,7 +16,7 @@ set -euo pipefail
 DEST="${1:?usage: pack-to.sh <destination-directory>}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 # Every workspace package, in dependency order. The base ones (utils, math, socket,
-# stream, json-rpc) used to come from npm as @cosmjs/*; renamed to @bkc/* they are no
+# stream, json-rpc) used to come from npm as @cosmjs/*; renamed to @bkc-network-lib/* they are no
 # longer published anywhere, so a consumer needs them shipped too.
 PACKAGES=(utils math encoding json-rpc socket stream crypto amino proto-signing tendermint-rpc stargate sdk)
 
@@ -33,5 +33,5 @@ done
 echo
 echo "Point the consumer's package.json at them:"
 for name in "${PACKAGES[@]}"; do
-  echo "  \"@bkc/$name\": \"file:./vendor/$name.tgz\","
+  echo "  \"@bkc-network-lib/$name\": \"file:./vendor/$name.tgz\","
 done

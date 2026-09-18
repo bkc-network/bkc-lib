@@ -1,4 +1,4 @@
-import { fromHex, toHex } from "@bkc/encoding";
+import { fromHex, toHex } from "@bkc-network-lib/encoding";
 
 import { Sha256, sha256 } from "./sha";
 import shaVectors from "./testdata/sha.json";

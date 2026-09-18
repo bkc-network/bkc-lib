@@ -1,4 +1,4 @@
-import { fromAscii, fromBase64, fromHex } from "@bkc/encoding";
+import { fromAscii, fromBase64, fromHex } from "@bkc-network-lib/encoding";
 
 import { Bip39, EnglishMnemonic } from "./bip39";
 import { sha256 } from "./sha";

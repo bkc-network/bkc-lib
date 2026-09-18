@@ -1,5 +1,5 @@
-import { toHex } from "@bkc/encoding";
-import { Uint53 } from "@bkc/math";
+import { toHex } from "@bkc-network-lib/encoding";
+import { Uint53 } from "@bkc-network-lib/math";
 
 import { pubkeyToRawAddress } from "./addresses";
 import { MultisigThresholdPubkey, SinglePubkey } from "./pubkeys";

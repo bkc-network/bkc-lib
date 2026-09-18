@@ -1,7 +1,7 @@
 # Hacking BKC Lib
 
 This document explains what you need to work on this repository, i.e. modify it.
-It is not intended for people using the `@bkc` packages - they want
+It is not intended for people using the `@bkc-network-lib` packages - they want
 [packages/sdk/README.md](packages/sdk/README.md).
 
 Most of it is inherited from CosmJS, which this is a fork of, and still
@@ -117,24 +117,24 @@ In the `scripts/` folder, a bunch of blockchains and other backend systems are
 started for testing purposes. Some ports need to be changed from the default in
 order to avoid conflicts. Here is an overview of the ports used:
 
-| Port  | Application                    | Usage                     |
-| ----- | ------------------------------ | ------------------------- |
-| 1318  | simapp LCD API                 | Manual Stargate debugging |
-| 1319  | wasmd LCD API                  | Manual Stargate debugging |
-| 1320  | simapp slow LCD API            | Manual Stargate debugging |
-| 1321  | evmd REST API                  | EVM chain tests           |
-| 1322  | evmd slow REST API             | EVM chain tests           |
-| 4444  | socketserver                   | @bkc/socket tests         |
-| 4445  | socketserver slow              | @bkc/socket tests         |
-| 5555  | httpserver                     | @bkc/tendermint-rpc tests |
-| 9090  | simapp gRPC                    | Manual Stargate debugging |
-| 9091  | evmd gRPC                      | EVM chain tests           |
-| 9092  | evmd slow gRPC                 | EVM chain tests           |
-| 11101 | Standalone CometBFT 1.x RPC    | @bkc/tendermint-rpc tests |
-| 11137 | Standalone Tendermint 0.37 RPC | @bkc/tendermint-rpc tests |
-| 11138 | Standalone CometBFT 0.38 RPC   | @bkc/tendermint-rpc tests |
-| 26658 | simapp Tendermint RPC          | Stargate client tests     |
-| 26659 | wasmd Tendermint RPC           | @bkc/cosmwasm tests       |
-| 26660 | simapp slow Tendermint RPC     | Stargate client tests     |
-| 26661 | evmd Tendermint RPC            | EVM chain tests           |
-| 26662 | evmd slow Tendermint RPC       | EVM chain tests           |
+| Port  | Application                    | Usage                                 |
+| ----- | ------------------------------ | ------------------------------------- |
+| 1318  | simapp LCD API                 | Manual Stargate debugging             |
+| 1319  | wasmd LCD API                  | Manual Stargate debugging             |
+| 1320  | simapp slow LCD API            | Manual Stargate debugging             |
+| 1321  | evmd REST API                  | EVM chain tests                       |
+| 1322  | evmd slow REST API             | EVM chain tests                       |
+| 4444  | socketserver                   | @bkc-network-lib/socket tests         |
+| 4445  | socketserver slow              | @bkc-network-lib/socket tests         |
+| 5555  | httpserver                     | @bkc-network-lib/tendermint-rpc tests |
+| 9090  | simapp gRPC                    | Manual Stargate debugging             |
+| 9091  | evmd gRPC                      | EVM chain tests                       |
+| 9092  | evmd slow gRPC                 | EVM chain tests                       |
+| 11101 | Standalone CometBFT 1.x RPC    | @bkc-network-lib/tendermint-rpc tests |
+| 11137 | Standalone Tendermint 0.37 RPC | @bkc-network-lib/tendermint-rpc tests |
+| 11138 | Standalone CometBFT 0.38 RPC   | @bkc-network-lib/tendermint-rpc tests |
+| 26658 | simapp Tendermint RPC          | Stargate client tests                 |
+| 26659 | wasmd Tendermint RPC           | @bkc-network-lib/cosmwasm tests       |
+| 26660 | simapp slow Tendermint RPC     | Stargate client tests                 |
+| 26661 | evmd Tendermint RPC            | EVM chain tests                       |
+| 26662 | evmd slow Tendermint RPC       | EVM chain tests                       |

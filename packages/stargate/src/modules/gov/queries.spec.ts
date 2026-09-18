@@ -1,8 +1,8 @@
-import { coin, coins, makeCosmoshubPath } from "@bkc/amino";
-import { toAscii } from "@bkc/encoding";
-import { DirectSecp256k1HdWallet } from "@bkc/proto-signing";
-import { CometClient, connectComet } from "@bkc/tendermint-rpc";
-import { assert, sleep } from "@bkc/utils";
+import { coin, coins, makeCosmoshubPath } from "@bkc-network-lib/amino";
+import { toAscii } from "@bkc-network-lib/encoding";
+import { DirectSecp256k1HdWallet } from "@bkc-network-lib/proto-signing";
+import { CometClient, connectComet } from "@bkc-network-lib/tendermint-rpc";
+import { assert, sleep } from "@bkc-network-lib/utils";
 import {
   ProposalStatus,
   TextProposal,

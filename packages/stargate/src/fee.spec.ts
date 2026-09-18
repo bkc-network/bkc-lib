@@ -1,4 +1,4 @@
-import { Decimal } from "@bkc/math";
+import { Decimal } from "@bkc-network-lib/math";
 
 import { calculateFee, GasPrice } from "./fee";
 

@@ -1,5 +1,5 @@
-import { fromAscii, fromBech32 } from "@bkc/encoding";
-import { Decimal, Uint64 } from "@bkc/math";
+import { fromAscii, fromBech32 } from "@bkc-network-lib/encoding";
+import { Decimal, Uint64 } from "@bkc-network-lib/math";
 import { PageRequest } from "cosmjs-types/cosmos/base/query/v1beta1/pagination";
 
 import { QueryClient } from "./queryclient";

@@ -1,4 +1,4 @@
-import { coins } from "@bkc/proto-signing";
+import { coins } from "@bkc-network-lib/proto-signing";
 import {
   MsgFundCommunityPool,
   MsgSetWithdrawAddress,

@@ -37,9 +37,9 @@
     "build": "yarn workspaces foreach --all --topological-dev --parallel --verbose run build",
     "docs": "yarn workspaces foreach --all --topological-dev --parallel --verbose run docs",
     "pack-web": "yarn workspaces foreach --all --topological-dev --parallel --verbose run pack-web",
-    "publish-next": "yarn workspaces foreach --all --no-private --exclude '@bkc/cosmwasm-stargate' exec yarn npm publish --tag next",
-    "publish-backports": "yarn workspaces foreach --all --no-private --exclude '@bkc/cosmwasm-stargate' exec yarn npm publish --tag backports-unsorted",
-    "publish-latest": "yarn workspaces foreach --all --no-private --exclude '@bkc/cosmwasm-stargate' exec yarn npm publish"
+    "publish-next": "yarn workspaces foreach --all --no-private --exclude '@bkc-network-lib/cosmwasm-stargate' exec yarn npm publish --tag next",
+    "publish-backports": "yarn workspaces foreach --all --no-private --exclude '@bkc-network-lib/cosmwasm-stargate' exec yarn npm publish --tag backports-unsorted",
+    "publish-latest": "yarn workspaces foreach --all --no-private --exclude '@bkc-network-lib/cosmwasm-stargate' exec yarn npm publish"
   },
   "resolutions": {
     "@isaacs/brace-expansion": "^5.0.1",
@@ -74,13 +74,13 @@
     "yaml@npm:^2.7.1": "^2.8.3"
   },
   "devDependencies": {
-    "@bkc/amino": "workspace:^",
-    "@bkc/cosmwasm": "workspace:^",
-    "@bkc/crypto": "workspace:^",
-    "@bkc/encoding": "workspace:^",
-    "@bkc/proto-signing": "workspace:^",
-    "@bkc/sdk": "workspace:^",
-    "@bkc/stargate": "workspace:^",
+    "@bkc-network-lib/amino": "workspace:^",
+    "@bkc-network-lib/cosmwasm": "workspace:^",
+    "@bkc-network-lib/crypto": "workspace:^",
+    "@bkc-network-lib/encoding": "workspace:^",
+    "@bkc-network-lib/proto-signing": "workspace:^",
+    "@bkc-network-lib/sdk": "workspace:^",
+    "@bkc-network-lib/stargate": "workspace:^",
     "@eslint/js": "^9.32.0",
     "@typescript-eslint/eslint-plugin": "^8.46.0",
     "@typescript-eslint/parser": "^8.46.0",

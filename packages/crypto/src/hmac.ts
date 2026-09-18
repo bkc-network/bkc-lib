@@ -1,4 +1,4 @@
-import { fixUint8Array } from "@bkc/encoding";
+import { fixUint8Array } from "@bkc-network-lib/encoding";
 
 import { HashFunction } from "./hash";
 

@@ -1,6 +1,6 @@
-import { makeCosmoshubPath } from "@bkc/amino";
-import { Mldsa65 } from "@bkc/crypto";
-import { fromBase64, fromHex } from "@bkc/encoding";
+import { makeCosmoshubPath } from "@bkc-network-lib/amino";
+import { Mldsa65 } from "@bkc-network-lib/crypto";
+import { fromBase64, fromHex } from "@bkc-network-lib/encoding";
 
 import { DirectMldsa65HdWallet } from "./directmldsa65hdwallet";
 import { makeSignBytes, makeSignDoc } from "./signing";

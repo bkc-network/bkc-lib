@@ -1,13 +1,13 @@
-# @bkc/amino
+# @bkc-network-lib/amino
 
-![typescript](https://img.shields.io/npm/types/@bkc/amino.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/amino.svg)](https://www.npmjs.com/package/@bkc/amino)
-[![license](https://img.shields.io/npm/l/@bkc/amino.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/amino.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/amino.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/amino.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/amino.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/amino.svg)](https://www.npmjs.com/package/@bkc-network-lib/amino)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/amino.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/amino.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/amino.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/amino.svg)
 
-Helpers for Amino for @bkc/stargate.
+Helpers for Amino for @bkc-network-lib/stargate.
 
 ## License
 

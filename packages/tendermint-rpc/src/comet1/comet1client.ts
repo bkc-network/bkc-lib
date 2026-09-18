@@ -1,4 +1,4 @@
-import { JsonRpcRequest, JsonRpcSuccessResponse } from "@bkc/json-rpc";
+import { JsonRpcRequest, JsonRpcSuccessResponse } from "@bkc-network-lib/json-rpc";
 import { Stream } from "xstream";
 
 import {

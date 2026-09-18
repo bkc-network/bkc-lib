@@ -1,5 +1,5 @@
-import { fixUint8Array, fromHex, toHex } from "@bkc/encoding";
-import { assert } from "@bkc/utils";
+import { fixUint8Array, fromHex, toHex } from "@bkc-network-lib/encoding";
+import { assert } from "@bkc-network-lib/utils";
 import { secp256k1 } from "@noble/curves/secp256k1.js";
 
 import { ExtendedSecp256k1Signature, Secp256k1Signature } from "./secp256k1signature";

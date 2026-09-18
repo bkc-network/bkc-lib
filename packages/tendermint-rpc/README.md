@@ -1,11 +1,11 @@
-# @bkc/tendermint-rpc
+# @bkc-network-lib/tendermint-rpc
 
-![typescript](https://img.shields.io/npm/types/@bkc/tendermint-rpc.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/tendermint-rpc.svg)](https://www.npmjs.com/package/@bkc/tendermint-rpc)
-[![license](https://img.shields.io/npm/l/@bkc/tendermint-rpc.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/tendermint-rpc.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/tendermint-rpc.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/tendermint-rpc.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/tendermint-rpc.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/tendermint-rpc.svg)](https://www.npmjs.com/package/@bkc-network-lib/tendermint-rpc)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/tendermint-rpc.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/tendermint-rpc.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/tendermint-rpc.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/tendermint-rpc.svg)
 
 This package provides a type-safe wrapper around
 [Tendermint RPC](https://docs.tendermint.com/master/rpc/). Notably, all binary

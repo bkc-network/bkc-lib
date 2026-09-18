@@ -1,6 +1,6 @@
 {
-  "name": "@bkc/amino",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/amino",
+  "version": "1.0.0",
   "description": "Helpers for Amino based signing.",
   "contributors": [
     "Simon Warta <webmaster128@users.noreply.github.com>"
@@ -44,10 +44,10 @@
     "pack-web": "yarn build-or-skip && webpack --mode development --config webpack.web.config.cjs"
   },
   "dependencies": {
-    "@bkc/crypto": "workspace:^",
-    "@bkc/encoding": "workspace:^",
-    "@bkc/math": "workspace:^",
-    "@bkc/utils": "workspace:^"
+    "@bkc-network-lib/crypto": "workspace:^",
+    "@bkc-network-lib/encoding": "workspace:^",
+    "@bkc-network-lib/math": "workspace:^",
+    "@bkc-network-lib/utils": "workspace:^"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",

@@ -1,4 +1,4 @@
-import { coins } from "@bkc/amino";
+import { coins } from "@bkc-network-lib/amino";
 import { MsgCreateVestingAccount } from "cosmjs-types/cosmos/vesting/v1beta1/tx";
 
 import { AminoTypes } from "../../aminotypes";

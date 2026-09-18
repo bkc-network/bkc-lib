@@ -1,5 +1,5 @@
 BKC Lib is a fork of CosmJS (https://github.com/cosmos/cosmjs), Apache-2.0, taken at
-version 0.39.0. Every workspace package was renamed from the @cosmjs scope to @bkc, and
+version 0.39.0. Every workspace package was renamed from the @cosmjs scope to @bkc-network-lib, and
 the signing stack was extended with ML-DSA-65 (FIPS 204) for the BKC chain. The upstream
 notice below is retained as the licence requires.
 

@@ -1,8 +1,13 @@
-import { addCoins } from "@bkc/amino";
-import { fixUint8Array, toHex } from "@bkc/encoding";
-import { Uint53 } from "@bkc/math";
-import { CometClient, connectComet, HttpEndpoint, toRfc3339WithNanoseconds } from "@bkc/tendermint-rpc";
-import { assert, sleep } from "@bkc/utils";
+import { addCoins } from "@bkc-network-lib/amino";
+import { fixUint8Array, toHex } from "@bkc-network-lib/encoding";
+import { Uint53 } from "@bkc-network-lib/math";
+import {
+  CometClient,
+  connectComet,
+  HttpEndpoint,
+  toRfc3339WithNanoseconds,
+} from "@bkc-network-lib/tendermint-rpc";
+import { assert, sleep } from "@bkc-network-lib/utils";
 import { MsgData, TxMsgData } from "cosmjs-types/cosmos/base/abci/v1beta1/abci";
 import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
 import { QueryDelegatorDelegationsResponse } from "cosmjs-types/cosmos/staking/v1beta1/query";
@@ -79,13 +84,13 @@ export interface IndexedTx {
    * If you hash this, you get the transaction hash (= transaction ID):
    *
    * ```js
-   * import { sha256 } from "@bkc/crypto";
-   * import { toHex } from "@bkc/encoding";
+   * import { sha256 } from "@bkc-network-lib/crypto";
+   * import { toHex } from "@bkc-network-lib/encoding";
    *
    * const transactionId = toHex(sha256(indexTx.tx)).toUpperCase();
    * ```
    *
-   * Use `decodeTxRaw` from @bkc/proto-signing to decode this.
+   * Use `decodeTxRaw` from @bkc-network-lib/proto-signing to decode this.
    */
   readonly tx: Uint8Array<ArrayBuffer>;
   /**

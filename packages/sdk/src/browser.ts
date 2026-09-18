@@ -1,4 +1,4 @@
-import { AccountData, DirectSignResponse, OfflineDirectSigner } from "@bkc/proto-signing";
+import { AccountData, DirectSignResponse, OfflineDirectSigner } from "@bkc-network-lib/proto-signing";
 import { JsonRpcSigner } from "ethers";
 
 import { toEvmAddress } from "./address";

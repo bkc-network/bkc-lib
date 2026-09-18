@@ -3,8 +3,8 @@ import {
   calculateFee,
   SigningStargateClient,
   StargateClient,
-} from "@bkc/stargate";
-import { isDefined, sleep } from "@bkc/utils";
+} from "@bkc-network-lib/stargate";
+import { isDefined, sleep } from "@bkc-network-lib/utils";
 
 import * as constants from "./constants";
 import { debugAccount, logAccountsState, logSendJob } from "./debugging";

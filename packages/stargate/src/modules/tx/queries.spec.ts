@@ -1,13 +1,13 @@
-import { encodeEthSecp256k1Pubkey } from "@bkc/amino";
+import { encodeEthSecp256k1Pubkey } from "@bkc-network-lib/amino";
 import {
   coin,
   coins,
   DirectEthSecp256k1HdWallet,
   DirectSecp256k1HdWallet,
   Registry,
-} from "@bkc/proto-signing";
-import { CometClient, connectComet } from "@bkc/tendermint-rpc";
-import { assertDefined, sleep } from "@bkc/utils";
+} from "@bkc-network-lib/proto-signing";
+import { CometClient, connectComet } from "@bkc-network-lib/tendermint-rpc";
+import { assertDefined, sleep } from "@bkc-network-lib/utils";
 import { MsgDelegate } from "cosmjs-types/cosmos/staking/v1beta1/tx";
 
 import { QueryClient } from "../../queryclient";

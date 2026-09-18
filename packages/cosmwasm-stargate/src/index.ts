@@ -1,1 +1,1 @@
-export * from "@bkc/cosmwasm";
+export * from "@bkc-network-lib/cosmwasm";

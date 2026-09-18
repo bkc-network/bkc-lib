@@ -1,11 +1,11 @@
-# @bkc/encoding
+# @bkc-network-lib/encoding
 
-![typescript](https://img.shields.io/npm/types/@bkc/encoding.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/encoding.svg)](https://www.npmjs.com/package/@bkc/encoding)
-[![license](https://img.shields.io/npm/l/@bkc/encoding.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/encoding.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/encoding.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/encoding.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/encoding.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/encoding.svg)](https://www.npmjs.com/package/@bkc-network-lib/encoding)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/encoding.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/encoding.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/encoding.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/encoding.svg)
 
 This package is an extension to the JavaScript standard library that is not
 bound to blockchain products. It provides basic hex/base64/ascii encoding to

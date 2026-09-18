@@ -1,6 +1,6 @@
 {
-  "name": "@bkc/sdk",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/sdk",
+  "version": "1.0.0",
   "description": "One package for building on the BKC post-quantum chain: ML-DSA-65 keys, signing, and EVM calls",
   "license": "Apache-2.0",
   "main": "build/index.js",
@@ -36,11 +36,11 @@
     "consumer-check": "./scripts/pack-and-check.sh"
   },
   "dependencies": {
-    "@bkc/amino": "workspace:^",
-    "@bkc/crypto": "workspace:^",
-    "@bkc/encoding": "workspace:^",
-    "@bkc/proto-signing": "workspace:^",
-    "@bkc/stargate": "workspace:^",
+    "@bkc-network-lib/amino": "workspace:^",
+    "@bkc-network-lib/crypto": "workspace:^",
+    "@bkc-network-lib/encoding": "workspace:^",
+    "@bkc-network-lib/proto-signing": "workspace:^",
+    "@bkc-network-lib/stargate": "workspace:^",
     "@bufbuild/protobuf": "^2.10.2",
     "cosmjs-types": "^0.11.0",
     "ethers": "^6.17.0"

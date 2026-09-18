@@ -1,5 +1,5 @@
-import { Mldsa65 } from "@bkc/crypto";
-import { fromBase64, fromHex, toBase64 } from "@bkc/encoding";
+import { Mldsa65 } from "@bkc-network-lib/crypto";
+import { fromBase64, fromHex, toBase64 } from "@bkc-network-lib/encoding";
 
 import {
   decodeSignature,

@@ -1,6 +1,6 @@
-import { encodePubkey } from "@bkc/proto-signing";
-import { CometClient, connectComet } from "@bkc/tendermint-rpc";
-import { assert } from "@bkc/utils";
+import { encodePubkey } from "@bkc-network-lib/proto-signing";
+import { CometClient, connectComet } from "@bkc-network-lib/tendermint-rpc";
+import { assert } from "@bkc-network-lib/utils";
 import { BaseAccount } from "cosmjs-types/cosmos/auth/v1beta1/auth";
 import { Any } from "cosmjs-types/google/protobuf/any";
 

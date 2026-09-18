@@ -1,5 +1,5 @@
-import { makeCosmoshubPath } from "@bkc/stargate";
-import { sleep } from "@bkc/utils";
+import { makeCosmoshubPath } from "@bkc-network-lib/stargate";
+import { sleep } from "@bkc-network-lib/utils";
 
 import { Faucet } from "../faucet";
 import { simappEnabled } from "../testutils";

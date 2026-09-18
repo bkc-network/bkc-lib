@@ -1,4 +1,4 @@
-// Runs as a builder would: importing only from @bkc/sdk, touching nothing in the monorepo.
+// Runs as a builder would: importing only from @bkc-network-lib/sdk, touching nothing in the monorepo.
 import {
   bkcChain,
   calculateFee,
@@ -12,7 +12,7 @@ import {
   toEvmAddress,
   tryToEvmAddress,
   withGasHeadroom,
-} from "@bkc/sdk";
+} from "@bkc-network-lib/sdk";
 
 const SEED = "157e43cecea4bc60fd31d629b61e3e9fdabf89e9d6e61980f2213b62aaa42bd4";
 const ok = (c, m) => console.info(`${c ? "PASS ✅" : "FAIL ❌"}  ${m}`);

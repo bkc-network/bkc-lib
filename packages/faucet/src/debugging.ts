@@ -1,4 +1,4 @@
-import { Coin } from "@bkc/stargate";
+import { Coin } from "@bkc-network-lib/stargate";
 
 import { MinimalAccount, SendJob } from "./types";
 

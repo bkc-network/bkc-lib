@@ -150,9 +150,9 @@ export {
   StargateClient,
   TimeoutError,
 } from "./stargateclient";
-export type { StdFee } from "@bkc/amino";
-export type { Coin } from "@bkc/proto-signing";
-export { coin, coins, makeCosmoshubPath, parseCoins } from "@bkc/proto-signing";
+export type { StdFee } from "@bkc-network-lib/amino";
+export type { Coin } from "@bkc-network-lib/proto-signing";
+export { coin, coins, makeCosmoshubPath, parseCoins } from "@bkc-network-lib/proto-signing";
 
 // Re-exported because this is part of the StargateClient/SigningStargateClient APIs
-export type { HttpEndpoint } from "@bkc/tendermint-rpc";
+export type { HttpEndpoint } from "@bkc-network-lib/tendermint-rpc";

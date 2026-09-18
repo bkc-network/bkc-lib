@@ -1,4 +1,4 @@
-import { HdPath, Slip10RawIndex } from "@bkc/crypto";
+import { HdPath, Slip10RawIndex } from "@bkc-network-lib/crypto";
 
 /**
  * The Cosmos Hub derivation path in the form `m/44'/118'/0'/0/a`

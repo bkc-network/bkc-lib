@@ -1,4 +1,4 @@
-# @bkc/sdk
+# @bkc-network-lib/sdk
 
 Everything that is specific to the **BKC** chain and was, until now, rewritten
 in every project that talks to it: the wallet extension, the demo dApp, and the
@@ -15,11 +15,11 @@ two things no ordinary Cosmos or EVM library expects:
 ## Installing
 
 ```sh
-npm i @bkc/sdk
+npm i @bkc-network-lib/sdk
 ```
 
-It pulls in the forked packages under `@bkc/*` - `@bkc/crypto`, `@bkc/amino`,
-`@bkc/proto-signing`, `@bkc/stargate`, `@bkc/tendermint-rpc`, `@bkc/encoding`.
+It pulls in the forked packages under `@bkc-network-lib/*` - `@bkc-network-lib/crypto`, `@bkc-network-lib/amino`,
+`@bkc-network-lib/proto-signing`, `@bkc-network-lib/stargate`, `@bkc-network-lib/tendermint-rpc`, `@bkc-network-lib/encoding`.
 
 **The scope is not cosmetic.** Upstream publishes `@cosmjs/crypto@0.39.0` too,
 so a package that asks for `"@cosmjs/crypto": "^0.39.0"` gets the upstream one -
@@ -54,7 +54,7 @@ Two things go wrong if you skip the script and pack by hand:
   the SDK, which is exactly the drift this package exists to prevent.
   `sha256sum` the vendored tarballs to check they match.
 
-npm caches a `file:` tarball by path, so `rm -rf node_modules/@bkc` before
+npm caches a `file:` tarball by path, so `rm -rf node_modules/@bkc-network-lib` before
 reinstalling - otherwise a freshly packed tarball is ignored in favour of the
 cached one.
 
@@ -63,7 +63,7 @@ cached one.
 You write ethers. That is the whole idea.
 
 ```ts
-import { Contract, ContractFactory, BkcSigner } from "@bkc/sdk";
+import { Contract, ContractFactory, BkcSigner } from "@bkc-network-lib/sdk";
 
 const signer = await BkcSigner.fromMnemonic(mnemonic, {
   evmRpcUrl: "http://…:18545",
@@ -139,13 +139,13 @@ import {
   SigningStargateClient,
   makeBkcRegistry,
   bkcChain,
-} from "@bkc/sdk";
+} from "@bkc-network-lib/sdk";
 ```
 
 And the pieces the ethers layer is built from, should you want them directly:
 `makeEvmCallMessage`, `withGasHeadroom`, `cosmosGasForEvmCall`,
 `findEthereumTxHash`, `toEvmAddress`, `tryToEvmAddress`, and `calculateFee` from
-`@bkc/stargate` for turning a gas budget into a fee.
+`@bkc-network-lib/stargate` for turning a gas budget into a fee.
 
 ## In a browser, with a wallet extension
 
@@ -153,7 +153,7 @@ A dapp holds no key - the user's wallet does. One call turns the injected
 provider into the same ethers `Signer` everything above takes:
 
 ```ts
-import { connectBkcWallet, Contract, ContractFactory } from "@bkc/sdk";
+import { connectBkcWallet, Contract, ContractFactory } from "@bkc-network-lib/sdk";
 
 const { account, signer, provider, cosmosSigner, wallet } =
   await connectBkcWallet(endpoints);
@@ -167,7 +167,7 @@ the same account as an `OfflineDirectSigner`, for `SigningStargateClient`.
 A whole dapp interaction, start to finish:
 
 ```ts
-import { connectBkcWallet, Contract, bkcChain } from "@bkc/sdk";
+import { connectBkcWallet, Contract, bkcChain } from "@bkc-network-lib/sdk";
 
 const endpoints = {
   evmRpcUrl: "https://<host>:18545", // EVM JSON-RPC, for reads
@@ -199,7 +199,7 @@ Two chain facts worth designing around, both exported on `bkcChain`:
 `receipt.fee` is always 0 here, because the fee was paid on the Cosmos side. Use
 `getEvmTransactionCost(hash, lcdUrl)` for what was actually charged.
 
-## `@bkc/sdk/core` - the chain without a transport
+## `@bkc-network-lib/sdk/core` - the chain without a transport
 
 A wallet is the other case: it already has a keyring, an RPC layer with failover
 and an approval flow, and it cannot afford to bundle ethers a second time. What
@@ -211,11 +211,11 @@ import {
   makeEvmCallMessage,
   bkcChain,
   mldsa65Sizes,
-} from "@bkc/sdk/core";
+} from "@bkc-network-lib/sdk/core";
 ```
 
-This entry point pulls in **no ethers, no `@bkc/stargate`, no
-`@bkc/tendermint-rpc`** - only `@bkc/crypto`, `@bkc/encoding` and
+This entry point pulls in **no ethers, no `@bkc-network-lib/stargate`, no
+`@bkc-network-lib/tendermint-rpc`** - only `@bkc-network-lib/crypto`, `@bkc-network-lib/encoding` and
 `@bufbuild/protobuf`. It carries the chain constants, the address conversions
 (including EIP-55 checksumming), the `MsgExecuteEvmCall` codec, the gas rules,
 the ML-DSA-65 sizes and HKDF salt, and ADR-36 message signing.

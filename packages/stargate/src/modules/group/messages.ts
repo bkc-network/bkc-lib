@@ -1,4 +1,4 @@
-import { GeneratedType } from "@bkc/proto-signing";
+import { GeneratedType } from "@bkc-network-lib/proto-signing";
 import {
   MsgCreateGroup,
   MsgCreateGroupPolicy,

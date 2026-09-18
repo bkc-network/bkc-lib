@@ -1,6 +1,6 @@
 {
-  "name": "@bkc/utils",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/utils",
+  "version": "1.0.0",
   "description": "Utility tools, primarily for testing code",
   "contributors": [
     "IOV SAS <admin@iov.one>",

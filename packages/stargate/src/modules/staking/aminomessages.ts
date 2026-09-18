@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { AminoMsg, Coin, Pubkey } from "@bkc/amino";
-import { Decimal } from "@bkc/math";
-import { decodePubkey, encodePubkey } from "@bkc/proto-signing";
-import { assertDefinedAndNotNull } from "@bkc/utils";
+import { AminoMsg, Coin, Pubkey } from "@bkc-network-lib/amino";
+import { Decimal } from "@bkc-network-lib/math";
+import { decodePubkey, encodePubkey } from "@bkc-network-lib/proto-signing";
+import { assertDefinedAndNotNull } from "@bkc-network-lib/utils";
 import {
   MsgBeginRedelegate,
   MsgCancelUnbondingDelegation,

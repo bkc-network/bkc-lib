@@ -1,5 +1,5 @@
-import { Secp256k1, Sha256 } from "@bkc/crypto";
-import { toBech32 } from "@bkc/encoding";
+import { Secp256k1, Sha256 } from "@bkc-network-lib/crypto";
+import { toBech32 } from "@bkc-network-lib/encoding";
 
 import { rawSecp256k1PubkeyToRawAddress } from "./addresses";
 import { encodeSecp256k1Signature } from "./signature";

@@ -1,4 +1,4 @@
-import { isNonNullObject } from "@bkc/utils";
+import { isNonNullObject } from "@bkc-network-lib/utils";
 import { argon2id, ArgonOpts } from "@noble/hashes/argon2.js";
 
 /**

@@ -1,4 +1,4 @@
-import { EncodeObject } from "@bkc/proto-signing";
+import { EncodeObject } from "@bkc-network-lib/proto-signing";
 
 import { bkcChain, evmCallTypeUrl } from "./chain";
 import { MsgExecuteEvmCall } from "./codec/bkc/bkc/v1/tx";

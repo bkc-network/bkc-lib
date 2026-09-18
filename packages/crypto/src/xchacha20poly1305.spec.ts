@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-import { fromHex } from "@bkc/encoding";
+import { fromHex } from "@bkc-network-lib/encoding";
 
 import { Xchacha20poly1305Ietf } from "./xchacha20poly1305";
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env -S yarn node
 
-const { SigningCosmWasmClient } = require("@bkc/cosmwasm");
-const { DirectSecp256k1HdWallet } = require("@bkc/proto-signing");
-const { calculateFee, GasPrice } = require("@bkc/stargate");
+const { SigningCosmWasmClient } = require("@bkc-network-lib/cosmwasm");
+const { DirectSecp256k1HdWallet } = require("@bkc-network-lib/proto-signing");
+const { calculateFee, GasPrice } = require("@bkc-network-lib/stargate");
 const fs = require("fs");
 
 const endpoint = "http://localhost:26659";

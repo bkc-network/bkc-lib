@@ -1,4 +1,4 @@
-import { fromBase64, fromHex, toBase64 } from "@bkc/encoding";
+import { fromBase64, fromHex, toBase64 } from "@bkc-network-lib/encoding";
 
 import blockResponse from "../testdata/block_results.json";
 import {

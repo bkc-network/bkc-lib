@@ -1,5 +1,5 @@
-import { getAminoPubkey } from "@bkc/amino";
-import { fromBase64, toBase64 } from "@bkc/encoding";
+import { getAminoPubkey } from "@bkc-network-lib/amino";
+import { fromBase64, toBase64 } from "@bkc-network-lib/encoding";
 import {
   coins,
   DirectEthSecp256k1HdWallet,
@@ -9,8 +9,8 @@ import {
   makeSignDoc,
   Registry,
   TxBodyEncodeObject,
-} from "@bkc/proto-signing";
-import { assert, sleep } from "@bkc/utils";
+} from "@bkc-network-lib/proto-signing";
+import { assert, sleep } from "@bkc-network-lib/utils";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { ReadonlyDate } from "readonly-date-esm";
 

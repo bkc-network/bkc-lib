@@ -1,4 +1,4 @@
-import { isUint8Array } from "@bkc/utils";
+import { isUint8Array } from "@bkc-network-lib/utils";
 
 import { Random } from "./random";
 

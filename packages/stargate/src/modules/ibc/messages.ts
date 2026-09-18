@@ -1,4 +1,4 @@
-import { EncodeObject, GeneratedType } from "@bkc/proto-signing";
+import { EncodeObject, GeneratedType } from "@bkc-network-lib/proto-signing";
 import { MsgTransfer } from "cosmjs-types/ibc/applications/transfer/v1/tx";
 import {
   MsgAcknowledgement,

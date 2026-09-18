@@ -4,9 +4,9 @@ import {
   makeCosmoshubPath,
   pubkeyToAddress,
   Secp256k1HdWallet,
-} from "@bkc/amino";
-import { coins } from "@bkc/proto-signing";
-import { assert } from "@bkc/utils";
+} from "@bkc-network-lib/amino";
+import { coins } from "@bkc-network-lib/proto-signing";
+import { assert } from "@bkc-network-lib/utils";
 import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 
 import { MsgSendEncodeObject } from "./modules";

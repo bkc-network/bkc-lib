@@ -1,6 +1,6 @@
-import { StdFee } from "@bkc/amino";
-import { Decimal, Uint53 } from "@bkc/math";
-import { coins } from "@bkc/proto-signing";
+import { StdFee } from "@bkc-network-lib/amino";
+import { Decimal, Uint53 } from "@bkc-network-lib/math";
+import { coins } from "@bkc-network-lib/proto-signing";
 
 /**
  * Denom checker for the Cosmos SDK 0.53 denom pattern
@@ -35,7 +35,7 @@ export class GasPrice {
    * Parses a gas price formatted as `<amount><denom>`, e.g. `GasPrice.fromString("0.012utoken")`.
    *
    * The denom must match the Cosmos SDK 0.53 pattern (https://github.com/cosmos/cosmos-sdk/blob/v0.53.0/types/coin.go#L846).
-   * See `GasPrice` in @bkc/stargate for a more generic matcher.
+   * See `GasPrice` in @bkc-network-lib/stargate for a more generic matcher.
    *
    * Separators are not yet supported.
    */

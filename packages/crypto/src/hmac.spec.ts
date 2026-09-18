@@ -1,4 +1,4 @@
-import { fromHex } from "@bkc/encoding";
+import { fromHex } from "@bkc-network-lib/encoding";
 
 import { Hmac } from "./hmac";
 import { Sha256, Sha512 } from "./sha";

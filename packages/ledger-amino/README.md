@@ -1,11 +1,11 @@
-# @bkc/ledger-amino
+# @bkc-network-lib/ledger-amino
 
-![typescript](https://img.shields.io/npm/types/@bkc/ledger-amino.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/ledger-amino.svg)](https://www.npmjs.com/package/@bkc/ledger-amino)
-[![license](https://img.shields.io/npm/l/@bkc/ledger-amino.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/ledger-amino.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/ledger-amino.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/ledger-amino.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/ledger-amino.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/ledger-amino.svg)](https://www.npmjs.com/package/@bkc-network-lib/ledger-amino)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/ledger-amino.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/ledger-amino.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/ledger-amino.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/ledger-amino.svg)
 
 ## Supported platforms
 

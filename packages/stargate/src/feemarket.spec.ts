@@ -1,5 +1,5 @@
-import { fromUtf8 } from "@bkc/encoding";
-import { Decimal } from "@bkc/math";
+import { fromUtf8 } from "@bkc-network-lib/encoding";
+import { Decimal } from "@bkc-network-lib/math";
 
 import { checkDynamicGasPriceSupport, multiplyDecimalByNumber, queryDynamicGasPrice } from "./feemarket";
 

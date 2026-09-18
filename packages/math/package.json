@@ -1,6 +1,6 @@
 {
-  "name": "@bkc/math",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/math",
+  "version": "1.0.0",
   "description": "Math helpers for blockchain projects",
   "contributors": [
     "IOV SAS <admin@iov.one>",

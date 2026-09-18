@@ -1,5 +1,5 @@
-import { Secp256k1, Secp256k1Signature, sha256 } from "@bkc/crypto";
-import { fromBase64, fromHex } from "@bkc/encoding";
+import { Secp256k1, Secp256k1Signature, sha256 } from "@bkc-network-lib/crypto";
+import { fromBase64, fromHex } from "@bkc-network-lib/encoding";
 
 import { makeCosmoshubPath } from "./paths";
 import { extractKdfConfiguration, Secp256k1HdWallet } from "./secp256k1hdwallet";

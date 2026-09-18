@@ -6,15 +6,15 @@ import {
   makeSignDoc,
   Secp256k1HdWallet,
   serializeSignDoc,
-} from "@bkc/amino";
-import { Secp256k1, Secp256k1Signature, sha256 } from "@bkc/crypto";
-import { fromBase64 } from "@bkc/encoding";
+} from "@bkc-network-lib/amino";
+import { Secp256k1, Secp256k1Signature, sha256 } from "@bkc-network-lib/crypto";
+import { fromBase64 } from "@bkc-network-lib/encoding";
 import {
   assertIsDeliverTxSuccess as assertIsDeliverTxSuccessStargate,
   calculateFee,
   SigningStargateClient,
-} from "@bkc/stargate";
-import { sleep } from "@bkc/utils";
+} from "@bkc-network-lib/stargate";
+import { sleep } from "@bkc-network-lib/utils";
 import Transport from "@ledgerhq/hw-transport";
 
 import { LedgerSigner } from "./ledgersigner";

@@ -1,11 +1,11 @@
-# @bkc/faucet-client
+# @bkc-network-lib/faucet-client
 
-![typescript](https://img.shields.io/npm/types/@bkc/faucet-client.svg)
-[![npm version](https://img.shields.io/npm/v/@bkc/faucet-client.svg)](https://www.npmjs.com/package/@bkc/faucet-client)
-[![license](https://img.shields.io/npm/l/@bkc/faucet-client.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
-![minimum node version](https://img.shields.io/node/v/@bkc/faucet-client.svg)
-![minified size](https://img.shields.io/bundlephobia/min/@bkc/faucet-client.svg)
-![monthly downloads](https://img.shields.io/npm/dm/@bkc/faucet-client.svg)
+![typescript](https://img.shields.io/npm/types/@bkc-network-lib/faucet-client.svg)
+[![npm version](https://img.shields.io/npm/v/@bkc-network-lib/faucet-client.svg)](https://www.npmjs.com/package/@bkc-network-lib/faucet-client)
+[![license](https://img.shields.io/npm/l/@bkc-network-lib/faucet-client.svg)](https://github.com/bkc-network/bkc-lib/blob/main/LICENSE)
+![minimum node version](https://img.shields.io/node/v/@bkc-network-lib/faucet-client.svg)
+![minified size](https://img.shields.io/bundlephobia/min/@bkc-network-lib/faucet-client.svg)
+![monthly downloads](https://img.shields.io/npm/dm/@bkc-network-lib/faucet-client.svg)
 
 ## Running the tests
 

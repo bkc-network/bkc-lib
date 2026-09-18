@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { toBase64, toHex } from "@bkc/encoding";
-import { JsonRpcRequest } from "@bkc/json-rpc";
+import { toBase64, toHex } from "@bkc-network-lib/encoding";
+import { JsonRpcRequest } from "@bkc-network-lib/json-rpc";
 
 import { smallIntToApi } from "../../inthelpers";
 import { jCheckNonEmptyString } from "../../jsonchecks";

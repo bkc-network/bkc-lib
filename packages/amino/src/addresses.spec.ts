@@ -1,5 +1,5 @@
-import { Mldsa65 } from "@bkc/crypto";
-import { fromBech32, fromHex, toBase64 } from "@bkc/encoding";
+import { Mldsa65 } from "@bkc-network-lib/crypto";
+import { fromBech32, fromHex, toBase64 } from "@bkc-network-lib/encoding";
 
 import { pubkeyToAddress, pubkeyToRawAddress } from "./addresses";
 import { decodeBech32Pubkey } from "./encoding";

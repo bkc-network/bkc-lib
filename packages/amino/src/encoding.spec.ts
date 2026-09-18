@@ -1,5 +1,5 @@
-import { Mldsa65, Random } from "@bkc/crypto";
-import { fromBase64, fromBech32, fromHex } from "@bkc/encoding";
+import { Mldsa65, Random } from "@bkc-network-lib/crypto";
+import { fromBase64, fromBech32, fromHex } from "@bkc-network-lib/encoding";
 
 import {
   decodeAminoPubkey,

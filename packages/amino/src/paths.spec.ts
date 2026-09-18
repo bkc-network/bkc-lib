@@ -1,4 +1,4 @@
-import { Slip10RawIndex } from "@bkc/crypto";
+import { Slip10RawIndex } from "@bkc-network-lib/crypto";
 
 import { makeCosmoshubPath } from "./paths";
 

@@ -1,4 +1,8 @@
-import { encodeMldsa65Signature, makeCosmoshubPath, rawMldsa65PubkeyToRawAddress } from "@bkc/amino";
+import {
+  encodeMldsa65Signature,
+  makeCosmoshubPath,
+  rawMldsa65PubkeyToRawAddress,
+} from "@bkc-network-lib/amino";
 import {
   type HdPath,
   Bip39,
@@ -9,9 +13,9 @@ import {
   pathToString,
   Random,
   stringToPath,
-} from "@bkc/crypto";
-import { fromBase64, fromUtf8, toBase64, toBech32, toUtf8 } from "@bkc/encoding";
-import { assert, isNonNullObject } from "@bkc/utils";
+} from "@bkc-network-lib/crypto";
+import { fromBase64, fromUtf8, toBase64, toBech32, toUtf8 } from "@bkc-network-lib/encoding";
+import { assert, isNonNullObject } from "@bkc-network-lib/utils";
 import { SignDoc } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import { AccountData, DirectSignResponse, OfflineDirectSigner } from "./signer";

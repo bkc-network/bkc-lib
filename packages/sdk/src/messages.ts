@@ -1,7 +1,7 @@
-import { makeSignDoc, serializeSignDoc } from "@bkc/amino";
-import { keccak256, Mldsa65 } from "@bkc/crypto";
-import { fromBase64, toBase64, toHex, toUtf8 } from "@bkc/encoding";
-import { OfflineDirectSigner } from "@bkc/proto-signing";
+import { makeSignDoc, serializeSignDoc } from "@bkc-network-lib/amino";
+import { keccak256, Mldsa65 } from "@bkc-network-lib/crypto";
+import { fromBase64, toBase64, toHex, toUtf8 } from "@bkc-network-lib/encoding";
+import { OfflineDirectSigner } from "@bkc-network-lib/proto-signing";
 
 /**
  * Signing a message with no transaction behind it - the "sign in with your wallet" flow.
@@ -38,7 +38,7 @@ export interface SignedMessage {
  */
 export function makeAdr36SignBytes(message: string, signer: string): Uint8Array {
   // The Amino JSON rules - sorted keys, no whitespace, escaped `&<>` - are what make a
-  // signature portable between wallets, and they belong to `@bkc/amino`. Building the
+  // signature portable between wallets, and they belong to `@bkc-network-lib/amino`. Building the
   // document by hand here would be a second implementation of them, free to drift from
   // the one the wallets actually sign with.
   return serializeSignDoc(

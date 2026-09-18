@@ -1,6 +1,6 @@
 {
-  "name": "@bkc/proto-signing",
-  "version": "0.39.0",
+  "name": "@bkc-network-lib/proto-signing",
+  "version": "1.0.0",
   "description": "Utilities for protobuf based signing (Cosmos SDK 0.40+)",
   "contributors": [
     "Will Clark <willclarktech@users.noreply.github.com>",
@@ -45,11 +45,11 @@
     "pack-web": "yarn build-or-skip && webpack --mode development --config webpack.web.config.cjs"
   },
   "dependencies": {
-    "@bkc/amino": "workspace:^",
-    "@bkc/crypto": "workspace:^",
-    "@bkc/encoding": "workspace:^",
-    "@bkc/math": "workspace:^",
-    "@bkc/utils": "workspace:^",
+    "@bkc-network-lib/amino": "workspace:^",
+    "@bkc-network-lib/crypto": "workspace:^",
+    "@bkc-network-lib/encoding": "workspace:^",
+    "@bkc-network-lib/math": "workspace:^",
+    "@bkc-network-lib/utils": "workspace:^",
     "cosmjs-types": "^0.11.0"
   },
   "devDependencies": {

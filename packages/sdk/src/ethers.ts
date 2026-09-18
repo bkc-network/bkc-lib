@@ -1,5 +1,9 @@
-import { DirectMldsa65HdWallet, DirectMldsa65Wallet, OfflineDirectSigner } from "@bkc/proto-signing";
-import { GasPrice } from "@bkc/stargate";
+import {
+  DirectMldsa65HdWallet,
+  DirectMldsa65Wallet,
+  OfflineDirectSigner,
+} from "@bkc-network-lib/proto-signing";
+import { GasPrice } from "@bkc-network-lib/stargate";
 import { BrowserProvider, JsonRpcSigner, Network } from "ethers";
 
 import { bkcChain } from "./chain";

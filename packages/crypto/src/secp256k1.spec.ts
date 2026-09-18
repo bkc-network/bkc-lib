@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-import { fromHex } from "@bkc/encoding";
+import { fromHex } from "@bkc-network-lib/encoding";
 
 import { Secp256k1 } from "./secp256k1";
 import { ExtendedSecp256k1Signature, Secp256k1Signature } from "./secp256k1signature";

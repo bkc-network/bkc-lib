@@ -1,4 +1,4 @@
-import { Bip39, Random } from "@bkc/crypto";
+import { Bip39, Random } from "@bkc-network-lib/crypto";
 
 import * as constants from "../constants";
 import { makePathBuilder } from "../pathbuilder";

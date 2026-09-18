@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { fromBase64, fromHex } from "@bkc/encoding";
-import { JsonRpcSuccessResponse } from "@bkc/json-rpc";
-import { assert } from "@bkc/utils";
+import { fromBase64, fromHex } from "@bkc-network-lib/encoding";
+import { JsonRpcSuccessResponse } from "@bkc-network-lib/json-rpc";
+import { assert } from "@bkc-network-lib/utils";
 
 import { fromRfc3339WithNanoseconds } from "../../dates";
 import { apiToBigInt, apiToSmallInt } from "../../inthelpers";

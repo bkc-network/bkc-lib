@@ -1,4 +1,4 @@
-// Types in this file are exported outside of the @bkc/tendermint-rpc package,
+// Types in this file are exported outside of the @bkc-network-lib/tendermint-rpc package,
 // e.g. as part of a request or response
 
 import { ReadonlyDateWithNanoseconds } from "./dates";

@@ -1,4 +1,4 @@
-import { comet1, comet38, tendermint37 } from "@bkc/tendermint-rpc";
+import { comet1, comet38, tendermint37 } from "@bkc-network-lib/tendermint-rpc";
 
 /** An event attribute */
 export interface Attribute {

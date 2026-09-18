@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { isNonNullObject } from "@bkc/utils";
+import { isNonNullObject } from "@bkc-network-lib/utils";
 
 import { Attribute, Event } from "./events";
 

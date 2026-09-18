@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { fromBase64, toBase64 } from "@bkc/encoding";
+import { fromBase64, toBase64 } from "@bkc-network-lib/encoding";
 
 import { encodeEthSecp256k1Pubkey, encodeMldsa65Pubkey, encodeSecp256k1Pubkey } from "./encoding";
 import { Pubkey, pubkeyType } from "./pubkeys";

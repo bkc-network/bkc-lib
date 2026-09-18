@@ -1,5 +1,5 @@
-import { fromBase64, toBase64, toUtf8 } from "@bkc/encoding";
-import { AminoTypes, coins } from "@bkc/stargate";
+import { fromBase64, toBase64, toUtf8 } from "@bkc-network-lib/encoding";
+import { AminoTypes, coins } from "@bkc-network-lib/stargate";
 import {
   MsgClearAdmin,
   MsgExecuteContract,

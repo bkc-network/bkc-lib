@@ -1,6 +1,6 @@
-import { coins } from "@bkc/amino";
-import { keccak256, Secp256k1, Secp256k1Signature } from "@bkc/crypto";
-import { fromBase64, fromHex } from "@bkc/encoding";
+import { coins } from "@bkc-network-lib/amino";
+import { keccak256, Secp256k1, Secp256k1Signature } from "@bkc-network-lib/crypto";
+import { fromBase64, fromHex } from "@bkc-network-lib/encoding";
 
 import { DirectEthSecp256k1Wallet } from "./directethsecp256k1wallet";
 import { makeAuthInfoBytes, makeSignBytes, makeSignDoc } from "./signing";

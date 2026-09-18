@@ -1,6 +1,6 @@
-import { toAscii, toHex } from "@bkc/encoding";
-import { firstEvent, toListPromise } from "@bkc/stream";
-import { assert, sleep } from "@bkc/utils";
+import { toAscii, toHex } from "@bkc-network-lib/encoding";
+import { firstEvent, toListPromise } from "@bkc-network-lib/stream";
+import { assert, sleep } from "@bkc-network-lib/utils";
 import { ReadonlyDate } from "readonly-date-esm";
 import { Stream } from "xstream";
 
