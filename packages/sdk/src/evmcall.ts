@@ -4,18 +4,11 @@ import { bkcChain, evmCallTypeUrl } from "./chain";
 import { MsgExecuteEvmCall } from "./codec/bkc/bkc/v1/tx";
 
 /**
- * Writing to the EVM on a chain that has no ECDSA keys.
+ * Writing to the EVM on a chain with no ECDSA keys: every state change is a Cosmos message.
  *
- * BKC signs with ML-DSA-65, so there is no Ethereum transaction to sign:
- * `eth_sendRawTransaction` is disabled and `MsgEthereumTx` is rejected. Every EVM state
- * change is a native Cosmos message instead, and the chain executes it in the EVM and
- * emits an ordinary Ethereum hash, receipt and logs - so everything downstream of the
- * send behaves like any EVM chain.
- *
- * Two rules are easy to get wrong, and both are handled here:
- *  - `callNonce` is the COSMOS account sequence the transaction is signed with, not the
- *    EVM nonce (the handler checks `account.Sequence == call_nonce + 1`)
- *  - the Cosmos gas limit must cover the EVM gas on top of the signature's own cost
+ * Two rules are easy to get wrong, and both are handled here - `callNonce` is the Cosmos
+ * sequence, not the EVM nonce, and the Cosmos gas must cover the EVM gas on top of the
+ * signature's own cost.
  */
 
 /** Headroom over an `eth_estimateGas` result, matching what ethers applies. */

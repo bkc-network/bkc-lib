@@ -1,9 +1,16 @@
 import { fromHex, toHex } from "@bkc-network-lib/encoding";
 import { OfflineDirectSigner } from "@bkc-network-lib/proto-signing";
-import { calculateFee, GasPrice, SigningStargateClient } from "@bkc-network-lib/stargate";
+import {
+  type SequenceResponse,
+  calculateFee,
+  GasPrice,
+  SigningStargateClient,
+} from "@bkc-network-lib/stargate";
+import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import { toEvmAddress } from "./address";
 import { bkcChain } from "./chain";
+import { type DiscoveredChain, discoverChain } from "./discovery";
 import { cosmosGasForEvmCall, findEthereumTxHash, makeEvmCallMessage, withGasHeadroom } from "./evmcall";
 import { makeBkcRegistry } from "./registry";
 
@@ -52,6 +59,9 @@ interface EvmTransactionRequest {
 
 const hexToBytes = (hex?: string): Uint8Array =>
   hex ? fromHex(hex.startsWith("0x") ? hex.slice(2) : hex) : new Uint8Array();
+
+/** How long a prefetched account stays usable. A sequence only moves on a broadcast. */
+const prefetchTtlMs = 5000;
 
 /** The node refuses a wider window than this, and answers with an opaque error. */
 const maxLogBlockRange = 10000;
@@ -108,12 +118,19 @@ function assertLogRangeIsQueryable(
 export async function createBkcEip1193Provider(options: BkcEip1193Options): Promise<Eip1193Provider> {
   const { evmRpcUrl, cosmosRpcUrl, signer } = options;
 
-  const gasPrice = options.gasPrice ?? GasPrice.fromString(`${bkcChain.gasPrice}${bkcChain.denom}`);
+  // A measurement of how large an ML-DSA-65 signature is, not a parameter the chain
+  // publishes, so a constant is the honest place for it.
   const baseGasLimit = options.baseGasLimit ?? bkcChain.baseGasLimit;
+
+  /**
+   * The chain id and gas price, on the first write rather than here: fetching them up front
+   * would put a round trip in front of every connect for answers a read never uses. Cached
+   * per pair of endpoints, so a dapp that built a reader has already paid.
+   */
+  const chain = (): Promise<DiscoveredChain> => discoverChain({ evmRpcUrl, cosmosRpcUrl });
 
   const cosmos = await SigningStargateClient.connectWithSigner(cosmosRpcUrl, signer, {
     registry: makeBkcRegistry(),
-    gasPrice,
   });
 
   const [account] = await signer.getAccounts();
@@ -138,6 +155,31 @@ export async function createBkcEip1193Provider(options: BkcEip1193Options): Prom
     return body.result;
   };
 
+  /**
+   * The account, read while ethers is still estimating gas.
+   *
+   * ethers asks for an estimate and then sends, in that order, so an estimate for this
+   * account is a reliable sign that a write is coming. Reading the account during that round
+   * trip takes it off the path to the wallet's approval prompt, which is the wait a user
+   * actually feels - the alternative is to start it afterwards and add the two together.
+   *
+   * Kept briefly. A sequence only moves when this account broadcasts, which it has not done
+   * between the two calls, but one left lying around would eventually be wrong.
+   */
+  let prefetched: { readonly at: number; readonly account: Promise<SequenceResponse> } | null = null;
+
+  function readAccount(): Promise<SequenceResponse> {
+    const held = prefetched;
+    prefetched = null;
+
+    if (held && Date.now() - held.at < prefetchTtlMs) {
+      // A prefetch that failed is not an error here: ask again, with somewhere to report it.
+      return held.account.catch(() => cosmos.getSequence(senderAddress));
+    }
+
+    return cosmos.getSequence(senderAddress);
+  }
+
   const sendTransaction = async (request: EvmTransactionRequest): Promise<string> => {
     if (request.from && request.from.toLowerCase() !== senderEvmAddress.toLowerCase()) {
       throw new Error(`This provider signs for ${senderEvmAddress}, not ${request.from}`);
@@ -145,25 +187,24 @@ export async function createBkcEip1193Provider(options: BkcEip1193Options): Prom
 
     const data = hexToBytes(request.data);
 
-    const evmGasLimit = request.gas
-      ? BigInt(request.gas)
-      : withGasHeadroom(
-          BigInt(
-            (await forward("eth_estimateGas", [
-              {
-                from: senderEvmAddress,
-                ...(request.to ? { to: request.to } : {}),
-                data: `0x${toHex(data)}`,
-                ...(request.value ? { value: request.value } : {}),
-              },
-            ])) as string,
-          ),
-        );
-
+    // Together, not in sequence: independent questions, and all of this happens before the
+    // wallet can prompt, which is the wait a user feels.
+    //
     // `callNonce` is the Cosmos sequence this transaction is signed with - the handler
-    // checks `account.Sequence == call_nonce + 1`. It is not the EVM nonce, which is what
-    // an EVM library would put in `nonce`.
-    const { sequence } = await cosmos.getSequence(senderAddress);
+    // checks `account.Sequence == call_nonce + 1`. It is not the EVM nonce.
+    const [evmGasLimit, onChain] = await Promise.all([
+      request.gas
+        ? Promise.resolve(BigInt(request.gas))
+        : forward("eth_estimateGas", [
+            {
+              from: senderEvmAddress,
+              ...(request.to ? { to: request.to } : {}),
+              data: `0x${toHex(data)}`,
+              ...(request.value ? { value: request.value } : {}),
+            },
+          ]).then((estimate) => withGasHeadroom(BigInt(estimate as string))),
+      readAccount(),
+    ]);
 
     const message = makeEvmCallMessage({
       sender: senderAddress,
@@ -171,17 +212,35 @@ export async function createBkcEip1193Provider(options: BkcEip1193Options): Prom
       data,
       value: request.value ? BigInt(request.value).toString() : undefined,
       gasLimit: evmGasLimit,
-      sequence: BigInt(sequence),
+      sequence: BigInt(onChain.sequence),
     });
 
     // The chain rejects SIGN_MODE_UNSPECIFIED, so gas is never simulated: it is computed,
     // and the fee with it.
     const cosmosGas = cosmosGasForEvmCall(evmGasLimit, baseGasLimit);
 
-    const result = await cosmos.signAndBroadcast(
+    // Sign with what is already known, then broadcast. `signAndBroadcast` would do both, but
+    // it re-reads the account it was never told, and `cosmos.getChainId()` costs a `/status`
+    // because the client does not learn the chain id when it connects. Two round trips, both
+    // in front of the approval prompt, for answers held a few lines up.
+    const discovered = await chain();
+
+    const txRaw = await cosmos.sign(
       senderAddress,
       [message],
-      calculateFee(Number(cosmosGas), gasPrice),
+      calculateFee(Number(cosmosGas), options.gasPrice ?? discovered.gasPrice),
+      "",
+      {
+        accountNumber: onChain.accountNumber,
+        sequence: onChain.sequence,
+        chainId: discovered.chainId,
+      },
+    );
+
+    const result = await cosmos.broadcastTx(
+      TxRaw.encode(txRaw).finish(),
+      cosmos.broadcastTimeoutMs,
+      cosmos.broadcastPollIntervalMs,
     );
 
     if (result.code !== 0) {
@@ -210,6 +269,19 @@ export async function createBkcEip1193Provider(options: BkcEip1193Options): Prom
 
         case "eth_sendTransaction":
           return sendTransaction((args[0] ?? {}) as EvmTransactionRequest);
+
+        case "eth_estimateGas": {
+          const from = ((args[0] ?? {}) as { from?: string }).from;
+
+          if (!from || from.toLowerCase() === senderEvmAddress.toLowerCase()) {
+            const ahead = cosmos.getSequence(senderAddress);
+            // Nobody awaits this yet; without a handler a rejection would be unhandled.
+            ahead.catch(() => undefined);
+            prefetched = { at: Date.now(), account: ahead };
+          }
+
+          return forward(method, args);
+        }
 
         case "eth_getLogs": {
           const filter = (args[0] ?? {}) as { fromBlock?: unknown; toBlock?: unknown };

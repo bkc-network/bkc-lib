@@ -4,6 +4,130 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-10-28
+
+Only `@bkc-network-lib/sdk` is released; every other package is unchanged and
+stays at 1.0.0.
+
+### Added
+
+- `WrappedEVMLog`, and the `txHashCompat` and `logs` fields on
+  `MsgExecuteEvmCallResponse`. The chain has returned them for some time; the
+  copy of the proto here stopped at `vmError`, so anything decoding that message
+  lost them silently.
+
+### Fixed
+
+- The package shipped `build/testdata/` - a 5.5 KB transaction captured from a
+  node, and the node's address in a comment - to every consumer, 17 KB of a 52
+  KB tarball. Only the spec imports it, and specs were already excluded;
+  `crypto`, `proto-signing` and `tendermint-rpc` all exclude theirs, so this was
+  the one package that forgot.
+- The bundled proto said it came from `qrt/qrt/v1` and declared
+  `go_package = "QRT/x/qrt/types"`, left over from before the chain was named
+  BKC. The chain's own proto is `bkc/bkc/v1` with
+  `go_package = "BKC/x/bkc/types"`, and the generator script pointed at a
+  `../qrt-chain` that does not exist. None of it changed a byte on the wire -
+  the package line was already `bkc.bkc.v1` - but all of it was wrong to read.
+- **Two round trips removed from every write, in front of the wallet's approval
+  prompt.** `createBkcEip1193Provider` read the signer's account to build the
+  message, then handed the message to `signAndBroadcast`, which read the same
+  account again because it was given no signer data; and the chain id came from
+  `getChainId()`, which the client does not learn when it connects, so the first
+  write paid a `/status` for a value `discoverChain` had already fetched. It now
+  signs with the account it read and the chain id it already has, then
+  broadcasts.
+
+  Measured against the public testnet with a real `increment()`: nine network
+  hops became seven, and the time from the call to the signature went from about
+  2,965 ms to about 1,700 ms. What remains before signing is `eth_blockNumber`
+  and `eth_estimateGas`, both issued by ethers before this package is reached,
+  and one account query, which a transaction cannot be built without.
+
+- @bkc-network-lib/sdk: the gas estimate and the account query are requested
+  together rather than one after the other. This changes nothing for callers
+  going through ethers, which estimates gas itself and passes it in; it matters
+  to anything calling the EIP-1193 provider directly without a gas limit.
+
+## [1.0.3] - 2026-10-28 [SUPERSEDED]
+
+The same source as 1.1.0, published under a patch number that understated what
+changed. Use 1.1.0.
+
+## [1.0.2] - 2026-10-28
+
+Only `@bkc-network-lib/sdk` is released; every other package is unchanged and
+stays at 1.0.0.
+
+This release removes public fields and makes a parameter required - a breaking
+change carried in a patch version deliberately. Everything removed was either
+wrong in 1.0.0 or read by nobody, and no caller in the BKC workspace touches any
+of it.
+
+### Changed
+
+- **The chain id and gas price are asked of the node, not compiled in.**
+  `connectBkcWallet`, `BkcProvider.connect` and `createBkcEip1193Provider` read
+  them from the endpoints already being passed - `/status` for the Cosmos chain
+  id, `eth_chainId` and `eth_gasPrice` for the EVM side - cached per pair of
+  endpoints. A consumer that passed neither was signing with whatever values
+  this package was published against: 1.0.0 shipped a gas price 13,333 times the
+  minimum the network settled on, and the chain id `BKC`, which no wallet would
+  enable on `bkc-testnet`.
+- **`getInjectedBkcWallet` reads `window.bkc` and nothing else.** It used to
+  fall back to `window.keplr` and `window.cosmostation.providers.keplr`. BKC
+  Wallet has written `window.bkc` since its first release and claims
+  `window.keplr` only when no other extension already owns it - so wherever
+  `window.bkc` was absent, those fallbacks could only return a foreign wallet,
+  whose secp256k1 key cannot sign for an ML-DSA-65 account. The dapp then waited
+  forever on an `enable()` that wallet was never going to answer.
+
+### Removed
+
+- **BREAKING** `bkcChain.chainId`, `bkcChain.evmChainId` and
+  `bkcChain.gasPrice`. All three described one deployment of the chain rather
+  than the chain, and a constant that goes stale silently is worse than no
+  constant. Use `discoverChain(endpoints)`.
+- **BREAKING** `bkcChain.isSimulable`. Nothing in this package or any known
+  consumer read it, and it described the behaviour of one build of the chain.
+  What is left on `bkcChain` is the same on a localnet, a rebuilt testnet and
+  mainnet: the bech32 prefix, the denom and its decimals, and the base gas
+  limit.
+- **BREAKING** `walletSigner`'s `chainId` no longer defaults. It is signed into
+  every transaction, so a default was a wrong chain rather than a convenience; a
+  missing argument is now a compile error.
+- **BREAKING** `ConnectBkcWalletOptions`, and the second argument to
+  `connectBkcWallet`. `chainId` was an override for a value the node is the
+  authority on, so it could only agree with the node or be rejected by it, and
+  `timeoutMs` is still there on `getInjectedBkcWallet` for anyone who needs it.
+
+### Added
+
+- `discoverChain(endpoints)` and `forgetDiscoveredChain(endpoints?)`, with
+  `ChainEndpoints` and `DiscoveredChain`.
+- `bkcReader(endpoints)`, a read-only provider that also starts the chain lookup
+  in the background. Reads need no key and no fee, so a dapp builds one before
+  it needs a signer - which keeps the lookup off the path to the wallet's
+  approval prompt without a consumer having to know the lookup exists.
+
+### Fixed
+
+- The gas price is resolved on the first write instead of when a provider is
+  built. The fee is passed to `signAndBroadcast` explicitly, so the client's own
+  default was never read - fetching it up front put a network round trip in
+  front of every connect, including the wallet's approval prompt, to compute a
+  number a page doing only reads never uses.
+- `connectBkcWallet` waits for the chain lookup and the injected provider
+  together rather than one after the other. Neither needs the other's answer,
+  and both are slow for unrelated reasons, so in sequence their waits added up.
+
+## [1.0.1] - 2026-10-28 [UNUSABLE]
+
+Published by mistake with its workspace dependency ranges unsubstituted
+(`@bkc-network-lib/amino: workspace:^` and four others), which npm and pnpm
+cannot resolve - `npm install` fails with `Unsupported URL Type "workspace:"`.
+It carries the same source as 1.0.2. Use 1.0.2.
+
 ## [1.0.0] - 2026-09-18
 
 Everything below is the BKC fork. Releases up to 0.39.0 are upstream CosmJS and

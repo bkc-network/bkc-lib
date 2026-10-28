@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # Regenerates src/codec from proto/.
 #
-# The chain's own protos live in ../qrt-chain/proto and pull their annotation imports
-# (gogoproto, cosmos_proto, amino) from the Buf registry. Those annotations carry no
-# bytes, so proto/ here holds a trimmed copy that generates offline - see the note at the
-# top of proto/bkc/bkc/v1/tx.proto for the two deliberate differences.
+# The chain's own protos live in bkc-chain/proto and pull gogoproto, cosmos_proto and
+# amino from the Buf registry. Those annotations carry no bytes, so proto/ here holds a
+# trimmed copy that generates offline.
 set -euo pipefail
 
 command -v protoc >/dev/null || { echo "protoc not found"; exit 1; }

@@ -2,7 +2,7 @@ import { AccountData, DirectSignResponse, OfflineDirectSigner } from "@bkc-netwo
 import { JsonRpcSigner } from "ethers";
 
 import { toEvmAddress } from "./address";
-import { bkcChain } from "./chain";
+import { discoverChain } from "./discovery";
 import { BkcEndpoints, BkcProvider } from "./ethers";
 
 /**
@@ -92,29 +92,26 @@ export interface BkcWalletConnection {
   readonly wallet: InjectedBkcWallet;
 }
 
-export interface ConnectBkcWalletOptions {
-  readonly chainId?: string;
-  /** how long to wait for the extension to inject itself */
-  readonly timeoutMs?: number;
-}
-
 interface WalletCarrier {
-  keplr?: InjectedBkcWallet;
-  cosmostation?: { providers?: { keplr?: InjectedBkcWallet } };
+  bkc?: { providers?: { keplr?: InjectedBkcWallet } };
 }
 
 /**
  * The injected provider, once it exists.
  *
- * An extension injects a moment after the page loads, so looking once and failing turns a
- * timing detail into "no wallet installed". Poll for a short grace period instead.
+ * `window.bkc` only. BKC Wallet claims `window.keplr` just when no other extension owns it,
+ * so wherever `window.bkc` is absent that name holds a foreign wallet - whose secp256k1 key
+ * cannot sign for an ML-DSA-65 account anyway.
+ *
+ * An extension injects a moment after the page loads, so looking once would turn a timing
+ * detail into "no wallet installed". Poll for a short grace period instead.
  */
 export async function getInjectedBkcWallet(timeoutMs = 3000): Promise<InjectedBkcWallet> {
   const carrier = globalThis as unknown as WalletCarrier;
   const deadline = Date.now() + timeoutMs;
 
   for (;;) {
-    const wallet = carrier.keplr ?? carrier.cosmostation?.providers?.keplr;
+    const wallet = carrier.bkc?.providers?.keplr;
 
     if (wallet) return wallet;
     if (Date.now() >= deadline) break;
@@ -133,10 +130,7 @@ export async function getInjectedBkcWallet(timeoutMs = 3000): Promise<InjectedBk
  * `algo` as `secp256k1`. That field is what routes public-key encoding downstream, so an
  * account reported as secp256k1 produces a transaction the chain rejects.
  */
-export function walletSigner(
-  wallet: InjectedBkcWallet,
-  chainId: string = bkcChain.chainId,
-): OfflineDirectSigner {
+export function walletSigner(wallet: InjectedBkcWallet, chainId: string): OfflineDirectSigner {
   return {
     async getAccounts(): Promise<readonly AccountData[]> {
       const key = await wallet.getKey(chainId);
@@ -173,12 +167,14 @@ function evmAddressOf(key: { bech32Address: string; address?: Uint8Array }): str
  * and `tx.wait()` behave exactly as they do on any EVM chain, and every write is signed
  * with ML-DSA-65 by the user's wallet.
  */
-export async function connectBkcWallet(
-  endpoints: BkcEndpoints,
-  options: ConnectBkcWalletOptions = {},
-): Promise<BkcWalletConnection> {
-  const chainId = options.chainId ?? bkcChain.chainId;
-  const wallet = await getInjectedBkcWallet(options.timeoutMs);
+export async function connectBkcWallet(endpoints: BkcEndpoints): Promise<BkcWalletConnection> {
+  // The chain id is asked of the node, because the wallet signs it into every transaction
+  // and a wrong one refuses to connect. Together with the extension lookup, not after it:
+  // neither needs the other's answer, and both run before the approval prompt can appear.
+  const [chainId, wallet] = await Promise.all([
+    discoverChain(endpoints).then((chain) => chain.chainId),
+    getInjectedBkcWallet(),
+  ]);
 
   await wallet.enable(chainId);
 

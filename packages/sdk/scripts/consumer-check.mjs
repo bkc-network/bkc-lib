@@ -53,7 +53,8 @@ ok(
 );
 
 const gas = cosmosGasForEvmCall(withGasHeadroom(44846n));
-const fee = calculateFee(Number(gas), GasPrice.fromString(`${bkcChain.gasPrice}${bkcChain.denom}`));
+// An arbitrary price: this check runs with no node, and only shows gas becoming a fee.
+const fee = calculateFee(Number(gas), GasPrice.fromString(`5000000${bkcChain.denom}`));
 ok(
   gas === bkcChain.baseGasLimit + 58299n,
   `cosmos gas = ${gas} (fee ${fee.amount[0].amount}${fee.amount[0].denom})`,

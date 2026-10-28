@@ -4,9 +4,10 @@ import {
   OfflineDirectSigner,
 } from "@bkc-network-lib/proto-signing";
 import { GasPrice } from "@bkc-network-lib/stargate";
-import { BrowserProvider, JsonRpcSigner, Network } from "ethers";
+import { BrowserProvider, JsonRpcProvider, JsonRpcSigner, Network } from "ethers";
 
 import { bkcChain } from "./chain";
+import { discoverChain } from "./discovery";
 import { createBkcEip1193Provider } from "./provider";
 
 /**
@@ -42,18 +43,43 @@ export interface BkcEndpoints {
 export class BkcProvider extends BrowserProvider {
   /** Builds a provider that signs with `signer`. */
   public static async connect(signer: OfflineDirectSigner, endpoints: BkcEndpoints): Promise<BkcProvider> {
-    const eip1193 = await createBkcEip1193Provider({
-      evmRpcUrl: endpoints.evmRpcUrl,
-      cosmosRpcUrl: endpoints.cosmosRpcUrl,
-      signer,
-      gasPrice: endpoints.gasPrice,
-    });
+    // Cached per endpoint pair, so this and the lookup inside createBkcEip1193Provider are
+    // one round trip between them.
+    const [eip1193, discovered] = await Promise.all([
+      createBkcEip1193Provider({
+        evmRpcUrl: endpoints.evmRpcUrl,
+        cosmosRpcUrl: endpoints.cosmosRpcUrl,
+        signer,
+        gasPrice: endpoints.gasPrice,
+      }),
+      discoverChain(endpoints),
+    ]);
 
-    // the chain id is known, so ethers need not ask for it on every call
-    const network = new Network(bkcChain.chainId, BigInt(bkcChain.evmChainId));
+    // Pinned, so ethers need not ask on every call - but asked of the node once.
+    const network = new Network(discovered.chainId, BigInt(discovered.evmChainId));
 
     return new BkcProvider(eip1193, network, { staticNetwork: network });
   }
+}
+
+/**
+ * A read-only provider, and the right first call in a dapp.
+ *
+ * Reads need no key and no fee, so this works before anyone connects - and starting the
+ * chain lookup here, with nothing waiting on it, keeps it off the path to the wallet's
+ * approval prompt. A failure is ignored: `connectBkcWallet` repeats the lookup where
+ * someone is waiting for the answer.
+ *
+ * `batchMaxCount: 1` keeps each request its own POST; one failing member of a batch is far
+ * harder to read in a network tab.
+ */
+export function bkcReader(endpoints: BkcEndpoints): JsonRpcProvider {
+  void discoverChain(endpoints).catch(() => undefined);
+
+  return new JsonRpcProvider(endpoints.evmRpcUrl, undefined, {
+    staticNetwork: true,
+    batchMaxCount: 1,
+  });
 }
 
 /**

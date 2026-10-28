@@ -71,13 +71,7 @@ export {
 
 // A dapp holds no key: the extension does. This turns the injected wallet into the same
 // ethers Signer everything else here takes.
-export type {
-  BkcAccount,
-  BkcWalletConnection,
-  ConnectBkcWalletOptions,
-  InjectedBkcWallet,
-  StdSignature,
-} from "./browser";
+export type { BkcAccount, BkcWalletConnection, InjectedBkcWallet, StdSignature } from "./browser";
 export { connectBkcWallet, getInjectedBkcWallet, walletSigner } from "./browser";
 
 // ---------------------------------------------------------------- contracts, the ethers way
@@ -93,6 +87,7 @@ export type {
 } from "./ethers";
 export {
   BkcProvider,
+  bkcReader,
   BkcSigner,
   Contract,
   ContractFactory,
@@ -122,6 +117,10 @@ export {
   verifyMessageOnChain,
 } from "./messages";
 
+// What the chain says about itself. Every helper above calls this for you.
+export type { ChainEndpoints, DiscoveredChain } from "./discovery";
+export { discoverChain, forgetDiscoveredChain } from "./discovery";
+
 // The raw EIP-1193 provider, for tooling that wants to wire its own stack - a Hardhat
 // plugin, viem, or a wallet. A builder never needs this.
 export type { BkcEip1193Options, Eip1193Provider } from "./provider";
@@ -132,7 +131,7 @@ export { createBkcEip1193Provider } from "./provider";
 // one implementation of EIP-55, not ethers' and ours side by side under the same name
 export { toBech32Address, toChecksumAddress, toEvmAddress, tryToEvmAddress } from "./address";
 export { bkcChain, evmCallTypeUrl } from "./chain";
-export { MsgExecuteEvmCall, MsgExecuteEvmCallResponse } from "./codec/bkc/bkc/v1/tx";
+export { MsgExecuteEvmCall, MsgExecuteEvmCallResponse, WrappedEVMLog } from "./codec/bkc/bkc/v1/tx";
 export type { EvmCallOptions } from "./evmcall";
 export { cosmosGasForEvmCall, findEthereumTxHash, makeEvmCallMessage, withGasHeadroom } from "./evmcall";
 export { isMldsa65Algo, mldsa65Algo, mldsa65RawAddress } from "./mldsa65";

@@ -1,15 +1,12 @@
 syntax = "proto3";
 
-// Extracted from the chain's proto/qrt/qrt/v1/tx.proto.
+// A trimmed copy of the chain's proto/bkc/bkc/v1/tx.proto.
 //
-// Two deliberate differences, neither of which changes the wire format:
-//  - the package is `bkc.bkc.v1`, the name the deployed chain registers (the source repo
-//    still says `qrt.qrt.v1` from before the rebrand)
-//  - the cosmos_proto/amino/gogoproto options are dropped: they are annotations for the
-//    Go side and carry no bytes
+// The one difference, which changes no bytes: the cosmos_proto, amino and gogoproto
+// options are dropped, so this generates offline instead of pulling the Buf registry.
 package bkc.bkc.v1;
 
-option go_package = "QRT/x/qrt/types";
+option go_package = "BKC/x/bkc/types";
 
 message MsgExecuteEvmCall {
   string sender = 1;
@@ -26,4 +23,19 @@ message MsgExecuteEvmCallResponse {
   bytes ret = 1;
   uint64 gas_used = 2;
   string vm_error = 3;
+  bytes tx_hash_compat = 4;
+  repeated WrappedEVMLog logs = 5;
+}
+
+message WrappedEVMLog {
+  string address = 1;
+  repeated string topics = 2;
+  bytes data = 3;
+  uint64 block_number = 4;
+  string tx_hash = 5;
+  uint64 tx_index = 6;
+  string block_hash = 7;
+  uint64 index = 8;
+  bool removed = 9;
+  uint64 block_timestamp = 10;
 }

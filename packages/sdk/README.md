@@ -18,8 +18,10 @@ two things no ordinary Cosmos or EVM library expects:
 npm i @bkc-network-lib/sdk
 ```
 
-It pulls in the forked packages under `@bkc-network-lib/*` - `@bkc-network-lib/crypto`, `@bkc-network-lib/amino`,
-`@bkc-network-lib/proto-signing`, `@bkc-network-lib/stargate`, `@bkc-network-lib/tendermint-rpc`, `@bkc-network-lib/encoding`.
+It pulls in the forked packages under `@bkc-network-lib/*` -
+`@bkc-network-lib/crypto`, `@bkc-network-lib/amino`,
+`@bkc-network-lib/proto-signing`, `@bkc-network-lib/stargate`,
+`@bkc-network-lib/tendermint-rpc`, `@bkc-network-lib/encoding`.
 
 **The scope is not cosmetic.** Upstream publishes `@cosmjs/crypto@0.39.0` too,
 so a package that asks for `"@cosmjs/crypto": "^0.39.0"` gets the upstream one -
@@ -54,9 +56,9 @@ Two things go wrong if you skip the script and pack by hand:
   the SDK, which is exactly the drift this package exists to prevent.
   `sha256sum` the vendored tarballs to check they match.
 
-npm caches a `file:` tarball by path, so `rm -rf node_modules/@bkc-network-lib` before
-reinstalling - otherwise a freshly packed tarball is ignored in favour of the
-cached one.
+npm caches a `file:` tarball by path, so `rm -rf node_modules/@bkc-network-lib`
+before reinstalling - otherwise a freshly packed tarball is ignored in favour of
+the cached one.
 
 ## Using it
 
@@ -153,7 +155,11 @@ A dapp holds no key - the user's wallet does. One call turns the injected
 provider into the same ethers `Signer` everything above takes:
 
 ```ts
-import { connectBkcWallet, Contract, ContractFactory } from "@bkc-network-lib/sdk";
+import {
+  connectBkcWallet,
+  Contract,
+  ContractFactory,
+} from "@bkc-network-lib/sdk";
 
 const { account, signer, provider, cosmosSigner, wallet } =
   await connectBkcWallet(endpoints);
@@ -187,14 +193,30 @@ const receipt = await tx.wait(); //   signed with ML-DSA-65 by the wallet
 console.log(receipt.hash, receipt.logs);
 ```
 
-Two chain facts worth designing around, both exported on `bkcChain`:
+Note what `endpoints` does **not** carry: no chain id, and no gas price. Those
+belong to whichever network you pointed at, so this package asks the node rather
+than shipping a copy that goes stale when a chain is rebuilt - `/status` for the
+chain id, `eth_chainId` and `eth_gasPrice` for the rest, cached per pair of
+endpoints. The gas price is fetched on the first write, not at connect, because
+no read needs one.
 
-- **Gas is much higher than an EVM chain.** An ML-DSA-65 signature is ~3.3 KB
-  and gas is charged per byte, so budget from `bkcChain.baseGasLimit` rather
-  than from Ethereum intuition.
-- **Gas cannot be simulated.** `bkcChain.isSimulable` is `false`; the chain
-  rejects `SIGN_MODE_UNSPECIFIED`, so the estimate comes from the budget, not
-  from the node.
+Build the read-only provider first and the lookup costs a dapp nothing:
+
+```ts
+import { bkcReader } from "@bkc-network-lib/sdk";
+
+const provider = bkcReader(endpoints); // reads now; also warms the chain lookup
+```
+
+Reads work before anyone connects, and starting here means the wallet's approval
+prompt is not waiting on a network round trip later. Pass `endpoints.gasPrice`
+to skip the fee lookup, `discoverChain(endpoints)` to read the values yourself,
+and `forgetDiscoveredChain()` if a chain was rebuilt under the same URLs while
+your process was running.
+
+One chain fact worth designing around: **gas is much higher than on an EVM
+chain.** An ML-DSA-65 signature is ~3.3 KB and gas is charged per byte, so
+budget from `bkcChain.baseGasLimit` rather than from Ethereum intuition.
 
 `receipt.fee` is always 0 here, because the fee was paid on the Cosmos side. Use
 `getEvmTransactionCost(hash, lcdUrl)` for what was actually charged.
@@ -215,10 +237,11 @@ import {
 ```
 
 This entry point pulls in **no ethers, no `@bkc-network-lib/stargate`, no
-`@bkc-network-lib/tendermint-rpc`** - only `@bkc-network-lib/crypto`, `@bkc-network-lib/encoding` and
-`@bufbuild/protobuf`. It carries the chain constants, the address conversions
-(including EIP-55 checksumming), the `MsgExecuteEvmCall` codec, the gas rules,
-the ML-DSA-65 sizes and HKDF salt, and ADR-36 message signing.
+`@bkc-network-lib/tendermint-rpc`** - only `@bkc-network-lib/crypto`,
+`@bkc-network-lib/encoding` and `@bufbuild/protobuf`. It carries the chain
+constants, the address conversions (including EIP-55 checksumming), the
+`MsgExecuteEvmCall` codec, the gas rules, the ML-DSA-65 sizes and HKDF salt, and
+ADR-36 message signing.
 
 ## The two rules this package exists to enforce
 
@@ -231,10 +254,9 @@ the ML-DSA-65 sizes and HKDF salt, and ADR-36 message signing.
 ## Regenerating the codec
 
 `src/codec` is generated from `proto/`, a trimmed copy of the chain's
-`proto/qrt/qrt/v1/tx.proto`. Two deliberate differences, neither of which
-changes the wire format: the package is renamed to `bkc.bkc.v1` (what the
-deployed chain registers, after the rebrand), and the
-gogoproto/cosmos_proto/amino annotations are dropped so it generates offline.
+`proto/bkc/bkc/v1/tx.proto`. One difference, which changes no bytes: the
+gogoproto, cosmos_proto and amino annotations are dropped so it generates
+offline.
 
 ```sh
 npm i -g ts-proto   # provides protoc-gen-ts_proto

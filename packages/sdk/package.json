@@ -1,6 +1,6 @@
 {
   "name": "@bkc-network-lib/sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "One package for building on the BKC post-quantum chain: ML-DSA-65 keys, signing, and EVM calls",
   "license": "Apache-2.0",
   "main": "build/index.js",
@@ -20,7 +20,8 @@
     "build/",
     "proto/",
     "*.md",
-    "!*.spec.*"
+    "!*.spec.*",
+    "!build/testdata/**"
   ],
   "publishConfig": {
     "access": "public",

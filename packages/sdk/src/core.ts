@@ -1,14 +1,8 @@
 /**
- * @bkc-network-lib/sdk/core - the BKC chain, without a transport.
+ * @bkc-network-lib/sdk/core - the chain without a transport.
  *
- * The main entry point brings ethers and a Cosmos client with it, because that is what an
- * application wants. A wallet does not: it already has its own keyring, its own RPC layer
- * with failover, its own approval flow. What it needs from an SDK is the part it must not
- * get wrong - key sizes, address derivation, the chain's own message encoding, the gas
- * rules - and none of that needs a transport.
- *
- * Importing from here pulls in no ethers, no `@bkc-network-lib/stargate` and no `@bkc-network-lib/tendermint-rpc`,
- * so a bundle stays the size it was.
+ * For a wallet, which already has a keyring, an RPC layer and an approval flow, and needs
+ * only the parts it must not get wrong. Pulls in no ethers, no stargate, no tendermint-rpc.
  *
  *     import { MsgExecuteEvmCall, makeEvmCallMessage, bkcChain } from "@bkc-network-lib/sdk/core";
  */
@@ -41,7 +35,7 @@ export { deriveMldsa65Seed, mldsa65HkdfSalt, mldsa65PubkeyTypeUrl } from "@bkc-n
 
 // ---------------------------------------------------------------- EVM calls
 
-export { MsgExecuteEvmCall, MsgExecuteEvmCallResponse } from "./codec/bkc/bkc/v1/tx";
+export { MsgExecuteEvmCall, MsgExecuteEvmCallResponse, WrappedEVMLog } from "./codec/bkc/bkc/v1/tx";
 export type { EvmCallOptions } from "./evmcall";
 export { cosmosGasForEvmCall, findEthereumTxHash, makeEvmCallMessage, withGasHeadroom } from "./evmcall";
 
